@@ -10,7 +10,6 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
 import { getMenusUserId } from '../../services/menu.service';
-import HomeIcon from "@mui/icons-material/Home";
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import TrafficIcon from '@mui/icons-material/Traffic';
 import PublicIcon from '@mui/icons-material/Public';
@@ -47,6 +46,7 @@ import PriceChangeIcon from '@mui/icons-material/PriceChange';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { useDispatch } from 'react-redux';
 import { setUser, logoutUser } from '../../features/user/userSlice'
+import HomeIcon from '@mui/icons-material/Home';
 
 const iconsMap = {
   "Home": <HomeIcon />,
@@ -145,25 +145,25 @@ const Sidebar = () => {
 
     async function loadMenus() {
       const res = await getMenusUserId(user.user_id)
-      setMenus(res)      
+      setMenus(res)
     }
 
-    loadMenus()   
-   
+    loadMenus()
+
   }, [])
 
   useEffect(() => {
     if (menus && menus.length > 0) {
       const mainMenu = menus.filter((m) => m.parent_menu_id === 0);
       const subMenus = menus.filter((sm) => sm.parent_menu_id > 0);
-      
+
       setMenu(mainMenu);
       setSubMenu(subMenus);
     }
   }, [menus]);
 
   const handleCerrarSesion = () => {
-    
+
     Cookies.remove('token')
     dispatch(logoutUser());
     window.location.reload()
@@ -177,7 +177,7 @@ const Sidebar = () => {
     };
   });
 
-  
+
 
   return (
     <Box
@@ -230,50 +230,60 @@ const Sidebar = () => {
 
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
 
-         {!menus && (
-          <Item
-            title="Menus not found"
-            to="/login"
-            icon={<SearchOffIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            color={colors.grey[100]}
-            isCollapsed={isCollapsed}
-          />
-         )}
+            <Item
+              title="Inicio"
+              to="/home"
+              icon={<HomeIcon />}
+              selected={selected}
+              setSelected={setSelected}
+              color={colors.grey[100]}
+              isCollapsed={isCollapsed}
+            />
 
-          {menuWithSubmenus.map((m) => (
-            <div key={m.menu_id}>
-              {!isCollapsed && (
-                <Typography
-                  variant="h6"
-                  color={colors.grey[400]}
-                  sx={{ m: "15px 0 5px 20px" }}
-                >
-                  {m.name}
-                </Typography>
-              )}
-              {m.subMenu.map((submenus) => (
-                <div key={submenus.menu_id}>
-                  <Item
-                    title={submenus.name}
-                    to={submenus.route}
-                    icon={iconsMap[submenus.icon_mui]}
-                    selected={selected}
-                    setSelected={setSelected}
-                    color={colors.grey[100]}              
-                    isCollapsed={isCollapsed}
-                  />
-                  
-                </div>
-              ))
+            {!menus && (
+              <Item
+                title="Menus not found"
+                to="/login"
+                icon={<SearchOffIcon />}
+                selected={selected}
+                setSelected={setSelected}
+                color={colors.grey[100]}
+                isCollapsed={isCollapsed}
+              />
+            )}
 
-              }
-              
-            </div>
-          ))
+            {menuWithSubmenus.map((m) => (
+              <div key={m.menu_id}>
+                {!isCollapsed && (
+                  <Typography
+                    variant="h6"
+                    color={colors.grey[400]}
+                    sx={{ m: "15px 0 5px 20px" }}
+                  >
+                    {m.name}
+                  </Typography>
+                )}
+                {m.subMenu.map((submenus) => (
+                  <div key={submenus.menu_id}>
+                    <Item
+                      title={submenus.name}
+                      to={submenus.route}
+                      icon={iconsMap[submenus.icon_mui]}
+                      selected={selected}
+                      setSelected={setSelected}
+                      color={colors.grey[100]}
+                      isCollapsed={isCollapsed}
+                    />
 
-          }
+                  </div>
+                ))
+
+                }
+
+              </div>
+            ))
+
+            }
 
             <MenuItem
               style={{

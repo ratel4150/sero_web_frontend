@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux'
 
 import LottieData from '../../assets/company.json'
 
-import BienvenidoImg from '../../assets/bienvenido.png'
 import Avatar from '../../assets/avatar-administrativo.png'
 
 import Timeline from '@mui/lab/Timeline';

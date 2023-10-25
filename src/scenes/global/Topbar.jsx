@@ -22,9 +22,14 @@ import LayersIcon from '@mui/icons-material/Layers';
 
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from "react-router-dom";
+import { useSelector } from 'react-redux'
 
+import DialogUI from '../../components/MaterialUI/Dialog'
 
 const Topbar = () => {
+
+  const mapa_seleccionado = useSelector((state) => state.plaza_mapa)
+  console.log(mapa_seleccionado)
 
   const navigation = useNavigate()
   let location = useLocation()
@@ -75,25 +80,25 @@ const Topbar = () => {
 
 
   return (
-    <Box display="flex" justifyContent="space-between" p={2} sx={{ marginBottom: '15px' }} >
+    <Box display="flex" justifyContent="space-between" p={2} sx={{ marginBottom: '15px', backgroundColor: location.pathname === `/map/${mapa_seleccionado.place_id}` ? theme.palette.mode === "dark" ? '#1F2D40' : '#F2F0F0' : null }} >
       {/* SEARCH BAR */}
 
       <DrawerNotification state={state} toggleDrawer={toggleDrawer} />
 
       <Box
         display="flex"
-        backgroundColor={colors.primary[500]}
+        backgroundColor={theme.palette.mode === "dark" ? colors.primary[400] : '#F2F0F0'}
         alignItems='center'
         borderRadius="3px"
         gap='10px'
       >
-        {location.pathname === '/map' && (
+       {location.pathname === `/map/${mapa_seleccionado.place_id}` && (
           <>
             <LayersIcon sx={{ fontSize: '36px' }} />
             <Typography sx={{ fontSize: '22px' }}>
               Sistema De Información Geográfica 
-              <span style={{ color: colors.greenAccent[400], fontSize: '26px', fontWeight: 'bold' }}>
-                { ' ' } Cuautitlan Izcalli
+              <span style={{ marginLeft: '15px', color: theme.palette.mode === "dark" ? colors.greenAccent[400] : 'black', fontSize: '20px', fontWeight: 'bold' }}>
+                {`${mapa_seleccionado.name}`}
               </span>
             </Typography>
           </>
@@ -111,6 +116,12 @@ const Topbar = () => {
             <DarkModeOutlinedIcon />
           )}
         </IconButton>
+
+         {location.pathname === `/map/${mapa_seleccionado.place_id}` && (
+
+          <DialogUI />
+
+        )}
 
 
         <IconButton onClick={handleOpenAppsMenu} sx={{ width: '50px', height: '50px' }} >

@@ -45,4 +45,16 @@ body,
 }
 
 
+.scroll::-webkit-scrollbar {
+  background-color: #FBFCFC;
+  border-radius: 5px;
+  width: 0;
+  height: 0;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  border: 2px solid rgb(155, 169, 5);
+}
+
+
 /* Login */

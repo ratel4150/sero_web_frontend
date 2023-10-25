@@ -4,13 +4,19 @@ import { Box, IconButton, Typography, useTheme, Tooltip, Card, CardHeader, CardC
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 
-
+import { getServicesMapByIdPlaza, getLayersMapByIdPlaza } from '../../services/map.service'
 import { tokens } from "../../theme";
 
-import PublicIcon from '@mui/icons-material/Public';
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { setDialog } from '../../redux/dialogSlice'
+import { setLayersActivos, setCargarLayer } from '../../redux/featuresSlice'
+
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import SeroClaro from '../../assets/sero_claro.png'
+import SeroOscuro from '../../assets/sero-logo.png'
 
-
+import { Marker } from "mapbox-gl";
 
 
 const Item = ({ title, to, icon, selected, setSelected, color, isCollapsed = false }) => {
@@ -56,27 +62,216 @@ const Item = ({ title, to, icon, selected, setSelected, color, isCollapsed = fal
 
 const Sidebar = () => {
 
+    const dispatch = useDispatch()
+
+    const mapa_seleccionado = useSelector((state) => state.plaza_mapa) // es la campana seleccionada
+    const mapa_activo = useSelector((state) => state.mapa)
+    const dialog_mapa = useSelector((state) => state.dialog)
+    const features = useSelector((state) => state.features)
+
+
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [selected, setSelected] = useState("Dashboard");
-    const [user, setUser] = useState(null)
+
+    const [serviciosMapa, setServiciosMapa] = useState([])
+    const [layersMapa, setLayersMapa] = useState([])
+    const [nombreServicioActivo, setNombreServicioActivo] = useState('')
+    const [marker, setMarker] = useState(null)
 
     useEffect(() => {
         screen.width <= 450 ? setIsCollapsed(true) : setIsCollapsed(false)
-        const user_res = localStorage.getItem('user');
-        const user = JSON.parse(user_res)
-        //console.log(user);
-        if (user) { 
-            setUser(user)
-        }
-    }, [])
+        loadData()
+    }, [mapa_seleccionado])
 
+    useEffect(() => {
+        if (serviciosMapa.length > 0) {
+            console.log(serviciosMapa)
+            serviciosMapa.forEach(servicio => {
+                if (servicio.service_id === 7) fillCartografia(servicio)
+            })
+        }
+    }, [serviciosMapa])
+
+    useEffect(() => {
+
+        if (features.coordinates && features.coordinates.length > 0 && features.coordinates[0] !== undefined) {
+
+            if (marker !== null) marker.remove()
+
+            setMarker(new Marker({
+                color: colors.greenAccent[500],
+            }).setLngLat(features.coordinates).addTo(mapa_activo.mapa));
+        } else {
+            if (marker !== null) marker.remove()
+        }
+
+
+    }, [features.coordinates])
+
+
+    const fillCartografia = (servicio) => {
+        const id = document.getElementById(servicio.service_id.toString())
+        id.style.color = colors.greenAccent[600]
+        setNombreServicioActivo(servicio.etiqueta)
+        setLayersByIdServicio(servicio.service_id)
+    }
+
+
+    const loadData = async () => {
+
+        const servicios_mapa = getServicesMapByIdPlaza(mapa_seleccionado.place_id)
+
+        const layers_mapa = getLayersMapByIdPlaza(mapa_seleccionado.place_id)
+
+        const promise = await Promise.all([servicios_mapa, layers_mapa])
+        console.log(promise)
+
+        setServiciosMapa(promise[0])
+        setLayersMapa(promise[1])
+    }
+
+    const setLayersByIdServicio = (id_servicio) => {
+
+        const layers_a = layersMapa.filter(layer => id_servicio === layer.servicio_id)
+
+        dispatch(setLayersActivos(layers_a))
+
+        layers_a.forEach(l => {
+            document.getElementById(l.name_layer).style.display = 'block'
+        })
+
+        layersMapa.filter(layer => id_servicio !== layer.servicio_id).forEach(l => {
+            document.getElementById(l.name_layer).style.display = 'none'
+        })
+
+    }
+
+    const handleServicioIcon = (servicio) => {
+        setLayersByIdServicio(servicio.service_id)
+        setNombreServicioActivo(servicio.etiqueta)
+        changeColorServicioIcon(servicio.service_id)
+    }
+
+    const changeColorServicioIcon = (id_servicio) => {
+
+        const id = document.getElementById(id_servicio.toString())
+        id.style.color = colors.greenAccent[600]
+
+        serviciosMapa.forEach(servicio => {
+            if (servicio.service_id !== id_servicio) {
+                document.getElementById(servicio.service_id.toString()).style.color = colors.grey[100]
+            }
+        })
+    }
+
+    const handleLayer = (layer) => {
+        validateLayerInMap(layer)
+    }
+
+    const cargarLayerMap = (layer) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (layer.url_geoserver !== '') {
+                    if (layer.tipo === 'punto') {
+                        await cargaPunto(layer);
+                    } else if (layer.tipo === 'poligono') {
+                        await cargarPoligono(layer);
+                    } else if (layer.tipo === 'seccion') {
+                        //await cargarSeccion(layer);
+                    }
+                }
+                resolve("Layer cargado cargado con éxito");
+            } catch (error) {
+                console.log(error);
+                reject(error);
+            }
+        })
+
+    }
+
+    const validateLayerInMap = (layer) => {
+        if (!mapa_activo.mapa.getLayer(layer.layer_id)) {
+            dispatch(setDialog({ title: 'Cargando capa...', status: true }))
+            dispatch(setCargarLayer(cargarLayerMap))
+            cargarLayerMap(layer).then(message => {
+                dispatch(setDialog({
+                    title: '',
+                    status: false
+                }))
+                changeColorLayer(layer.name_layer, colors.greenAccent[600])
+            }).catch(error => {
+                console.log("No se pudo cargar el layer", error)
+            })
+            return
+        }
+
+        if (mapa_activo.mapa.getLayoutProperty(layer.layer_id, 'visibility') === 'visible' || mapa_activo.mapa.getLayoutProperty(layer.layer_id, 'visibility') === undefined) {
+            mapa_activo.mapa.setLayoutProperty(layer.layer_id, 'visibility', 'none')
+            mapa_activo.mapa.setFilter(layer.layer_id, null)
+            changeColorLayer(layer.name_layer, colors.grey[100])
+        } else {
+            mapa_activo.mapa.setLayoutProperty(layer.layer_id, 'visibility', 'visible')
+            changeColorLayer(layer.name_layer, colors.greenAccent[600])
+        }
+
+    }
+
+
+    const changeColorLayer = (nombre_layer, color) => {
+        const id = document.getElementById(nombre_layer)
+        id.style.backgroundColor = color
+    }
+
+
+    const cargaPunto = async (layer) => {
+
+        const data = await cargarFeaturesLayer(layer.url_geoserver);
+        mapa_activo.mapa.addSource(layer.name_layer, { type: 'geojson', data: data });
+        mapa_activo.mapa.addLayer({
+            "id": layer.layer_id.toString(),
+            "type": "circle",
+            "source": layer.name_layer,
+            "layout": {},
+            "minzoom": 10,
+            "maxzoom": 24,
+            "paint": { 'circle-radius': ['/', 7.142857142857142, 2], 'circle-color': layer.color, 'circle-opacity': layer.opacidad, 'circle-stroke-width': 1, 'circle-stroke-color': '#232323' },
+        });
+        mapa_activo.mapa.setLayoutProperty(layer.layer_id.toString(), 'visibility', 'visible')
+    }
+
+    const cargarPoligono = async (layer) => {
+        const data = await cargarFeaturesLayer(layer.url_geoserver);
+        mapa_activo.mapa.addSource(layer.name_layer, { type: 'geojson', data: data });
+        mapa_activo.mapa.addLayer({
+            id: layer.layer_id.toString(),
+            type: "fill",
+            source: layer.name_layer,
+            layout: {},
+            minzoom: 6,
+            maxzoom: 18,
+            paint: {
+                'fill-color': layer.color,
+                'fill-outline-color': 'rgb(0,0,0)',
+                'fill-opacity': layer.opacidad,
+            },
+
+        });
+    }
+
+
+    const cargarFeaturesLayer = async (url) => {
+        let response = await fetch(url);
+        let data = await response.json();
+        return data;
+    }
 
     const handleCerrarSesion = () => {
         localStorage.removeItem('user')
         window.location.reload()
     }
+
+
 
     return (
         <Box
@@ -119,7 +314,7 @@ const Sidebar = () => {
                                 alignItems="center"
                                 ml="15px"
                             >
-                                <img src={theme.palette.mode === "dark" ? "sero_claro.png" : "sero-logo.png"} style={{ width: '150px' }} alt="" />
+                                <img src={theme.palette.mode === "dark" ? SeroClaro : SeroOscuro} style={{ width: '150px' }} alt="" />
                                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                                     <MenuOutlinedIcon />
                                 </IconButton>
@@ -131,55 +326,70 @@ const Sidebar = () => {
 
                         {!isCollapsed && (
                             <Box>
+
+                                {/* SERVICIOS */}
                                 <Card sx={{ width: '90%', marginBottom: '15px' }}>
-                                    <CardHeader sx={{ backgroundColor: colors.primary[500], height: '30px' }}
+                                    <CardHeader sx={{ backgroundColor: theme.palette.mode === "dark" ? colors.primary[600] : colors.grey[700], height: '30px', color: theme.palette.mode === "dark" ? colors.grey[100] : 'white' }}
                                         title='Servicios'
                                     />
-                                    <CardContent sx={{ backgroundColor: colors.grey[1000] }} >
-                                        <Box sx={{ display: 'flex', justifyContent: 'space-evenly', width: '100%', borderRadius: '10px' }} >
-                                            <IconButton aria-label="delete" size="large">
-                                                <PublicIcon sx={{ color: colors.primary[500] }} fontSize="inherit" />
-                                            </IconButton>
-                                            <IconButton aria-label="delete" size="large">
-                                                <PublicIcon sx={{ color: colors.primary[500] }} fontSize="inherit" />
-                                            </IconButton>
-                                            <IconButton aria-label="delete" size="large">
-                                                <PublicIcon sx={{ color: colors.primary[500] }} fontSize="inherit" />
-                                            </IconButton>
-                                            <IconButton aria-label="delete" size="large">
-                                                <PublicIcon sx={{ color: colors.primary[500] }} fontSize="inherit" />
-                                            </IconButton>
+                                    <CardContent sx={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[500] : colors.primary[400] }} >
+                                        <Box sx={{ display: 'flex', justifyContent: 'space-evenly', width: '100%', borderRadius: '10px', flexWrap: 'wrap' }} >
+
+                                            {serviciosMapa.length > 0 && serviciosMapa.map((servicio, index) => (
+                                                <IconButton sx={{ width: '30%' }} key={index} aria-label="delete" size="large" onClick={() => handleServicioIcon(servicio)}>
+                                                    <i id={servicio.service_id.toString()} style={{ color: colors.grey[100] }} className={servicio.icono}></i>
+                                                </IconButton>
+                                            ))}
+
                                         </Box>
-                                        <Alert severity="success" color="info" variant="outline" sx={{
+                                        <Alert severity="success" variant="outline" sx={{
                                             height: '36px', marginTop: '5px', borderRadius: '7px', display: 'flex', justifyContent: 'flex-start', alignItems: 'center',
-                                            backgroundColor: colors.greenAccent[500]
+                                            backgroundColor: colors.greenAccent[600], color: '#000000', fontWeight: 'bold'
                                         }}>
-                                            Cartografía
+                                            {nombreServicioActivo}
                                         </Alert>
+                                        {dialog_mapa.status && (
+                                            <Alert sx={{ marginTop: '5px' }} severity="warning">Cargando capa...</Alert>
+                                        )}
                                     </CardContent>
                                 </Card>
 
-                                <Card sx={{ width: '90%', marginBottom: '15px' }}>
-                                    <CardHeader sx={{ backgroundColor: colors.primary[500], height: '30px' }}
+                                {/* LAYERS DEL SERVICIO SELECCIONADO */}
+                                <Card className="scroll" sx={{ width: '90%', maxHeight: '200px', marginBottom: '15px', overflow: 'scroll' }}>
+                                    <CardHeader sx={{ backgroundColor: theme.palette.mode === "dark" ? colors.primary[600] : colors.grey[700], height: '30px', color: theme.palette.mode === "dark" ? colors.grey[100] : 'white' }}
                                         title='Layers'
                                     />
                                     <CardContent
-                                        sx={{ backgroundColor: colors.grey[1000] }} >
-                                        <Button sx={{ width: '100%', backgroundColor: colors.grey[100], marginBottom: '2px' }} >Secondary</Button>
-                                        <Button sx={{ width: '100%', backgroundColor: colors.grey[100], marginBottom: '2px' }} >Secondary</Button>
-                                        <Button sx={{ width: '100%', backgroundColor: colors.grey[100], marginBottom: '2px' }} >Secondary</Button>
+                                        sx={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[500] : colors.primary[400] }} >
+
+                                        {layersMapa.length > 0 && layersMapa.map((layer, index) => (
+                                            <Button id={layer.name_layer} key={index} onClick={() => handleLayer(layer)}
+                                                sx={{
+                                                    width: '100%', backgroundColor: '#e0e0e0', marginBottom: '3px', display: 'block',
+                                                    ":hover": {
+                                                        bgcolor: '#e0e0e0'
+                                                    }
+                                                }} >
+                                                {layer.etiqueta}
+                                            </Button>
+                                        ))}
+
                                     </CardContent>
                                 </Card>
 
+                                {/* INFORMACION */}
+
                                 <Card sx={{ width: '90%' }}>
-                                    <CardHeader sx={{ backgroundColor: colors.primary[500], height: '30px' }}
+                                    <CardHeader sx={{ backgroundColor: theme.palette.mode === "dark" ? colors.primary[600] : colors.grey[700], height: '30px', color: theme.palette.mode === "dark" ? colors.grey[100] : 'white' }}
                                         title='Información'
                                     />
                                     <CardContent
-                                        sx={{ backgroundColor: colors.grey[1000] }} >
-                                        <Button sx={{ width: '100%' }} color="primary">Secondary</Button>
-                                        <Button sx={{ width: '100%' }} color="primary">Secondary</Button>
-                                        <Button sx={{ width: '100%' }} color="primary">Secondary</Button>
+                                        sx={{ backgroundColor: theme.palette.mode === 'dark' ? colors.primary[500] : colors.primary[400] }} >
+                                        {Object.keys(features.features_layer).length > 0 && (features.features_layer.cuenta ||  features.features_layer.municipio || features.features_layer.ide) ? Object.keys(features.features_layer).map(f => (
+                                            <Button sx={{ width: '100%', backgroundColor: theme.palette.mode === 'dark' ? colors.primary[500] : colors.primary[400], color: colors.grey[100] }}>
+                                                {`${f.replaceAll('_', ' ')} : ${features.features_layer[f]}`}
+                                            </Button>
+                                        )) : null}
                                     </CardContent>
                                 </Card>
 

@@ -30,6 +30,7 @@ import { esES } from '@mui/x-date-pickers/locales';
 import 'dayjs/locale/es';
 
 import { useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux'
 import Cookies from 'js-cookie'
 import { verifyTokenRequest } from "./api/auth";
 
@@ -42,6 +43,7 @@ function App() {
   const [login, setLogin] = useState(null);
   let location = useLocation()
   const navigation = useNavigate();
+  const mapa_seleccionado = useSelector((state) => state.plaza_mapa)
 
   useEffect(() => {
     async function checkLogin () {
@@ -104,7 +106,7 @@ function App() {
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <div className="app">
-                {location.pathname !== '/map' ? (<Sidebar isSidebar={isSidebar} />) : (<SidebarMap isSidebar={isSidebar} />)}
+              {location.pathname !== `/map/${mapa_seleccionado.place_id}` ? (<Sidebar isSidebar={isSidebar} />) : (<SidebarMap isSidebar={isSidebar} />)}
                 <main className="content">
                   <Topbar setIsSidebar={setIsSidebar} />
                   <Routes>
@@ -122,7 +124,7 @@ function App() {
                     <Route path="/geography" element={<Geography />} />
                     <Route path="/new-user" element={<NewUser />} />
                     <Route path="/map-list" element={<MapList />} />
-                    <Route path="/map" element={<Map />} />
+                    <Route path="/map/:place_id" element={<Map />} />
                     <Route path="/roles" element={<Roles />} />
                     <Route path="/maintenance" element={<Maintenance />} />
                   </Routes>

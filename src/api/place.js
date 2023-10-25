@@ -1,5 +1,4 @@
 import axios from './axios'
 
-//export const loginRequest = user => axios.post(`/login`, user)
-
+export const placeById = (place_id) => axios.get(`/PlaceById/${place_id}`)
 export const placeByUserIdRequest = (user_id) => axios.get(`/PlaceByUserId/${user_id}`)
