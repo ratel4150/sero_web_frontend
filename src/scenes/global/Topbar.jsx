@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import * as React from 'react';
 
 import { Box, IconButton, useTheme, Typography, Avatar, Menu, MenuItem } from "@mui/material";
 import { useContext } from "react";
@@ -22,9 +23,14 @@ import LayersIcon from '@mui/icons-material/Layers';
 
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from "react-router-dom";
-import { useSelector } from 'react-redux'
 
 import DialogUI from '../../components/MaterialUI/Dialog'
+
+import { getPlacesByUserId } from '../../services/place.service';
+import { useSelector } from 'react-redux'
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 
 const Topbar = () => {
 
@@ -40,6 +46,9 @@ const Topbar = () => {
 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElApps, setAnchorElApps] = useState(null);
+  const user = useSelector(state => state.user)
+  const [places, setPlaces] = useState([])
+  const [selectedPlace, setSelectedPlace] = useState('');
 
 
   const [state, setState] = useState({
@@ -78,10 +87,10 @@ const Topbar = () => {
     setAnchorElApps(null);
   };
 
-
   return (
     <Box display="flex" justifyContent="space-between" p={2} sx={{ marginBottom: '15px', backgroundColor: location.pathname === `/map/${mapa_seleccionado.place_id}` ? theme.palette.mode === "dark" ? '#1F2D40' : '#F2F0F0' : null }} >
       {/* SEARCH BAR */}
+
 
       <DrawerNotification state={state} toggleDrawer={toggleDrawer} />
 

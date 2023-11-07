@@ -36,18 +36,18 @@ const Login = ({ setLogin }) => {
           setIsAuthenticated(true)
           dispatch(setUser(res.data))
       
-          const res_place = await placeByUserIdRequest(res.data.user_id);
-          if (res_place && res_place.data) {
-            console.log(res_place.data);
-            dispatch_place(setPlace([
-              { place_id: 1, name: 'Zinacantepec', image: '1-zina.jpg' },
-              { place_id: 2, name: 'Cuautitlan Izcalli', image: '2-cuauti.jpg' },
-              { place_id: 3, name: 'Demo', image: '3-SER0_imagotipo_azul.png' },
-              { place_id: 4, name: 'Naucalpan', image: '4-logo-naucalpan.png' }
-            ]));
-          } else {
-            console.error('La respuesta de placeByUserIdRequest no contiene datos válidos');
-          }
+          // const res_place = await placeByUserIdRequest(res.data.user_id);
+          // if (res_place && res_place.data) {
+          //   console.log(res_place.data);
+          //   dispatch_place(setPlace([
+          //     { place_id: 1, name: 'Zinacantepec', image: '1-zina.jpg' },
+          //     { place_id: 2, name: 'Cuautitlan Izcalli', image: '2-cuauti.jpg' },
+          //     { place_id: 3, name: 'Demo', image: '3-SER0_imagotipo_azul.png' },
+          //     { place_id: 4, name: 'Naucalpan', image: '4-logo-naucalpan.png' }
+          //   ]));
+          // } else {
+          //   console.error('La respuesta de placeByUserIdRequest no contiene datos válidos');
+          // }
       
           // const res_service = await placeServiceByUserIdRequest(res.data.user_id)
           // if (res_service && res_service.data) {
