@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import { useSelector } from 'react-redux';
+import { getPlacesByUserId } from '../services/place.service.js';
 
-function PlaceSelect({ places, selectedPlace, handlePlaceChange }) {
+
+function PlaceSelect({ selectedPlace, handlePlaceChange }) {
+  const user = useSelector((state) => state.user);
+  const [places, setPlaces] = useState([]);
+
+  useEffect(() => {
+    async function loadPlaces() {
+      const res = await getPlacesByUserId(user.user_id);
+      setPlaces(res);
+    }
+
+    loadPlaces();
+  }, [user]);
+
   return (
     <TextField
       id="filled-select-places"
