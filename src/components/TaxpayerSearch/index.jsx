@@ -286,8 +286,21 @@ const index = ({ params, setNuevosDatos }) => {
         montoAdeudo: data?.deuda,
       },
     ]);
-  
-    store.setPagos([
+    const arrayPayments = [];
+
+for (let i = 1; i <= specificAccountIndexes.paymentInfoContributor.index.length; i++) {
+  const payment = {
+    referencia: data?.[`reference_${i}`],
+    fechaDePago: data?.[`payment_date_${i}`],
+    descripcion: data?.[`description_${i}`],
+    montoPagado: data?.[`amount_paid_${i}`],
+  };
+
+  arrayPayments.push(payment);
+}
+
+store.setPagos(arrayPayments);
+    /* store.setPagos([
       { referencia:data?.reference_1,
         fechaDePago: data?.payment_date_1,
         descripcion: data?.description_1,
@@ -297,7 +310,7 @@ const index = ({ params, setNuevosDatos }) => {
         descripcion: data?.description_2,
         montoPagado: data?.amount_paid_2,
       }
-    ]);
+    ]); */
     const getIsValidValue = (value) => value || value != "NULL";
 
     const clavesInvalidas = [];
