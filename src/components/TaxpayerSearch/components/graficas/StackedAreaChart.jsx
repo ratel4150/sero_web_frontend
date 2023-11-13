@@ -1,10 +1,14 @@
 import React from "react";
 import Chart from "react-apexcharts";
+import useStore from "../store/useStore.";
 
 
-const StackedAreaChart = ({ adeudos, pagos }) => {
-  const categories = adeudos.map((item) => item.fechaActualizacion);
-  const seriesAdeudo = adeudos.map((item) => item.montoAdeudo);
+const StackedAreaChart = () => {
+  const store = useStore()
+  const adeudos = store.adeudos
+  const pagos = store.pagos
+  const categories = adeudos.map((item) => item.updateDate);
+  const seriesAdeudo = adeudos.map((item) => item.debtAmount);
   const seriesPagos = pagos?.map((item) => item.montoPagado);
 
   const chartOptions = {

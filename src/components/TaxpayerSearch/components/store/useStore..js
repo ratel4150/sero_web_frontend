@@ -38,6 +38,7 @@ const testConfig = {
   cuenta: '000000-0',
   esRolSuperior: true,
   data: {},
+ 
 }
 
 
@@ -56,6 +57,8 @@ const config = (set) => ({
   esRolSuperior: isDevelopment ? testConfig.esRolSuperior : null,
   data: isDevelopment ? testConfig.data : null,
   specificAccount: '',
+  accions:  null,
+  setAccions:(newAccions) => set({ accions: newAccions }),
   setSpecificAccount:(newSpecificAccount)=>set({specificAccount: newSpecificAccount}),
   setFotosFuncion: (callback) => set((state) => ({ fotos: callback(state.fotos) })),
   

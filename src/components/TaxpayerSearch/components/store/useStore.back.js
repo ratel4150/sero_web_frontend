@@ -54,7 +54,7 @@ const config = (set) => ({
   service: isDevelopment ? testConfig.service : null,
   isSuperiorRole: isDevelopment ? testConfig.isSuperiorRole : null,
   data: isDevelopment ? testConfig.data : null,
-
+  
   setCoordinates: (newCoordinates) => set((state) => ({ coordinates: newCoordinates })),
   setTaxpayer: (newTaxpayer) => set((state) => ({ taxpayer: newTaxpayer })),
   setAddress: (newAddress) => set((state) => ({ address: newAddress })),
@@ -64,7 +64,7 @@ const config = (set) => ({
   setPhotos: (newPhotos) => set((state) => ({ photos: newPhotos })),
   setRole: (newRole) => set((state) => ({ role: newRole })),
   setMissingData: (newData) => set((state) => ({ missingData: newData })),
-
+  
   setAccount: (newAccount) => set((state) => ({ account: newAccount })),
   setService: (newService) => set((state) => ({ service: newService })),
   setIsSuperiorRole: (newIsSuperiorRole) => set((state) => ({ isSuperiorRole: newIsSuperiorRole })),

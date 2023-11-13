@@ -1,7 +1,12 @@
 import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
+import useStore from "../store/useStore.";
 
-const GraficaBarrasAgrupadas = ({ pagos, adeudos }) => {
+const GraficaBarrasAgrupadas = () => {
+  const store = useStore()
+  const pagos = store.pagos
+  const adeudos = store.adeudos
+  
   const chartRef = useRef();
   const chartInstance = useRef(null);
 
@@ -16,7 +21,8 @@ const GraficaBarrasAgrupadas = ({ pagos, adeudos }) => {
     // Procesa los datos para la gráfica
     const fechas = pagos?.map((pago) => pago.fechaDePago);
     const pagosData = pagos?.map((pago) => pago.montoPagado);
-    const adeudosData = adeudos.map((adeudo) => adeudo.montoAdeudo);
+    const adeudosData = adeudos.map((adeudo) => adeudo.debtAmount);
+    console.log(adeudosData);
 
     chartInstance.current = new Chart(ctx, {
       type: "bar",

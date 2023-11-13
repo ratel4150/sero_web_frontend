@@ -22,17 +22,20 @@ const TableHeader = ({ cellsText: cellsText }) => (
 
 const DataRow = ({ item }) => (
   <TableRow>
+    
     <TableCell>{item.fechaDePago}</TableCell>
     <TableCell>{item.descripcion}</TableCell>
     <TableCell>{item.montoPagado}</TableCell>
+     <TableCell>{item.referencia || "-"}</TableCell>
   </TableRow>
+  
 );
 
 const DataTable = ({ filas: filas }) => (
   <TableContainer component={Paper}>
     <Table>
       <TableHeader
-        cellsText={["Fecha de Pago", "Descripción", "Monto Pagado"]}
+        cellsText={["Fecha de Pago", "Descripción", "Monto Pagado", "Referencia"]}
       />
       <TableBody>
         {filas.map((item, index) => (

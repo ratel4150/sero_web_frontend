@@ -125,7 +125,7 @@ const index = ({ params, setNuevosDatos }) => {
         }
       });
     }
-
+    console.log(specificAccountIndexes);
     const userProfileContributor = store.specificAccount[0];
     /* console.log(store.specificAccount[specificAccountIndexes.paymentInfoContributor.index]); */
 
@@ -201,16 +201,72 @@ const index = ({ params, setNuevosDatos }) => {
       payment_date: "2023-10-26T10:28:50.000Z",
       payment_period: "02-2023-02-2023", */
     };
-  
+
     if (specificAccountIndexes.paymentInfoContributor.index.length > 1) {
       specificAccountIndexes.paymentInfoContributor.index
         .slice(1)
         .forEach((iteration) => {
           console.log(store.specificAccount[iteration]);
           for (const key in store.specificAccount[iteration]) {
-            data = { ...data, [`${key}_${iteration}`]: store.specificAccount?.[iteration][key] };
+            data = {
+              ...data,
+              [`${key}_${iteration}`]: store.specificAccount?.[iteration][key],
+            };
           }
         });
+    }
+     if(specificAccountIndexes.debtInfoContributor.index.length > 1){
+      specificAccountIndexes.debtInfoContributor.index.forEach((iteration,index)=>{
+       
+        for (const key in store.specificAccount[iteration]) {
+          data = {
+            ...data,
+            [`${key}_${index+1}`]: store.specificAccount?.[iteration][key],
+          };
+        }
+
+      })
+
+    }
+
+    if(specificAccountIndexes.debtInfoContributor.index.length > 1){
+      specificAccountIndexes.debtInfoContributor.index.forEach((iteration,index)=>{
+       
+        for (const key in store.specificAccount[iteration]) {
+          data = {
+            ...data,
+            [`${key}_${index+1}`]: store.specificAccount?.[iteration][key],
+          };
+        }
+
+      })
+
+    }
+    if(specificAccountIndexes.dateCaptureInfoContributor.index.length > 1){
+      specificAccountIndexes.dateCaptureInfoContributor.index.forEach((iteration,index)=>{
+       
+        for (const key in store.specificAccount[iteration]) {
+          data = {
+            ...data,
+            [`${key}_${index+1}`]: store.specificAccount?.[iteration][key],
+          };
+        }
+
+      })
+
+    }
+     if(specificAccountIndexes.imageUrlInfoContributor.index.length > 1){
+      specificAccountIndexes.imageUrlInfoContributor.index.forEach((iteration,index)=>{
+       
+        for (const key in store.specificAccount[iteration]) {
+          data = {
+            ...data,
+            [`${key}_${index+1}`]: store.specificAccount?.[iteration][key],
+          };
+        }
+
+      })
+
     }
 
     console.log(data);
@@ -277,29 +333,90 @@ const index = ({ params, setNuevosDatos }) => {
       Poblacion: data?.town,
       CodigoPostal: data?.postalCode,
     });
+    const arrayDebts = []
+    
+    for (
+      let i = 1;
+      i <= specificAccountIndexes.debtInfoContributor.index.length;
+      i++
+    ) {
+      console.log(i);
+      const debt = {
+        debtAmount: data?.[`debt_amount_${i}`],
+        lastPaymentDate: data?.[`last_payment_date_${i}`],
+        updateDate: data?.[`update_date_${i}`],
+        cutoffDate: data?.[`cutoff_date_${i}`],
+        lasTwoMonthPayment: data?.[`last_two_month_payment_${i}`],
+      };
 
+      console.log(debt);
 
-    store.setAdeudos([
-      {
-        fechaActualizacion: "", //"2023-10-01",
-        fechaCorte: data?.bimestre_inicio, //"2023-09-30",
-        montoAdeudo: data?.deuda,
-      },
-    ]);
+      arrayDebts.push(debt);
+    }
+
+    store.setAdeudos(arrayDebts);
+ 
     const arrayPayments = [];
 
-for (let i = 1; i <= specificAccountIndexes.paymentInfoContributor.index.length; i++) {
-  const payment = {
-    referencia: data?.[`reference_${i}`],
-    fechaDePago: data?.[`payment_date_${i}`],
-    descripcion: data?.[`description_${i}`],
-    montoPagado: data?.[`amount_paid_${i}`],
-  };
+    for (
+      let i = 1;
+      i <= specificAccountIndexes.paymentInfoContributor.index.length;
+      i++
+    ) {
+      const payment = {
+        referencia: data?.[`reference_${i}`],
+        fechaDePago: data?.[`payment_date_${i}`],
+        descripcion: data?.[`description_${i}`],
+        montoPagado: data?.[`amount_paid_${i}`],
+      };
 
-  arrayPayments.push(payment);
-}
+      arrayPayments.push(payment);
+    }
 
-store.setPagos(arrayPayments);
+    store.setPagos(arrayPayments);
+
+
+    const arrayAccions = []
+
+    for (
+      let i = 1;
+      i <= specificAccountIndexes.dateCaptureInfoContributor.index.length;
+      i++
+    ) {
+      const accions = {
+        dateCapture: data?.[`date_capture_${i}`],
+        taskDone: data?.[`task_done_${i}`],
+        personWhoCapture: data?.[`person_who_capture_${i}`]
+      };
+
+      arrayAccions.push(accions);
+    }
+
+    store.setAccions(arrayAccions)
+
+    const arrayImages = []
+
+    for (
+      let i = 1;
+      i <= specificAccountIndexes.dateCaptureInfoContributor.index.length;
+      i++
+    ) {
+      const accions = {
+        dateCapture: data?.[`date_capture_${i}`],
+        taskDone: data?.[`task_done_${i}`],
+        personWhoCapture: data?.[`person_who_capture_${i}`]
+      };
+
+      arrayAccions.push(accions);
+    }
+
+
+
+
+
+
+
+  
     /* store.setPagos([
       { referencia:data?.reference_1,
         fechaDePago: data?.payment_date_1,

@@ -9,6 +9,7 @@ import {
   TableRow,
   TextField
 } from "@mui/material";
+import useStore from "./store/useStore.";
 
 const TableHeader = ({ cellsText: cellsText }) => (
   <TableHead>
@@ -22,30 +23,37 @@ const TableHeader = ({ cellsText: cellsText }) => (
 
 const DataRow = ({ item }) => (
   <TableRow>
-    <TableCell>{item.fechaActualizacion}</TableCell>
-    <TableCell>{item.fechaCorte}</TableCell>
-    <TableCell>{item.montoAdeudo}</TableCell>
+    <TableCell>{item.debtAmount}</TableCell>
+    <TableCell>{item.lastPaymentDate}</TableCell>
+    <TableCell>{item.updateDate}</TableCell>
+    <TableCell>{item.cutoffDate}</TableCell>
+    <TableCell>{item.lasTwoMonthPayment}</TableCell>
   </TableRow>
 );
 
-const DataTable = ({ filas }) => (
+const DataTable = ({ filas }) => {
+  const store = useStore();
+  return (
   <TableContainer component={Paper}>
     <Table>
       <TableHeader
         cellsText={[
-          "Fecha de Actualización",
-          "Fecha de Corte",
-          "Monto de Adeudo",
+          "Monto de deuda",
+          "Fecha del último pago",
+          "Fecha de actualización",
+          "Fecha de corte o fecha límite",
+          "Pago de los últimos dos meses",
         ]}
       />
       <TableBody>
-        {filas?.map((item, index) => (
+       
+        {store.adeudos?.map((item, index) => (
           <DataRow key={index} item={item} />
         ))}
       </TableBody>
     </Table>
   </TableContainer>
-);
+)};
 const Adeudos = DataTable;
 
 export default Adeudos;
