@@ -52,7 +52,7 @@ const StatBox = ({ title, subtitle, icon, isSmall = false, image = false, src = 
             : null
         }}
       >
-        <Typography variant="h4" sx={{ color: colors.greenAccent[500] }}>
+        <Typography variant="h4" sx={{ color: colors.greenAccent[400] }}>
           {subtitle}
         </Typography>
       </Box>

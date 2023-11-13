@@ -1,28 +1,22 @@
 import React from 'react'
+
+// LIBRERIES
 import Lottie from 'lottie-react'
 import { Box, useTheme, Typography } from "@mui/material";
-import { tokens } from "../../theme";
 import { useSelector } from 'react-redux'
+import ReactPlayer from 'react-player'
 
-import LottieData from '../../assets/company.json'
+// COMPONENTS
+import TimeLineHome from '../../components/TimeLineHome'
+import Slider from '../../components/Slider'
+import ToolsResume from '../../components/ToolsResume'
 
+// STATICS
 import Avatar from '../../assets/avatar-administrativo.png'
+import Video from '../../assets/video/sero_space.mp4'
+import LottieData from '../../assets/company.json'
+import { tokens } from "../../theme";
 
-import Timeline from '@mui/lab/Timeline';
-import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
-import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
-import TimelineDot from '@mui/lab/TimelineDot';
-
-import BarChartIcon from '@mui/icons-material/BarChart';
-import LaptopMacIcon from '@mui/icons-material/LaptopMac';
-import MapIcon from '@mui/icons-material/Map';
-import RepeatIcon from '@mui/icons-material/Repeat';
-
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 
 const index = () => {
 
@@ -33,127 +27,50 @@ const index = () => {
 
 
   return (
-    <Box m="40px" marginTop="0">
 
-      <Box sx={{ width: '100%', marginBottom: '10px', backgroundColor: colors.primary[400] }}>
-        <Card sx={{ backgroundColor: colors.primary[400] }}>
-          <CardContent sx={{ backgroundColor: colors.primary[400], display: 'flex', gap: '20px', alignItems: 'center' }}>
-            <Box>
-              <Typography variant="h5" color={colors.grey[100]} component="div" sx={{display: 'inline'}}>
-                Bienvenido <Typography variant="h5" sx={{display: 'inline'}} color={colors.yellowAccent[700]}>{`${user.name}`}</Typography>
-              </Typography>
-              <Typography variant="h5" color={colors.grey[100]}>
-                En el panel lateral izquierdo entontraras las diversas funciones a las que tienes acceso con el rol que se te proporciono, asi como las herramientas de la barra superior
-              </Typography>
-            </Box>
-            <img src={Avatar} style={{ height: '100px' }} alt="" />
-          </CardContent>
-        </Card>
+    <Box m="20px" marginTop="0" sx={{ backgroundColor: colors.primary[400], borderRadius: '10px', padding: '0 0 40px 0' }}>
+
+      <Box sx={{ width: '100%', marginBottom: '5px' }}>
+
+        <Box sx={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+          <Box sx={{ padding: '0 20px' }}>
+            <Typography variant="h5" color={colors.grey[100]} component="div" sx={{ display: 'inline' }}>
+              Bienvenido <Typography variant="h5" sx={{ display: 'inline' }} color={colors.greenAccent[700]}>{`${user.name}`}</Typography>
+            </Typography>
+            <Typography variant="h5" color={colors.grey[100]}>
+              En el panel lateral izquierdo entontraras las diversas funciones a las que tienes acceso con el rol que se te proporciono, asi como las herramientas de la barra superior.
+            </Typography>
+          </Box>
+          <img src={Avatar} style={{ height: '150px', marginTop: '10px', marginRight: '50px' }} alt="" />
+        </Box>
+
       </Box>
 
-      <Box display='flex' justifyContent='center' alignItems='center' gap='10px' sx={{ backgroundColor: colors.primary[400] }}>
+      <Box display='flex' justifyContent='center' alignItems='center' gap='10px'
+        sx={{ borderRadius: '10px' }}
+      >
 
-        <Box sx={{ width: '50%', backgroundColor: colors.primary[400], padding: '15px' }}>
-
-          <Timeline position="alternate">
-
-            <TimelineItem>
-              <TimelineOppositeContent
-                sx={{ m: 'auto 0' }}
-                align="right"
-                variant="body2"
-                color="text.secondary"
-              >
-                Análisis
-              </TimelineOppositeContent>
-              <TimelineSeparator>
-                <TimelineConnector />
-                <TimelineDot color='success'>
-                  <BarChartIcon className='text-white' />
-                </TimelineDot>
-                <TimelineConnector />
-              </TimelineSeparator>
-              <TimelineContent sx={{ py: '12px', px: 2 }}>
-                <Typography variant="h6" component="span">
-                  Dashboard
-                </Typography>
-                <Typography>Reportes tabulares</Typography>
-                <Typography>Reportes gráficos</Typography>
-              </TimelineContent>
-            </TimelineItem>
-
-            <TimelineItem>
-              <TimelineOppositeContent
-                sx={{ m: 'auto 0' }}
-                variant="body2"
-                color="text.secondary"
-              >
-                Mapas
-              </TimelineOppositeContent>
-              <TimelineSeparator >
-                <TimelineConnector />
-                <TimelineDot color="success">
-                  <MapIcon className='text-white' />
-                </TimelineDot>
-                <TimelineConnector />
-              </TimelineSeparator>
-              <TimelineContent sx={{ py: '12px', px: 2 }}>
-                <Typography variant="h6" component="span">
-                  Capas geográficas
-                </Typography>
-                <Typography>Selección geoespacial</Typography>
-                <Typography>Tracking operativo</Typography>
-              </TimelineContent>
-            </TimelineItem>
-
-            <TimelineItem>
-              <TimelineOppositeContent
-                sx={{ m: 'auto 0' }}
-                variant="body2"
-                color="text.secondary"
-              >
-                Administración
-              </TimelineOppositeContent>
-              <TimelineSeparator>
-                <TimelineConnector />
-                <TimelineDot color="success">
-                  <LaptopMacIcon className='text-white'/>
-                </TimelineDot>
-                <TimelineConnector />
-              </TimelineSeparator>
-              <TimelineContent sx={{ py: '12px', px: 2 }}>
-                <Typography variant="h6" component="span">
-                  Usuarios
-                </Typography>
-                <Typography>Campañas</Typography>
-                <Typography>Eventos</Typography>
-              </TimelineContent>
-            </TimelineItem>
-
-            <TimelineItem>
-              <TimelineSeparator>
-                <TimelineConnector />
-                <TimelineDot color="success">
-                  <RepeatIcon className='text-white'/>
-                </TimelineDot>
-                <TimelineConnector />
-              </TimelineSeparator>
-              <TimelineContent sx={{ py: '12px', px: 2 }}>
-                <Typography variant="h6" component="span">
-                  Óptimas herramientas
-                </Typography>
-                <Typography>para tu estratégia</Typography>
-              </TimelineContent>
-            </TimelineItem>
-          </Timeline>
-
-
+        <Box sx={{ width: '50%', padding: '15px' }}>
+          <TimeLineHome />
         </Box>
 
         <Box sx={{ width: '38%' }}>
           <Lottie animationData={LottieData} size={1000} />
         </Box>
 
+      </Box>
+
+      <Box sx={{ marginTop: '-100px' }}>
+        <Slider />
+      </Box>
+
+      <Box sx={{ backgroundColor: colors.primary[400] }}>
+        <ReactPlayer url={Video} playing={true} muted={true} width='100%' height='400px' loop={true}
+          style={{ backgroundColor: colors.primary[400] }} />
+      </Box>
+
+      <Box sx={{ marginTop: '-150px' }}>
+        <ToolsResume />
       </Box>
 
     </Box>

@@ -50,46 +50,19 @@ const RecaudacionGestor = ({size_grid}) => {
             align: "center",
             cellClassName: "name-column--cell",
         },
-        {
-            field: "datos",
-            headerName: "Datos",
-            headerAlign: "center",
-            renderCell: ({ row: { id_usuario } }) => {
-                return (
-                    <Box
-                        width="30%"
-                        m="0 auto"
-                    >
-                        <IconButton aria-label="perfil" onClick={() => handleSeeUser(id_usuario)}>
-                            <FaceIcon />
-                        </IconButton>
-                    </Box>
-                );
-            },
-        },
     ];
 
 
     return (
         <Box
-            backgroundColor={colors.primary[400]}
+            backgroundColor={colors.primary[700]}
             gridColumn={`span ${size_grid}`}
             borderRadius='10px'
+            height='390px'
         >
-
-            <Box sx={{ marginTop: '20px', backgroundColor: colors.primary[400] }}>
-                <Typography
-                    variant="h5"
-                    color={colors.greenAccent[400]}
-                    sx={{ paddingTop: '10px', paddingLeft: '30px' }}
-                >
-                    Recaudación por gestor
-                </Typography>
-            </Box>
-
             <Box
-                m="20px 0 0 0"
-                height="400px"
+              
+                height="100%"
                 sx={{
                     "& .MuiDataGrid-root": {
                         border: "none",

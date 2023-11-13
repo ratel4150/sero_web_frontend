@@ -32,6 +32,8 @@ import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 
+import SeroSpace from '../../assets/ser0_space_fondooscuro.png'
+
 const Topbar = () => {
 
   const mapa_seleccionado = useSelector((state) => state.plaza_mapa)
@@ -170,10 +172,11 @@ const Topbar = () => {
               </IconButton>
             </Box>
 
-            <Box sx={{ padding: '5px', borderRadius: '10px' }}>
-              <IconButton sx={{ backgroundColor: colors.blueAccent[700] }} onClick={() => navigation('/map-list')} >
+            <Box sx={{ padding: '5px', borderRadius: '10px', cursor: 'pointer' }}>
+            <img src={SeroSpace} alt="" onClick={() => navigation('/map-list')} />
+              {/* <IconButton sx={{ backgroundColor: colors.blueAccent[700] }} onClick={() => navigation('/map-list')} >
                 <MapIcon sx={{ fontSize: '30px' }} />
-              </IconButton>
+              </IconButton> */}
             </Box>
 
             <Box sx={{ padding: '5px', borderRadius: '50%' }}>
