@@ -1,18 +1,23 @@
 import { useState, useEffect, useRef } from 'react'
-import { Box, useTheme, Typography } from '@mui/material'
 import { tokens } from '../../theme'
 
-// GRAPHICS
-import Legend from '../../components/LightweightCharts/Legend'
-import BarStack from '../../components/NivoChart/BarStack'
-import Pie from '../../components/NivoChart/Pie'
-import ProgressCircle from "../../components/ProgressCircle";
+
+// LIBRARIES
+import { Box, useTheme, Typography, Button } from '@mui/material'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 // ICONS
 import NewspaperIcon from '@mui/icons-material/Newspaper';
-import StatBox from '../../components/StatBox';
-import Donut from '../../components/EChart/Donut';
+import PaidIcon from '@mui/icons-material/Paid';
+
+// COMPONENTS
 import RecaudacionGestor from '../../components/RecaudacionGestor';
+import PorcentajeGestor from '../../components/PorcentajeGestor'
+import StatBox from '../../components/StatBox';
+import ProgressCircle from "../../components/ProgressCircle";
+import Legend from '../../components/LightweightCharts/Legend'
+import BarStack from '../../components/NivoChart/BarStack'
+import Pie from '../../components/NivoChart/Pie'
 
 // DATA TEMP
 import { data, data_campos_capturados, data_cuentas_pagadas, data_tipo_servicio_bar } from '../../data/BarStack'
@@ -29,6 +34,28 @@ const index = () => {
         >
 
             {/* RANGO DE FECHAS */}
+            <DatePicker
+                sx={{ width: '36%', backgroundColor: colors.primary[1000] }}
+                // onChange={(e) => changeControl(e, 'fechaNacimiento')}
+                views={["year", "month", "day"]}
+                format="DD-MM-YYYY"
+                disableFuture
+                label='Fecha inicial'
+            />
+
+            <DatePicker
+                sx={{ width: '36%', backgroundColor: colors.primary[1000], marginLeft: '10px' }}
+                // onChange={(e) => changeControl(e, 'fechaNacimiento')}
+                views={["year", "month", "day"]}
+                format="DD-MM-YYYY"
+                disableFuture
+                label='Fecha final'
+            />
+
+            <Button variant="contained" color="success"
+                sx={{ marginLeft: '10px', width: '120px', height: '40px', position: 'relative', top: '5px' }}>
+                Aplicar
+            </Button>
 
             {/* FILA 1 datos generales */}
             <Box
@@ -37,7 +64,7 @@ const index = () => {
                 gridTemplateColumns="repeat(12, 1fr)"
                 gridAutoRows="100px"
                 gap="15px"
-                sx={{ margin: '10px 0' }}
+                sx={{ margin: '20px 0' }}
             >
 
 
@@ -135,7 +162,7 @@ const index = () => {
                 gridTemplateColumns="repeat(12, 1fr)"
                 gridAutoRows="390px"
                 gap="15px"
-                sx={{ margin: '10px 0' }}
+                sx={{ margin: '20px 0' }}
             >
 
                 <Box
@@ -165,7 +192,7 @@ const index = () => {
                 gridTemplateColumns="repeat(12, 1fr)"
                 gridAutoRows="300px"
                 gap="15px"
-                sx={{ margin: '10px 0' }}
+                sx={{ margin: '20px 0' }}
             >
 
                 <Box
@@ -179,7 +206,7 @@ const index = () => {
                             sx={{ padding: "10px 30px 0 20px" }}
                             color={colors.grey[100]}
                         >
-                            Meta establecida
+                            META ESTABLECIDA
                         </Typography>
                         <Box
                             display="flex"
@@ -206,17 +233,46 @@ const index = () => {
                     gridColumn='span 9'
                     backgroundColor={colors.primary[400]}
                     borderRadius="10px"
-                    display='flex'
-                    gap='10px'
-                    alignItems='center'
-                    sx={{ padding: '0 5px' }}
                 >
+                    <Box
+                        mt="10px"
+                        p="0 10px"
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
+
+                        <Typography
+                            variant="h5"
+                            fontWeight="600"
+                            sx={{ padding: "2px 30px 0 5px" }}
+                            color={colors.grey[200]}
+                        >
+                            GESTIONES POR TIPO DE SERVICIO Y ESTATUS DE LOCALIZACIÓN
+                        </Typography>
+                    </Box>
+
+                    <Box
+                        gridColumn='span 9'
+                        backgroundColor={colors.primary[400]}
+                        borderRadius="10px"
+                        sx={{ padding: '0 5px' }}
+                        display='flex'
+                        justifyContent='space-between'
+                        alignItems='center'
+                        height='266px'
+                    >
+
+                        <Box sx={{ width: '49%', height: '97%' }}>
+                            <Pie data={data_tipo_servicio} theme='yellow_green_blue' />
+                        </Box>
+
+                        <Box sx={{ width: '49%', height: '97%' }}>
+                            <Pie data={data_pie} theme='accent' />
+                        </Box>
 
 
-                    <Pie data={data_tipo_servicio} theme='yellow_green_blue' />
 
-                    <Pie data={data_pie} theme='accent' />
-
+                    </Box>
 
                 </Box>
 
@@ -227,17 +283,38 @@ const index = () => {
                 id="grid-1"
                 display="grid"
                 gridTemplateColumns="repeat(12, 1fr)"
-                gridAutoRows="300px"
+                gridAutoRows="350px"
                 gap="15px"
-                sx={{ margin: '10px 0' }}
+                sx={{ margin: '20px 0' }}
             >
-                {/* GRAFICA DE BARRA MOSTRANDO TOTAL DE GESTIONES POR GESTOR Y CUANTAS FUERON LOCALIZADAS DOS BARRAS */}
+
+                {/* GRAFICA DE BARRA EN STACK MOSTRANDO TOTAL DE GESTIONES POR GESTOR Y CUANTAS FUERON LOCALIZADAS */}
                 <Box
                     gridColumn='span 12'
                     backgroundColor={colors.primary[400]}
                     borderRadius="10px"
-                    sx={{ cursor: 'pointer' }}
+                    sx={{ cursor: 'pointer'}}
+                    
                 >
+
+                    <Box
+                        mt="10px"
+                        mb="-15px"
+                        p="0 10px"
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
+
+                        <Typography
+                            variant="h5"
+                            fontWeight="600"
+                            sx={{ padding: "2px 30px 0 5px" }}
+                            color={colors.grey[200]}
+                        >
+                            GESTIONES POR GESTOR Y ESTATUS DE LOCALIZACIÓN
+                        </Typography>
+                    </Box>
+
                     <BarStack data={data} position='vertical' color='nivo' keys={['localizado', 'no localizado']} groupMode={false} />
                 </Box>
             </Box>
@@ -249,15 +326,33 @@ const index = () => {
                 gridTemplateColumns="repeat(12, 1fr)"
                 gridAutoRows="300px"
                 gap="15px"
-                sx={{ margin: '10px 0' }}
+                sx={{ margin: '20px 0' }}
             >
-                {/* GRAFICA DE BARRA MOSTRANDO TOTAL DE GESTIONES POR GESTOR Y CUANTAS FUERON LOCALIZADAS DOS BARRAS */}
+                {/* GRAFICA DE BARRA MOSTRANDO TOTAL DE GESTIONES POR GESTOR Y CUANTOS CAMPOS FUERON CAPTURADOS */}
                 <Box
                     gridColumn='span 12'
                     backgroundColor={colors.primary[400]}
                     borderRadius="10px"
                     sx={{ cursor: 'pointer' }}
                 >
+                    <Box
+                        mt="10px"
+                        mb="-15px"
+                        p="0 10px"
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
+
+                        <Typography
+                            variant="h5"
+                            fontWeight="600"
+                            sx={{ padding: "2px 30px 0 5px" }}
+                            color={colors.grey[200]}
+                        >
+                            CAMPOS CAPTURADOS POR GESTOR
+                        </Typography>
+                    </Box>
+
                     <BarStack data={data_campos_capturados} position='horizontal' color='pastel1' keys={['capturado', 'no capturado']}
                         groupMode={false}
                     />
@@ -271,9 +366,140 @@ const index = () => {
                 gridTemplateColumns="repeat(12, 1fr)"
                 gridAutoRows="300px"
                 gap="15px"
-                sx={{ margin: '10px 0' }}
+                sx={{ margin: '20px 0' }}
             >
-                {/* GRAFICA DE BARRA MOSTRANDO TOTAL DE GESTIONES POR GESTOR Y CUANTAS FUERON LOCALIZADAS DOS BARRAS */}
+                {/* GRAFICA DE BARRA MOSTRANDO TOTAL DE GESTIONES POR GESTOR Y CUANTAS TIPO DE SERVICIO CAPTURADOS */}
+                <Box
+                    gridColumn='span 12'
+                    backgroundColor={colors.primary[400]}
+                    borderRadius="10px"
+                    sx={{ cursor: 'pointer' }}
+                >
+                     <Box
+                        mt="10px"
+                        mb="-15px"
+                        p="0 10px"
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
+
+                        <Typography
+                            variant="h5"
+                            fontWeight="600"
+                            sx={{ padding: "2px 30px 0 5px" }}
+                            color={colors.grey[200]}
+                        >
+                            GESTIONES CON TIPO DE SERVCIO CAPTURADO POR GESTOR
+                        </Typography>
+                    </Box>
+
+                    <BarStack data={data_tipo_servicio_bar} position='horizontal' color='nivo'
+                        keys={['tipo servicio', 'no tipo servicio']} groupMode={false} />
+                </Box>
+            </Box>
+
+            {/* FILA 7 */}
+            <Box
+                id="grid-1"
+                display="grid"
+                gridTemplateColumns="repeat(12, 1fr)"
+                gridAutoRows="100px"
+                gap="15px"
+                sx={{ marginTop: '20px' }}
+            >
+
+
+                <Box
+                    gridColumn='span 3'
+                    backgroundColor={colors.primary[400]}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    borderRadius="10px"
+                    // onClick={() => openModalBox('Jornadas')}
+                    sx={{ cursor: 'pointer' }}
+                >
+                    <StatBox
+                        title="Gestiones con pago"
+                        subtitle={1250}
+                        icon={
+                            <NewspaperIcon
+                                sx={{ color: 'black', fontSize: "28px" }}
+                            />
+                        }
+                    />
+                </Box>
+
+                <Box
+                    gridColumn='span 3'
+                    backgroundColor={colors.primary[400]}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    borderRadius="10px"
+                    // onClick={() => openModalBox('Jornadas')}
+                    sx={{ cursor: 'pointer' }}
+                >
+                    <StatBox
+                        title="Gestiones sin posicion"
+                        subtitle={15}
+                        icon={
+                            <NewspaperIcon
+                                sx={{ color: 'black', fontSize: "28px" }}
+                            />
+                        }
+                    />
+                </Box>
+
+
+                <Box
+                    gridColumn='span 3'
+                    backgroundColor={colors.primary[400]}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    borderRadius="10px"
+                    // onClick={() => openModalBox('Jornadas')}
+                    sx={{ cursor: 'pointer' }}
+                >
+                    <StatBox
+                        title="Gestiones sin foto"
+                        subtitle={2}
+                        icon={
+                            <NewspaperIcon
+                                sx={{ color: 'black', fontSize: "28px" }}
+                            />
+                        }
+                    />
+                </Box>
+
+                <Box
+                    gridColumn='span 3'
+                    backgroundColor={colors.primary[400]}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    borderRadius="10px"
+                    // onClick={() => openModalBox('Jornadas')}
+                    sx={{ cursor: 'pointer' }}
+                >
+                    <PaidIcon sx={{ fontSize: '50px', color: colors.greenAccent[700] }} />
+                </Box>
+
+
+
+            </Box>
+
+            {/* FILA 8 */}
+            <Box
+                id="grid-1"
+                display="grid"
+                gridTemplateColumns="repeat(12, 1fr)"
+                gridAutoRows="300px"
+                gap="15px"
+                sx={{ margin: '20px 0' }}
+            >
+                {/* GRAFICA DE BARRA MOSTRANDO TOTAL DE GESTIONES POR GESTOR Y CUANTAS FUERON PAGADAS */}
                 <Box
                     gridColumn='span 12'
                     backgroundColor={colors.primary[400]}
@@ -285,25 +511,19 @@ const index = () => {
                 </Box>
             </Box>
 
-            {/* FILA 7 */}
+            {/* FILA 9 */}
             <Box
                 id="grid-1"
                 display="grid"
                 gridTemplateColumns="repeat(12, 1fr)"
-                gridAutoRows="300px"
+                gridAutoRows="390px"
                 gap="15px"
-                sx={{ margin: '10px 0' }}
+                sx={{ margin: '20px 0' }}
             >
-                {/* GRAFICA DE BARRA MOSTRANDO TOTAL DE GESTIONES POR GESTOR Y CUANTAS FUERON LOCALIZADAS DOS BARRAS */}
-                <Box
-                    gridColumn='span 12'
-                    backgroundColor={colors.primary[400]}
-                    borderRadius="10px"
-                    sx={{ cursor: 'pointer' }}
-                >
-                    <BarStack data={data_tipo_servicio_bar} position='horizontal' color='nivo'
-                        keys={['tipo servicio', 'no tipo servicio']} groupMode={false} />
-                </Box>
+                <RecaudacionGestor size_grid={6} />
+
+                <PorcentajeGestor size_grid={6} />
+
             </Box>
 
 

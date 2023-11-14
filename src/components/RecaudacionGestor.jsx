@@ -45,7 +45,7 @@ const RecaudacionGestor = ({size_grid}) => {
         },
         {
             field: "recaudado",
-            headerName: "Recaudado",
+            headerName: "No gestiones",
             headerAlign: "center",
             align: "center",
             cellClassName: "name-column--cell",

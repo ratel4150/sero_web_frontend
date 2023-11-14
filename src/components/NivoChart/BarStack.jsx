@@ -22,6 +22,16 @@ const BarStack = ({ data, position, color, keys, groupMode }) => {
             enableGridY={false}
             layout={position}
             groupMode={`${groupMode ? "grouped" : ""}`}
+            tooltip={d => {
+                return (
+                    <div style={{ width: '270px', padding: '5px 20px', backgroundColor: '#fffafa', borderRadius: '10px', color: '#000000', textAlign: 'center' }}>
+                        <div style={{ width: '10px', height: '10px', marginRight: '10px', backgroundColor: d.color, display: 'inline-block' }}></div>
+                        <h4 style={{ display: 'inline-block', fontWeight: 'bold' }}>
+                            {d.indexValue.replaceAll('_', ' ')} - {d.formattedValue}
+                        </h4>
+                    </div>
+                )
+            }}
             theme={{
                 // added
                 axis: {
@@ -96,23 +106,6 @@ const BarStack = ({ data, position, color, keys, groupMode }) => {
             }}
             axisTop={null}
             axisRight={null}
-            // axisBottom={{
-            //     tickSize: 5,
-            //     tickPadding: 5,
-            //     tickRotation: 0,
-            //     legend: 'usuario',
-            //     legendPosition: 'middle',
-            //     legendOffset: 32
-            // }}
-            // axisLeft={{
-            //     tickSize: 5,
-            //     tickPadding: 5,
-            //     tickRotation: 0,
-            //     legend: 'gestiones',
-            //     legendPosition: 'middle',
-            //     legendOffset: -40,
-
-            // }}
             labelSkipWidth={12}
             labelSkipHeight={12}
             labelTextColor={{
