@@ -7,7 +7,7 @@ export const section6Content = {
     title: "Herrameintas",
     ITEMS: [
       {
-        title: "Ubicación en tiempo real",
+        title: "Geolocalización de personal",
         subtitle:
           "Ubica al personal de campo en tiempo real mediante la obtencion de geoposiciones de nuestras plataformas",
         image: Sec6Image1,

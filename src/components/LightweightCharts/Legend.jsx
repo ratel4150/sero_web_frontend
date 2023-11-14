@@ -1,48 +1,50 @@
-import { useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { createChart, ColorType } from 'lightweight-charts'
 import { useTheme, Typography, Box, ButtonGroup, Button } from '@mui/material'
 import { tokens } from '../../theme'
 
 
 const initialData = [
-    { time: '2019-12-01', value: 32.51 },
-    { time: '2019-12-02', value: 33.31 },
-    { time: '2019-12-03', value: 34.21 },
-    { time: '2019-12-04', value: 35.31 },
-    { time: '2019-12-05', value: 32.21 },
-    { time: '2019-12-06', value: 33.51 },
-    { time: '2019-12-07', value: 34.61 },
-    { time: '2019-12-08', value: 35.21 },
-    { time: '2019-12-09', value: 32.31 },
-    { time: '2019-12-10', value: 34.41 },
-    { time: '2019-12-11', value: 33.71 },
-    { time: '2019-12-12', value: 34.11 },
-    { time: '2019-12-13', value: 35.21 },
-    { time: '2019-12-14', value: 32.31 },
-    { time: '2019-12-15', value: 32.21 },
-    { time: '2019-12-16', value: 32.31 },
-    { time: '2019-12-17', value: 31.41 },
-    { time: '2019-12-18', value: 32.51 },
-    { time: '2019-12-19', value: 30.51 },
-    { time: '2019-12-20', value: 32.51 },
-    { time: '2019-12-21', value: 31.51 },
-    { time: '2019-12-22', value: 32.51 },
-    { time: '2019-12-23', value: 31.11 },
-    { time: '2019-12-24', value: 37.02 },
-    { time: '2019-12-25', value: 27.32 },
-    { time: '2019-12-26', value: 35.17 },
-    { time: '2019-12-27', value: 28.89 },
-    { time: '2019-12-28', value: 35.46 },
-    { time: '2019-12-29', value: 23.92 },
-    { time: '2019-12-30', value: 32.68 },
-    { time: '2019-12-31', value: 32.67 },
+    { time: '2019-12-01', value: 132 },
+    { time: '2019-12-02', value: 133 },
+    { time: '2019-12-03', value: 134 },
+    { time: '2019-12-04', value: 135 },
+    { time: '2019-12-05', value: 132 },
+    { time: '2019-12-06', value: 133 },
+    { time: '2019-12-07', value: 134 },
+    { time: '2019-12-08', value: 135 },
+    { time: '2019-12-09', value: 132 },
+    { time: '2019-12-10', value: 134 },
+    { time: '2019-12-11', value: 133 },
+    { time: '2019-12-12', value: 134 },
+    { time: '2019-12-13', value: 135 },
+    { time: '2019-12-14', value: 132 },
+    { time: '2019-12-15', value: 132 },
+    { time: '2019-12-16', value: 132 },
+    { time: '2019-12-17', value: 131 },
+    { time: '2019-12-18', value: 132 },
+    { time: '2019-12-19', value: 130 },
+    { time: '2019-12-20', value: 132 },
+    { time: '2019-12-21', value: 131 },
+    { time: '2019-12-22', value: 132 },
+    { time: '2019-12-23', value: 131 },
+    { time: '2019-12-24', value: 137 },
+    { time: '2019-12-25', value: 127 },
+    { time: '2019-12-26', value: 135 },
+    { time: '2019-12-27', value: 128 },
+    { time: '2019-12-28', value: 135 },
+    { time: '2019-12-29', value: 123 },
+    { time: '2019-12-30', value: 132 },
+    { time: '2019-12-31', value: 132 },
 ];
 
-const Legend = ({ title, data, fecha_inicio, fecha_fin }) => {
+const Legend = ({ title, data }) => {
 
     const theme = useTheme();
     const color = tokens(theme.palette.mode);
     const chartContainerRef = useRef();
+
+    const [total, setTotal] = useState(0);
 
     const colors = {
         backgroundColor: color.primary[400],
@@ -62,7 +64,7 @@ const Legend = ({ title, data, fecha_inicio, fecha_fin }) => {
         const chart = createChart(chartContainerRef.current, {
             layout: {
                 background: { type: ColorType.Solid, color: colors.backgroundColor },
-                textColor: colors.textColor, 
+                textColor: colors.textColor,
             },
             grid: {
                 vertLines: false,
@@ -76,6 +78,17 @@ const Legend = ({ title, data, fecha_inicio, fecha_fin }) => {
 
         const newSeries = chart.addAreaSeries({ lineColor: colors.lineColor, topColor: colors.areaTopColor, bottomColor: colors.areaBottomColor });
         newSeries.setData(initialData);
+
+        chart.subscribeCrosshairMove(param => {
+            //console.log(param)
+            let priceFormatted = '';
+            if(param.time) {
+                const data = param.seriesData.get(newSeries);
+                const price = data.value !== undefined ? data.value : data.close;
+                priceFormatted = price;
+                setTotal(priceFormatted)
+            }
+        })
 
         window.addEventListener('resize', handleResize);
 
@@ -93,17 +106,22 @@ const Legend = ({ title, data, fecha_inicio, fecha_fin }) => {
             sx={{ backgroundColor: color.primary[400], borderRadius: '10px' }}
         >
             <Typography
-                sx={{ padding: '10px 10px 0 10px', fontSize: '20px', color: color.grey[200] }}
+                sx={{ padding: '10px 10px 0 10px', fontSize: '16px', color: color.grey[200] }}
             >{title}</Typography>
 
-            <Box sx={{ padding: '10px 10px 0 10px' }}>
+            <Box sx={{ padding: '10px 10px 0 10px', display: 'flex', justifyContent: 'space-betwenn', alignItems: 'center' }}>
                 <ButtonGroup variant="contained" aria-label="outlined primary button group">
                     <Button sx={{ backgroundColor: color.greenAccent[600] }}>Mes</Button>
                     <Button sx={{ backgroundColor: color.greenAccent[600] }}>Semana</Button>
                     <Button sx={{ backgroundColor: color.greenAccent[600] }}>Día</Button>
                 </ButtonGroup>
+                <Typography
+                    sx={{ padding: '0px 10px 0 10px', fontSize: '20px', color: color.grey[200] }}
+                >{`Total: ${total}`}</Typography>
             </Box>
-            <div
+
+
+            <div 
                 ref={chartContainerRef}
             />
         </Box>

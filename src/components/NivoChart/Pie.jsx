@@ -25,11 +25,13 @@ const Pie = ({ data, theme }) => {
                         ]
                     ]
                 }}
-                arcLinkLabelsSkipAngle={10}
-                arcLinkLabelsTextColor="#333333"
-                arcLinkLabelsThickness={2}
+                arcLinkLabel={false}
+                arcLinkLabelsTextColor= '#f1f1f1'
+                arcLinkLabelsThickness={1}
+                arcLinkLabelsStraightLength={1}
+                arcLinkLabelsDiagonalLength={1}
                 arcLinkLabelsColor={{ from: 'color' }}
-                arcLabelsSkipAngle={10}
+                arcLabelsSkipAngle={1}
                 arcLabelsTextColor={{
                     from: 'color',
                     modifiers: [

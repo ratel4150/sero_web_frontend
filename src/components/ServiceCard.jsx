@@ -47,10 +47,6 @@ const ServiceCard = ({ title, subtitle, image, animation }) => {
           <Lottie animationData={animation} style={{ width: '60%', margin: '0 auto' }} />
         )}
 
-
-        {/* <OutlinedButton arrow fit>
-          Learn more
-        </OutlinedButton> */}
       </Stack>
     </Box>
   );

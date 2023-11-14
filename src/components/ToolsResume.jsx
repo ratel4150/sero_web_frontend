@@ -1,10 +1,9 @@
 import { Container, Grid } from "@mui/material";
 import React from "react";
-import Title from "../components/Title";
 import { section6Content } from "../data/ToolsResume";
 import ServiceCard from './ServiceCard'
 
-const { title, ITEMS } = section6Content;
+const { ITEMS } = section6Content;
 
 
 const ToolsResume = () => {

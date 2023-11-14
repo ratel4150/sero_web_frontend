@@ -9,6 +9,12 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // ICONS
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import PaidIcon from '@mui/icons-material/Paid';
+import PushPinIcon from '@mui/icons-material/PushPin';
+import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import MyLocationIcon from '@mui/icons-material/MyLocation';
+import PhotoIcon from '@mui/icons-material/Photo';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 
 // COMPONENTS
 import RecaudacionGestor from '../../components/RecaudacionGestor';
@@ -27,6 +33,14 @@ const index = () => {
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+
+    const [showModal, setShowModal] = useState(false)
+    const [titleModal, setTitleModal] = useState('')
+
+    const openModalBox = (box) => {
+        setTitleModal(box)
+        setShowModal(true)
+    }
 
     return (
         <Box
@@ -103,7 +117,7 @@ const index = () => {
                         title="Localizados"
                         subtitle={1250}
                         icon={
-                            <NewspaperIcon
+                            <PushPinIcon
                                 sx={{ color: 'black', fontSize: "28px" }}
                             />
                         }
@@ -124,7 +138,7 @@ const index = () => {
                         title="No localizados"
                         subtitle={1250}
                         icon={
-                            <NewspaperIcon
+                            <DoNotDisturbAltIcon
                                 sx={{ color: 'black', fontSize: "28px" }}
                             />
                         }
@@ -145,7 +159,7 @@ const index = () => {
                         title="Gestores"
                         subtitle={1250}
                         icon={
-                            <NewspaperIcon
+                            <AssignmentIndIcon
                                 sx={{ color: 'black', fontSize: "28px" }}
                             />
                         }
@@ -171,11 +185,10 @@ const index = () => {
                     borderRadius="10px"
                     sx={{ cursor: 'pointer' }}
                 >
+
                     <Legend
-                        title='Número de gestiones totales'
+                        title='NÚMERO DE GESTIONES TOTALES'
                         data=''
-                        fecha_inicio=''
-                        fecha_fin=''
                     />
                 </Box>
 
@@ -293,8 +306,8 @@ const index = () => {
                     gridColumn='span 12'
                     backgroundColor={colors.primary[400]}
                     borderRadius="10px"
-                    sx={{ cursor: 'pointer'}}
-                    
+                    sx={{ cursor: 'pointer' }}
+
                 >
 
                     <Box
@@ -375,7 +388,7 @@ const index = () => {
                     borderRadius="10px"
                     sx={{ cursor: 'pointer' }}
                 >
-                     <Box
+                    <Box
                         mt="10px"
                         mb="-15px"
                         p="0 10px"
@@ -423,7 +436,7 @@ const index = () => {
                         title="Gestiones con pago"
                         subtitle={1250}
                         icon={
-                            <NewspaperIcon
+                            <RequestQuoteIcon
                                 sx={{ color: 'black', fontSize: "28px" }}
                             />
                         }
@@ -442,9 +455,9 @@ const index = () => {
                 >
                     <StatBox
                         title="Gestiones sin posicion"
-                        subtitle={15}
+                        subtitle={1250}
                         icon={
-                            <NewspaperIcon
+                            <MyLocationIcon
                                 sx={{ color: 'black', fontSize: "28px" }}
                             />
                         }
@@ -464,9 +477,9 @@ const index = () => {
                 >
                     <StatBox
                         title="Gestiones sin foto"
-                        subtitle={2}
+                        subtitle={1250}
                         icon={
-                            <NewspaperIcon
+                            <PhotoIcon
                                 sx={{ color: 'black', fontSize: "28px" }}
                             />
                         }
@@ -506,6 +519,25 @@ const index = () => {
                     borderRadius="10px"
                     sx={{ cursor: 'pointer' }}
                 >
+
+                    <Box
+                        mt="10px"
+                        mb="-15px"
+                        p="0 10px"
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
+
+                        <Typography
+                            variant="h5"
+                            fontWeight="600"
+                            sx={{ padding: "2px 30px 0 5px" }}
+                            color={colors.grey[200]}
+                        >
+                            GESTIONES POR GESTOR Y CUANTAS FUERON PAGADAS
+                        </Typography>
+                    </Box>
+
                     <BarStack data={data_cuentas_pagadas} position='vertical' color='yellow_green'
                         keys={['gestionadas', 'pagadas']} groupMode={true} />
                 </Box>

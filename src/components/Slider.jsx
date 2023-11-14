@@ -5,6 +5,7 @@ import { section4Content } from "../data/slider"
 
 const { bottom } = section4Content;
 import Title from './Title'
+import { styles } from '../styles'
 
 const Slider = () => {
 
@@ -13,7 +14,7 @@ const Slider = () => {
     return (
         <Container sx={{ mt: { xs: 5, md: 5, lg: 5 } }}>
 
-            
+
             <Grid
                 container
                 spacing={5}
@@ -32,8 +33,8 @@ const Slider = () => {
                 {/* Right */}
                 <Grid item xs={12} md={6}>
                     <Stack spacing={2} sx={{ maxWidth: 480 }}>
-                        <Title variant={{ xs: "h3", md: "h2" }}>{bottom.title}</Title>
-
+                        {/* <Title variant={{ xs: "h3", md: "h2" }}>{bottom.title}</Title> */}
+                        <h1 className={`${styles.heroHeadText} text-white text-lg`}><span className='text-[#5ebfff]'>{bottom.title}</span></h1>
                         <Tabs
                             value={tabValue}
                             onChange={(e, v) => setTabValue(v)}

@@ -7,8 +7,13 @@ import Phone5Img from "../assets/wallet-transfer.webp";
 export const section4Content = {
    
     bottom: {
-      title: "Estadisticas en tiempo real",
+      title: "ESTADÍSTICAS EN TIEMPO REAL",
       TABS: [
+        {
+          name: "Rezago",
+          image: Phone5Img,
+          subtitle: "Visualización del rezago para generar estrategias.",
+        },
         {
           name: "Ingresos",
           image: Phone1Img,
@@ -20,11 +25,6 @@ export const section4Content = {
           image: Phone3Img,
           subtitle:
             "Seguridad de la comunicacion entre información.",
-        },
-        {
-          name: "Rezago",
-          image: Phone5Img,
-          subtitle: "Visualización del rezago para generar estrategias.",
         },
         {
           name: "Ubicacion",
