@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import useStore from "../store/useStore.";
+import { dateConverter } from "../../helpers/dateConverter";
 
 const GraficaBarrasAgrupadas = () => {
   const store = useStore()
@@ -19,7 +20,7 @@ const GraficaBarrasAgrupadas = () => {
     }
 
     // Procesa los datos para la gráfica
-    const fechas = pagos?.map((pago) => pago.fechaDePago);
+    const fechas = pagos?.map((pago) => dateConverter(pago.fechaDePago) );
     const pagosData = pagos?.map((pago) => pago.montoPagado);
     const adeudosData = adeudos.map((adeudo) => adeudo.debtAmount);
     console.log(adeudosData);
@@ -63,7 +64,7 @@ const GraficaBarrasAgrupadas = () => {
   }, [pagos, adeudos]);
 
   return (
-    <div style={{ maxWidth: "600px" }}>
+    <div style={{ maxWidth: "400px" }}>
       <canvas ref={chartRef} />
     </div>
   );

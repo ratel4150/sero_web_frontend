@@ -66,6 +66,7 @@ const Navegacion = ({
   fotos,
   plaza,
   datosFaltantes,
+  acciones,
   rol = "Gestor", //* 'Gestor' || 'Coordinador'
 }) => {
   const [value, setValue] = useState(
@@ -100,16 +101,21 @@ const Navegacion = ({
   const renderContent = (value) => {
     // const name = options[value];
     switch (value) {
-      case "FormularioDatosFaltantes":
-        return <DatosFaltantesSection {...datosFaltantes} />;
+     /*  case "FormularioDatosFaltantes":
+        return <DatosFaltantesSection {...datosFaltantes} />; */
       case "Contribuyente":
-        return (
-          <ContribuyenteSection
-            contribuyente={contribuyente}
-            domicilio={domicilio}
-            rol={rol}
-          />
-        );
+        if (contribuyente && domicilio ) {
+          return (
+            <ContribuyenteSection
+              contribuyente={contribuyente}
+              domicilio={domicilio}
+              rol={rol}
+            />
+          );
+        }else{
+          return null
+        }
+        
         return <PagosSection pagos={pagos} />;
       case "Graficas":
         return <GraficasSection pagos={pagos} adeudo={adeudo} />;
@@ -118,7 +124,7 @@ const Navegacion = ({
       case "Adeudo":
         return <AdeudosSection adeudos={adeudos} />;
       case "Acciones realizadas":
-        return <TablaProcesoSection />;
+        return <TablaProcesoSection acciones={acciones}/>;
       case "Fotografías capturadas":
         return <FotografiasSection fotos={fotos} />;
 
@@ -153,11 +159,11 @@ const Navegacion = ({
       </Typography>
 
       <BottomNavigation showLabels value={value} onChange={handleChange}>
-        <BottomNavigationAction
+       {/*  <BottomNavigationAction
           label="Datos Faltantes"
           value="FormularioDatosFaltantes"
           icon={<ListAltOutlinedIcon />}
-        />
+        /> */}
         <BottomNavigationAction
           label="Contribuyente"
           value="Contribuyente"
@@ -216,7 +222,7 @@ const Navegacion = ({
             {...{
               contribuyente,
               pagos,
-              adeudos: adeudos,
+              adeudos,
               coordenadas,
               domicilio,
               fotos,

@@ -128,7 +128,7 @@ function App() {
                     <Route path="/map/:place_id" element={<Map />} />
                     <Route path="/roles" element={<Roles />} />
                     <Route path="/maintenance" element={<AcountHistory />/* Aqui va Maintenance */} />
-                   
+                    
 
                   </Routes>
                 </main>

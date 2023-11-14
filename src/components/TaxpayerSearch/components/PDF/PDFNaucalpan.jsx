@@ -8,7 +8,9 @@ import TablaPagos from "./components/TablaPagos";
 
 //* Coordenadas: [-99.077326, 19.6363853]
 export const PDFNaucalpan = (params) => {
+  console.log(params);
   params.contribuyente;
+  params.domicilio
   return (
     // tabla-acciones-contribuyente
     <>
@@ -24,7 +26,7 @@ export const PDFNaucalpan = (params) => {
           <p className="fol">Folio:ERPP/NAOA/30JUN/DOM/0001/00000911-00</p>
         </div>
         <div style={{ marginTop: 30 }} />
-        <TablaDatosContribuyente contribuyente={params.contribuyente} />
+        <TablaDatosContribuyente contribuyente={params.contribuyente} domicilioContribuyente={params.domicilio}/>
         <TablaGeolocalizacion fotos={params.fotos} coordenadas={params.coordenadas} />
         <TablaAccionesContribuyente />
         <TablaAdeudo />

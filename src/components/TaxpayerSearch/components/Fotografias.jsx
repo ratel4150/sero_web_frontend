@@ -68,7 +68,7 @@ const GaleriaFotografias = ({
 
   useEffect(() => {
     console.log({ fotos });
-    const images = fotos.map(({ url }) => url);
+    const images = fotos.map(({ imageUrl }) => imageUrl);
     if (images.length > 0) setUrlsImages(images);
     console.log({ UrlsImages: images });
     // console.log({ ima ges });

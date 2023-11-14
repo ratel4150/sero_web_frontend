@@ -65,10 +65,10 @@ const ImageModal = ({ src, onClose, onBack, onNext }) => {
 
 // Componente principal para el visualizador de imágenes
 const ImageViewer = ({ images }) => {
+
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(-1)
-
   const openModal = (src, index) => {
     setSelectedIndex(index)
     setSelectedImage(src);

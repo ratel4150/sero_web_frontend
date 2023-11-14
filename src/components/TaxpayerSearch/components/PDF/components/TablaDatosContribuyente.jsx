@@ -13,7 +13,8 @@ const data = {
     "20 DE NOVIEMBRE VIV 31, VIV 3, COL. SAN FRANCISCO TEPOJACO SAN FRANCISCO TEPOJACO Cuautitlán Izcalli",
 };
 
-const TablaDatosContribuyente = ({ contribuyente }) => {
+const TablaDatosContribuyente = ({ contribuyente,domicilioContribuyente }) => {
+  console.log(domicilioContribuyente);
   return (
     <table className="tabla-datos-contribuyente">
       <thead>
@@ -36,10 +37,10 @@ const TablaDatosContribuyente = ({ contribuyente }) => {
         </tr>
 
         <tr className="tr-odd">
-          <td className="celda"> {contribuyente["Cuenta"]} </td>
-          <td className="celda"> {contribuyente["Clave Catastral"]} </td>
-          <td className="celda"> {contribuyente["Propietario"]} </td>
-          <td className="celda"> {contribuyente["Tipo de Servicio"]} </td>
+          <td className="celda"> {contribuyente["Cuenta"] || ' '} </td>
+          <td className="celda"> {contribuyente["Clave Catastral"] ||  ' ' } </td>
+          <td className="celda"> {contribuyente["Propietario"] || ' '} </td>
+          <td className="celda"> {contribuyente["TipoServicio"] || ' '} </td>
         </tr>
 
         <tr className="tr-pair small-bold">
@@ -50,10 +51,10 @@ const TablaDatosContribuyente = ({ contribuyente }) => {
         </tr>
 
         <tr className="tr-odd">
-          <td className="celda">{contribuyente["Tipo de Tarifa"]}</td>
-          <td className="celda">{contribuyente["Giro"]}</td>
-          <td className="celda">{contribuyente["Serie del medidor"]}</td>
-          <td className="celda">{contribuyente["Servicio"]}</td>
+          <td className="celda">{contribuyente["TipoTarifa"] || ' '}</td>
+          <td className="celda">{contribuyente["Giro"] || ' '}</td>
+          <td className="celda">{contribuyente["SerieMedidor"] || ' '}</td>
+          <td className="celda">{contribuyente["Servicio"] || 'Agua'}</td>
         </tr>
         <tr className="tr-pair">
           <td colSpan={4} className="celda">
@@ -61,7 +62,7 @@ const TablaDatosContribuyente = ({ contribuyente }) => {
           </td>
         </tr>
         <tr className="tr-odd">
-          <td colSpan={4} className="celda">{contribuyente["Domicilio"]}</td>
+          <td colSpan={4} className="celda">{domicilioContribuyente["Calle"]}</td>
         </tr>
         {/* {[1, 2, 3].map((row, index) => (
           <tr key={index} className={index % 2 === 0 ? "tr-pair" : "tr-odd"}>

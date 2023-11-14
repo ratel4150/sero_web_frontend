@@ -30,6 +30,8 @@ const getBlobByImage = async ({ refs, width, height }) => {
 
   // await addPageByComponent(component, pdfDoc);
   for (const ref of refs) {
+    console.log(ref);
+    console.log(ref.current);
     // Captura el componente como una imagen utilizando html2canvas
     if (!ref.current) continue;
     await addPageByComponent({
@@ -113,7 +115,7 @@ const PDFFromNodes = ({
   // captureComponent();
 
   return (
-    <div className={`PDFFromNodes ${isVisible ? "" : "hide"}`}>
+    <div className={`PDFFromNodes ${isVisible ? "" : "hided"}`}>
       {nodes.map((node, i) => (
         <div className="width-fit" key={i} ref={refs[i]}>
           {node}

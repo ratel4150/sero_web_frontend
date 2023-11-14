@@ -22,7 +22,7 @@ export const PDFCuatitlan = () => {
       </div>
 
       <TablaDatosContribuyente servicio="Regularización predio" />
-      <TablaGeolocalizacion coordenadas={[-99.07076, 19.6363853]} />
+      <TablaGeolocalizacion />
       <TablaAccionesContribuyente />
       <TablaAdeudo />
       <TablaPagos />

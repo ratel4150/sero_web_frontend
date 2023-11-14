@@ -10,6 +10,7 @@ import {
   TextField
 } from "@mui/material";
 import useStore from "./store/useStore.";
+import { dateConverter } from "../helpers/dateConverter";
 
 const TableHeader = ({ cellsText: cellsText }) => (
   <TableHead>
@@ -21,15 +22,20 @@ const TableHeader = ({ cellsText: cellsText }) => (
   </TableHead>
 );
 
-const DataRow = ({ item }) => (
+const DataRow = ({ item }) => {
+ 
+ 
+
+  
+  return (
   <TableRow>
     <TableCell>{item.debtAmount}</TableCell>
     <TableCell>{item.lastPaymentDate}</TableCell>
-    <TableCell>{item.updateDate}</TableCell>
-    <TableCell>{item.cutoffDate}</TableCell>
+    <TableCell>{dateConverter(item.updateDate) }</TableCell>
+    <TableCell>{dateConverter(item.cutoffDate) }</TableCell>
     <TableCell>{item.lasTwoMonthPayment}</TableCell>
   </TableRow>
-);
+)}
 
 const DataTable = ({ filas }) => {
   const store = useStore();
@@ -47,9 +53,11 @@ const DataTable = ({ filas }) => {
       />
       <TableBody>
        
-        {store.adeudos?.map((item, index) => (
+        {store.adeudos?.map((item, index) => {
+          console.log(item);
+          return (
           <DataRow key={index} item={item} />
-        ))}
+        )})}
       </TableBody>
     </Table>
   </TableContainer>

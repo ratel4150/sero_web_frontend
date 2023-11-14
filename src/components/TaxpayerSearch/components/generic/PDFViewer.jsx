@@ -9,7 +9,7 @@ function PdfViewer({ pdfBlob }) {
     // setPdfBlob(emptyBlob);
   }, []);
 
-  // if (!pdfBlob) return;
+/*   if (!pdfBlob) return; */
   return (
     <>
       {/* <h1>Visor de PDF</h1> */}

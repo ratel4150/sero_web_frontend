@@ -5,11 +5,12 @@ import IconOnHover from "./IconOnHover";
 
 const ComponentToPdf= ({ children }) => {
   const componentRef = useRef(null);
+  console.log(componentRef);
 
   const captureComponent = async () => {
     console.log("Download");
     const component = componentRef.current;
-
+    console.log(component);
     if (component) {
       // Captura el componente como una imagen utilizando html2canvas
       const canvas = await html2canvas(component, { scale: 3 });

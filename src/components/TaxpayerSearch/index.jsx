@@ -254,6 +254,8 @@ const index = ({ params, setNuevosDatos }) => {
 
       })
 
+    }else {
+
     }
      if(specificAccountIndexes.imageUrlInfoContributor.index.length > 1){
       specificAccountIndexes.imageUrlInfoContributor.index.forEach((iteration,index)=>{
@@ -394,21 +396,28 @@ const index = ({ params, setNuevosDatos }) => {
 
     store.setAccions(arrayAccions)
 
-    const arrayImages = []
+    const arrayPhotos = []
 
     for (
       let i = 1;
       i <= specificAccountIndexes.dateCaptureInfoContributor.index.length;
       i++
     ) {
-      const accions = {
+      const photo = {
+        imageUrl: data?.[`image_url_${i}`],
+        imageType: data?.[`image_type_${i}`],
         dateCapture: data?.[`date_capture_${i}`],
         taskDone: data?.[`task_done_${i}`],
-        personWhoCapture: data?.[`person_who_capture_${i}`]
+        personWhoCapture: data?.[`person_who_capture_${i}`],
+        synchronizationDate: data?.[`syncronization_date_${i}`],
       };
 
-      arrayAccions.push(accions);
+      arrayPhotos.push(photo);
     }
+
+    store.setFotos(arrayPhotos)
+
+    
 
 
 
@@ -505,7 +514,8 @@ const index = ({ params, setNuevosDatos }) => {
         coordenadas={store.coordenadas}
         contribuyente={store.contribuyente}
         domicilio={store.domicilio}
-        adeudos={store.adeudo}
+        adeudos={store.adeudos}
+        acciones={store.accions}
         pagos={store.pagos}
         plaza={store.plaza}
         fotos={store.fotos}

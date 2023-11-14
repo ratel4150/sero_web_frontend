@@ -12,14 +12,17 @@ const TableHeader = () => {
   );
 };
 const DataColumns = ({ data }) => {
-  return data?.map((row, index) => (
+  console.log(data);
+  return data?.map((row, index) => {
+    console.log(row);
+    return (
     <tr key={index}>
       <td>{row.cuenta}</td>
       <td>{row.claveCatastral}</td>
       <td>{row.propietario}</td>
       <td>{row.tipoServicio}</td>
     </tr>
-  ));
+  )});
 };
 // Puedes agregar aquí las filas de datos de la tabla
 // Ejemplo:

@@ -19,6 +19,7 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff"; // Icono de des
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"; // Icono de activación
 import useStore from "./store/useStore.";
 import replaceItemAtIndex from "./utils/replaceItemAtIndex";
+import { dateConverter } from "../helpers/dateConverter";
 
 const classNames = {
   parentContainer: "fotografias-tomadas",
@@ -66,7 +67,7 @@ const Fotografia = ({ image, onClick, index }) => {
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
-          height: 400,
+          height: 600,
           justifyContent: "flex-end",
         }}
       >
@@ -74,35 +75,60 @@ const Fotografia = ({ image, onClick, index }) => {
           <img
             onClick={handleClickImage}
             className={classNames.image}
-            src={image.url}
-            alt={image.description}
+            src={image.imageUrl}
+            alt={image. imageType || "-"}
+          
           />
         </Box>
         <CardContent>
-          <div>
+          <div style={{display:"flex",flexDirection:"row"}}>
             <Typography
-              variant="body1"
-              component="span"
-              fontWeight={500}
-              pr={1}
+               variant="caption" display="block" gutterBottom
             >
-              Fecha:
+              Tipo de Imagen :
             </Typography>
-            <Typography variant="body1" component="span">
-              {image.date}
+            <Typography   variant="caption" display="block" gutterBottom>
+              {image.imageType || "-"}
             </Typography>
           </div>
-          <div>
+          <div  style={{display:"flex",flexDirection:"row"}}>
             <Typography
-              variant="body1"
-              component="span"
-              fontWeight={500}
-              pr={1}
+              variant="caption" display="block" gutterBottom
             >
-              Descripción:
+              Fecha de captura:
             </Typography>
-            <Typography variant="body1" component="span">
-              {image.description}
+            <Typography  variant="caption" display="block" gutterBottom>
+              { dateConverter(image.dateCapture)  || "-"}
+            </Typography>
+          </div>
+          <div  style={{display:"flex",flexDirection:"row"}}>
+            <Typography
+              variant="caption" display="block" gutterBottom
+            >
+              Tarea realizada:
+            </Typography>
+            <Typography  variant="caption" display="block" gutterBottom>
+              {image.taskDone || "-"}
+            </Typography>
+          </div>
+          <div  style={{display:"flex",flexDirection:"row"}}>
+            <Typography
+             variant="caption" display="block" gutterBottom
+            >
+              Persona quien captura:
+            </Typography>
+            <Typography  variant="caption" display="block" gutterBottom>
+              {image.personWhoCapture || "-"}
+            </Typography>
+          </div>
+          <div  style={{display:"flex",flexDirection:"row"}}>
+            <Typography
+              variant="caption" display="block" gutterBottom
+            >
+              Fecha de sincronizaciòn:
+            </Typography>
+            <Typography  variant="caption" display="block" gutterBottom>
+              {image.synchronizationDate || "-"}
             </Typography>
           </div>
         </CardContent>

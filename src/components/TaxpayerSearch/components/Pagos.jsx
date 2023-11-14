@@ -8,6 +8,7 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import { dateConverter } from "../helpers/dateConverter";
 
 
 const TableHeader = ({ cellsText: cellsText }) => (
@@ -23,7 +24,7 @@ const TableHeader = ({ cellsText: cellsText }) => (
 const DataRow = ({ item }) => (
   <TableRow>
     
-    <TableCell>{item.fechaDePago}</TableCell>
+    <TableCell>{ dateConverter(item.fechaDePago) || "-" }</TableCell>
     <TableCell>{item.descripcion}</TableCell>
     <TableCell>{item.montoPagado}</TableCell>
      <TableCell>{item.referencia || "-"}</TableCell>

@@ -17,6 +17,7 @@ import {
   DateRange,
   DoneAll,
 } from "@mui/icons-material";
+import { dateConverter } from "../helpers/dateConverter";
 
 const data = [
   {
@@ -62,7 +63,8 @@ const styles = {
   },
 };
 
-const TablaProceso = () => {
+const TablaProceso = ({acciones}) => {
+  console.log(acciones);
   return (
     <Container maxWidth="sm">
       <Typography variant="h5" gutterBottom>
@@ -78,27 +80,29 @@ const TablaProceso = () => {
             width: "100%",
           }}
         >
-          {data.map((item, index) => (
+          {acciones.slice(0,1)?.map((item, index) => {
+            console.log(item);
+            return(
             <ListItem key={index} style={styles.listItem}>
               <ListItemIcon>
                 <Assignment />
               </ListItemIcon>
               <ListItemText>
-                <Typography
+                {/* <Typography
                   style={{ color: "var(--color-text)" }}
                   variant="subtitle1"
                 >
                   {item.proceso}
                 </Typography>
-                <Typography variant="body2">{item.servicio}</Typography>
-                <Typography variant="body2">{item.tarea}</Typography>
-                <Typography variant="body2">{item.gestor}</Typography>
+                <Typography variant="body2">{item.servicio}</Typography> */}
+                <Typography variant="body2">{item.taskDone}</Typography>
+                <Typography variant="body2">{item.personWhoCapture}</Typography>
                 <Typography variant="body2">
-                  <DateRange /> {item.fechaDeCaptura}
+                  <DateRange /> {dateConverter(item.dateCapture)}
                 </Typography>
               </ListItemText>
             </ListItem>
-          ))}
+          )})}
         </List>
       </Paper>
     </Container>

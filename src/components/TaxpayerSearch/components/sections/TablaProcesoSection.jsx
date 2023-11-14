@@ -3,10 +3,10 @@ import { Paper, Box } from "@mui/material";
 import TablaProceso from "../TablaProceso";
 import classNames from "../styles/classNames";
 
-const TablaProcesoSection = () => (
+const TablaProcesoSection = ({acciones}) => (
   <Box className={"nav-busqueda-contribuyente"}>
     <Paper className={classNames.articleHeader}>
-      <TablaProceso />
+      <TablaProceso  acciones={acciones}/>
     </Paper>
   </Box>
 );

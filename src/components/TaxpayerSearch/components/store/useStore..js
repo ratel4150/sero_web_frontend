@@ -58,6 +58,8 @@ const config = (set) => ({
   data: isDevelopment ? testConfig.data : null,
   specificAccount: '',
   accions:  null,
+  photographs: null,
+  stPhotographs:(newPhotographs)=> set({photographs:newPhotographs}),
   setAccions:(newAccions) => set({ accions: newAccions }),
   setSpecificAccount:(newSpecificAccount)=>set({specificAccount: newSpecificAccount}),
   setFotosFuncion: (callback) => set((state) => ({ fotos: callback(state.fotos) })),

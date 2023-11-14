@@ -25,15 +25,15 @@ en filas de columnas de 3 imagenes, excepto la primera fila donde la primera cel
 </td> 
 */
 
-function renderImages(images, coordenadas) {
+/* function renderImages(images, coordenadas) {
   const rows = [];
   for (let i = 0; i < images.length; i += 3) {
     const rowImages = images.slice(i, i + 3);
 
     const rowCells = rowImages.map((foto, index) => (
-      <td key={foto.url + index} className={`celda flex-grow-1 cell-location`}>
-        <p style={{ margin: 0, lineHeight: 2 }}>{foto.description}</p>
-        <img className="evidencia" src={foto.url} alt="" />
+      <td key={foto.imageUrl + index} className={`celda flex-grow-1 cell-location`}>
+        <p style={{ margin: 0, lineHeight: 2 }}>{foto.imageType}</p>
+        <img className="evidencia" src={foto.imageUrl} alt={foto.imageType} />
       </td>
     ));
 
@@ -58,10 +58,11 @@ function renderImages(images, coordenadas) {
   }
 
   return <tbody>{rows}</tbody>;
-}
+} */
 
 const TablaContenido = ({ fotos, coordenadas }) => {
   console.log({ fotos });
+  console.log(coordenadas);
 
   return (
     <>
@@ -77,38 +78,48 @@ const TablaContenido = ({ fotos, coordenadas }) => {
           <p style={{ margin: 0, lineHeight: 2 }}>Geolocalizacion</p>
           <MapboxMap coordenadas={coordenadas} />
         </td>
-        {fotos.slice(0, 2).map((foto, i) => (
-          <td key={foto.url + i} className={`cell-location`}>
-            <p style={{ margin: 0, lineHeight: 2 }}>{foto.description}</p>
-            <img className="evidencia" src={foto.url} alt="" />
-          </td>
-        ))}
+        {fotos.slice(0, 2).map((foto, i) => {
+          console.log(foto);
+          console.log(foto.imageUrl);
+       
+            return (
+              <td key={foto.imageUrl + i} className={`cell-location`}>
+                <p style={{ margin: 0, lineHeight: 2 }}>{foto.imageType}</p>
+                <img className="evidencia" src={foto.imageUrl} alt={foto.imageType} />
+            
+              </td>
+            )
+         
+        })}
       </tr>
 
       <tr className="tr-pair tr-location flex">
         {fotos.slice(2, 5)?.map((foto, i) => (
           <td
-            key={foto.url + i}
+            key={foto.imageUrl + i}
             className={`cell-location`}
             style={{ flex: "1" }}
           >
-            <p style={{ margin: 0, lineHeight: 2 }}>{foto.description}</p>
-            <img className="evidencia" src={foto.url} alt="" />
+            <p style={{ margin: 0, lineHeight: 2 }}>{foto.imageType}</p>
+            <img className="evidencia" src={foto.imageUrl} alt="" />
           </td>
         ))}
       </tr>
 
       <tr className="tr-pair tr-location flex">
-        {fotos.slice(5, 8)?.map((foto, i) => (
+        {fotos.slice(5, 8)?.map((foto, i) => {
+          
+          console.log(foto);
+          return (
           <td
             key={foto.url + i}
             className={`cell-location`}
             style={{ flex: "1" }}
           >
-            <p style={{ margin: 0, lineHeight: 2 }}>{foto.description}</p>
-            <img className="evidencia" src={foto.url} alt="" />
+            <p style={{ margin: 0, lineHeight: 2 }}>{foto.imageType}</p>
+            <img className="evidencia" src={foto.imageUrl} alt="" />
           </td>
-        ))}
+        )})}
       </tr>
     </>
   );
@@ -125,7 +136,9 @@ function useFilteredPhotos(fotos) {
 
 const TablaGeolocalizacion = ({ coordenadas, fotos }) => {
   // const { fotos } = useStore();
+  console.log(fotos);
   const filteredPhotos = useFilteredPhotos(fotos);
+  console.log(filteredPhotos);
   return (
     <table className="tabla-datos-geolocalizacion ">
       <thead>
