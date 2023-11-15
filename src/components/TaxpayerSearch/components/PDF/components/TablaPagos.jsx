@@ -1,7 +1,10 @@
 //import './styles/TablaGeolocalización.css'
 import { FC, ReactNode } from "react";
+import useStore from "../../store/useStore.";
 
 const TablaPagos = () => {
+  const store =useStore()
+  const pagos = store.pagos
   return (
     <table className="tabla-acciones-contribuyente ">
       <thead>

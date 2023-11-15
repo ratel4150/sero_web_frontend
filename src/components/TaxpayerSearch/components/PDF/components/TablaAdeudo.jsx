@@ -1,6 +1,11 @@
 //import './styles/TablaGeolocalización.css'
 
+import { dateConverter } from "../../../helpers/dateConverter";
+import useStore from "../../store/useStore.";
+
 const TablaAdeudo = () => {
+  const store = useStore();
+  const adeudos = store.adeudos;
   return (
     <table className="tabla-acciones-contribuyente ">
       <thead>
@@ -20,11 +25,14 @@ const TablaAdeudo = () => {
           <th className="celda">Fecha de corte</th>
           <th className="celda">Monto original de adeudo</th>
         </tr>
-        <tr className="tr-odd">
-          <td className="celda">2023-06-01 </td>
-          <td className="celda">2023-06-07</td>
-          <td className="celda">$3,189.49</td>
-        </tr>
+
+        {adeudos?.map((adeudo) => (
+          <tr className="tr-odd">
+            <td className="celda">{dateConverter(adeudo.updateDate) }</td>
+            <td className="celda">{dateConverter(adeudo.cutoffDate) }</td>
+            <td className="celda">{"$"+adeudo.debtAmount}</td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );

@@ -80,7 +80,7 @@ const TablaProceso = ({acciones}) => {
             width: "100%",
           }}
         >
-          {acciones.slice(0,1)?.map((item, index) => {
+          {acciones?.slice(0,1)?.map((item, index) => {
             console.log(item);
             return(
             <ListItem key={index} style={styles.listItem}>
