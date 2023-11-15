@@ -70,8 +70,8 @@ const index = () => {
       </Box>
 
       <Box sx={{ backgroundColor: colors.primary[400] }}>
-        <ReactPlayer url={Video} playing={true} muted={true} width='100%' height='400px' loop={true}
-          controls={false} style={{ backgroundColor: colors.primary[400] }} />
+        <ReactPlayer url={Video} playing={true} muted={false} width='100%' height='400px' loop={true}
+          controls={true} style={{ backgroundColor: colors.primary[400] }} />
       </Box>
 
       <Box sx={{ marginTop: '-150px' }}>

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Box, Button, useTheme, Modal, Typography } from '@mui/material';
 import GridOnIcon from '@mui/icons-material/GridOn';
-import { tokens } from "../../theme";
+import { tokens } from "../theme";
 
 
 const style = {
@@ -33,7 +33,6 @@ const ModalBox = ({ setShowModal, title, setShowModalGrid }) => {
     };
     
     const handleOpenGrid = () => {
-        console.log("Abrir grid")
         setShowModalGrid(true)
         setShowModal(false)
     }
@@ -58,12 +57,12 @@ const ModalBox = ({ setShowModal, title, setShowModalGrid }) => {
                         sx={{marginTop: '15px'}}
                     >
                         <Button variant="contained" endIcon={<GridOnIcon />} onClick={handleOpenGrid}
-                            sx={{ backgroundColor: colors.yellowAccent[900], marginRight: '10px' }}
+                            sx={{ backgroundColor: colors.greenAccent[600], marginRight: '10px' }}
                         >
                             Mostrar grid
                         </Button>
                         <Button variant="contained" endIcon={<GridOnIcon />}
-                            sx={{ backgroundColor: colors.yellowAccent[900] }}
+                            sx={{ backgroundColor: colors.greenAccent[600] }}
                         >
                             Descargar
                         </Button>

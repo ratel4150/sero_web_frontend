@@ -24,6 +24,8 @@ import ProgressCircle from "../../components/ProgressCircle";
 import Legend from '../../components/LightweightCharts/Legend'
 import BarStack from '../../components/NivoChart/BarStack'
 import Pie from '../../components/NivoChart/Pie'
+import ModalBox from '../../components/ModalBox'
+import ModalGridData from '../../components/ModalGridData'
 
 // DATA TEMP
 import { data, data_campos_capturados, data_cuentas_pagadas, data_tipo_servicio_bar } from '../../data/BarStack'
@@ -35,6 +37,7 @@ const index = () => {
     const colors = tokens(theme.palette.mode);
 
     const [showModal, setShowModal] = useState(false)
+    const [showModalGrid, setShowModalGrid] = useState(false)
     const [titleModal, setTitleModal] = useState('')
 
     const openModalBox = (box) => {
@@ -46,6 +49,8 @@ const index = () => {
         <Box
             m='20px'
         >
+            {showModal && (<ModalBox setShowModal={setShowModal} title={titleModal} setShowModalGrid={setShowModalGrid} />)}
+            {showModalGrid && (<ModalGridData setShowModal={setShowModalGrid} />)}
 
             {/* RANGO DE FECHAS */}
             <DatePicker
@@ -89,7 +94,7 @@ const index = () => {
                     alignItems="center"
                     justifyContent="center"
                     borderRadius="10px"
-                    // onClick={() => openModalBox('Jornadas')}
+                    onClick={() => openModalBox('Gestiones')}
                     sx={{ cursor: 'pointer' }}
                 >
                     <StatBox
