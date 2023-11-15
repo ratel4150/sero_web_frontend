@@ -42,7 +42,7 @@ const PorcentajeGestor = ({ size_grid }) => {
                         borderRadius="4px"
                     >
                         <Chip label={`${porcentaje}%`} avatar={<Avatar src={photo} />}
-                            style={{ color: colors.grey[100], fontSize: '15px', width: (porcentaje * 4), height: '15px', background: porcentaje >= 40 ? color_porcentaje_mayor : (porcentaje < 40 && porcentaje >= 20 ? color_porcentaje_medio : color_porcentaje_bajo)}}>
+                            style={{ color: colors.grey[100], fontSize: '15px', width: (porcentaje * 4), height: '15px', background: porcentaje >= 40 ? color_porcentaje_mayor : (porcentaje < 40 && porcentaje >= 20 ? color_porcentaje_medio : color_porcentaje_bajo) }}>
                         </Chip>
                     </Box>
                 );
@@ -53,12 +53,13 @@ const PorcentajeGestor = ({ size_grid }) => {
 
     return (
         <Box
-            backgroundColor={colors.primary[400]}
+            backgroundColor={colors.primary[700]}
             gridColumn={`span ${size_grid}`}
             borderRadius='10px'
+            height='390px'
         >
 
-            <Box sx={{ marginTop: '20px', backgroundColor: colors.primary[400] }}>
+            {/* <Box sx={{ marginTop: '20px', backgroundColor: colors.primary[400] }}>
                 <Typography
                     variant="h5"
                     color={colors.greenAccent[400]}
@@ -66,41 +67,41 @@ const PorcentajeGestor = ({ size_grid }) => {
                 >
                     Porcentaje por gestor
                 </Typography>
-            </Box>
+            </Box> */}
 
             <Box
-                m="20px 0 0 0"
-                height="400px"
+                m="0px 0 0 0"
+                height="390px"
                 sx={{
                     "& .MuiDataGrid-root": {
                         border: "none",
                         textAlign: "center"
-                      },
-                      "& .MuiDataGrid-cell": {
+                    },
+                    "& .MuiDataGrid-cell": {
                         borderBottom: "none",
                         textAlign: "center !important"
-                      },
-                      "& .name-column--cell": {
+                    },
+                    "& .name-column--cell": {
                         color: colors.grey[200],
                         fontSize: "14px"
-                      },
-                      "& .MuiDataGrid-columnHeaders": {
+                    },
+                    "& .MuiDataGrid-columnHeaders": {
                         backgroundColor: colors.primary[400],
                         borderBottomColor: colors.greenAccent[700],
-                      },
-                      "& .MuiDataGrid-virtualScroller": {
+                    },
+                    "& .MuiDataGrid-virtualScroller": {
                         backgroundColor: colors.primary[400],
-                      },
-                      "& .MuiDataGrid-footerContainer": {
+                    },
+                    "& .MuiDataGrid-footerContainer": {
                         borderTop: "none",
                         backgroundColor: colors.primary[400],
-                      },
-                      "& .MuiCheckbox-root": {
+                    },
+                    "& .MuiCheckbox-root": {
                         color: `${colors.greenAccent[200]} !important`,
-                      },
-                      "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                    },
+                    "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
                         color: `${colors.grey[100]} !important`,
-                      },
+                    },
                 }}
             >
 

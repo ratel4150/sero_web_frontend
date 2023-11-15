@@ -41,7 +41,6 @@ import Spinner from '../../components/MaterialUI/SpinnerCircle'
 import LineChart from "../../components/LineChart";
 import ProgressCircle from "../../components/ProgressCircle";
 import MapBoxMap from '../../components/MapBoxMap'
-import ThreeGraphics from '../../components/ThreeGraphics';
 import SkeletonUI from '../../components/MaterialUI/SkeletonUI'
 import Modal from '../../components/MaterialUI/Modal'
 

@@ -24,6 +24,7 @@ import Map from './scenes/map'
 import Roles from './scenes/roles'
 import Maintenance from './scenes/maintenance'
 import WorkAssignment from './scenes/work-assignment'
+import DashboardCoordinator from './scenes/dashboard-coordinacion'
 import Account from './scenes/account'
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -130,7 +131,6 @@ function App() {
                     <Route path="/roles" element={<Roles />} />
                     <Route path="/maintenance" element={<Maintenance />} />
                     <Route path="/work-assignment" element={<WorkAssignment />} />
-                    <Route path="/account" element={<Account />} />
                   </Routes>
                 </main>
               </div>

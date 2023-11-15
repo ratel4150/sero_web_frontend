@@ -58,3 +58,17 @@ body,
 
 
 /* Login */
+
+/* canvas {
+  background-color: red;
+  height: 400px !important;
+  position: relative;
+  top: 100px;
+} */
+
+.css-1kwv0rr {
+  width: 69%;
+  position: relative;
+  top: 30px;
+  z-index: 1;
+}
