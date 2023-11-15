@@ -47,6 +47,7 @@ import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { useDispatch } from 'react-redux';
 import { setUser, logoutUser } from '../../features/user/userSlice'
 import HomeIcon from '@mui/icons-material/Home';
+import ScreenSearchDesktopIcon from '@mui/icons-material/ScreenSearchDesktop';
 
 const iconsMap = {
   "Home": <HomeIcon />,
@@ -82,7 +83,8 @@ const iconsMap = {
   "PriceCheckIcon": <PriceCheckIcon />,
   "PlaylistAddCheckIcon": <PlaylistAddCheckIcon />,
   "SensorOccupiedIcon": <SensorOccupiedIcon />,
-  "PriceChangeIcon": <PriceChangeIcon />
+  "PriceChangeIcon": <PriceChangeIcon />,
+  "ScreenSearchDesktopIcon": <ScreenSearchDesktopIcon/>
 };
 
 const Item = ({ title, to, icon, selected, setSelected, color, isCollapsed = false }) => {

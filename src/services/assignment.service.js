@@ -7,7 +7,7 @@ export const postWorkAssignment = async (place_id, service_id, excelData) => {
       const response = await workAssignmentRequest(place_id, service_id, excelData);
       return response.data; // Puedes ajustar esto según la estructura de respuesta de tu API
     } catch (error) {
-      console.error('Error al enviar datos a la API', error);
+      console.error('Error al enviar datos a la API', error.response?.data || error.message);
       throw error; // O maneja el error según tus necesidades
     }
   };
