@@ -2,19 +2,23 @@ import { Box, useTheme } from '@mui/material'
 import React from 'react'
 import { tokens } from '../../theme';
 import { useSelector } from 'react-redux';
-import TaxPayerSearch from '../../components/TaxpayerSearch';
+
+import Header from '../../components/Header';
+import AccountHistoryModule from '../../components/AccountHistoryModule';
 
 function AcountHistory() {
   const user = useSelector(state => state.user)
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
-    <Box m="40px" marginTop="0">
-      <Box sx={{ width: '100%', marginBottom: '10px', backgroundColor: colors.primary[400] }}>
-         <TaxPayerSearch/>
-      </Box>
-     
-    </Box>
+    <Box m="20px">
+      <Header title="Historial de cuenta" subtitle="Ingresa los datos" /> 
+    {/* <Header title="Crea un nuevo usuario" subtitle="Ingresa los datos" />  
+              
+    <StepperComponent /> */}
+    <AccountHistoryModule />
+    
+</Box>
 
   )
 }

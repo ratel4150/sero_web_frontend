@@ -34,6 +34,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import Cookies from 'js-cookie'
 import { verifyTokenRequest } from "./api/auth";
 import AcountHistory from "./scenes/acount-history";
+import SheetGenerator from "./scenes/sheet-generator";
 
 
 function App() {
@@ -127,7 +128,8 @@ function App() {
                     <Route path="/map-list" element={<MapList />} />
                     <Route path="/map/:place_id" element={<Map />} />
                     <Route path="/roles" element={<Roles />} />
-                    <Route path="/maintenance" element={<AcountHistory />/* Aqui va Maintenance */} />
+                    {/* <Route path="/maintenance" element={<AcountHistory /> */}{/* Aqui va Maintenance />*/} 
+                    <Route path="/maintenance" element={<AcountHistory />}/>
                     
 
                   </Routes>

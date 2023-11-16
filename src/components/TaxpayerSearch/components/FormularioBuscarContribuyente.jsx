@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { TextField, Button, Paper } from "@mui/material";
+import { TextField, Button, Paper, InputAdornment, MenuItem } from "@mui/material";
 import ListaPlaza from "./ListaPlaza";
 import SearchIcon from "@mui/icons-material/Search";
 import "./styles/FormularioBuscarContribuyente.css";
 import GenericSelect from "./generic/GenericSelect";
 import useStore from "./store/useStore.";
 import axios from "axios";
+import PlaceIcon from '@mui/icons-material/Place';
 
 const FormularioBuscarContribuyente = ({
   cuenta, setCuenta,
@@ -57,7 +58,7 @@ const FormularioBuscarContribuyente = ({
       elevation={2}
     >
 
-      <GenericSelect
+      {/* <GenericSelect
         className="hijo-formulario-buscar-cuenta"
         label={"Selecciona Plaza"}
         setSelected={setPlaza}
@@ -68,7 +69,21 @@ const FormularioBuscarContribuyente = ({
           "Naucalpan",
           // "Cuautitlan Izcalli",
         ]}
-      />
+      /> */}
+        <TextField
+                   
+                    select
+                    label="Sexo"
+                    variant="filled"
+                    sx={{ width: '45%' }}
+                    defaultValue=""
+                   /*  onChange={(e) => changeControl(e, 'sexo')} */
+                >
+                    <MenuItem key="1" value="1"> Cuautitlan Mexicoº </MenuItem>
+                    <MenuItem key="2" value="2"> Cuautitlan Izcalli </MenuItem>
+                    <MenuItem key="2" value="2"> Naucalpan </MenuItem>
+                    <MenuItem key="3" value="3"> No sabe </MenuItem>
+                </TextField>
       <GenericSelect
         className="hijo-formulario-buscar-cuenta"
         label={"Selecciona tipo de servicio"}

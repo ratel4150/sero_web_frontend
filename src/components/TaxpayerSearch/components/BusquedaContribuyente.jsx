@@ -104,6 +104,7 @@ const BusquedaContribuyente = ({
   // };
   return (
     <div className={classNames.principal}>
+      
       <Typography className={classNames.title} variant="h3">
         Plaza: {plaza}
       </Typography>
