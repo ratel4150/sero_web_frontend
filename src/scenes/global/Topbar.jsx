@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import * as React from 'react';
 
 import { Box, IconButton, useTheme, Typography, Avatar, Menu, MenuItem } from "@mui/material";
 import { useContext } from "react";
@@ -22,9 +23,16 @@ import LayersIcon from '@mui/icons-material/Layers';
 
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from "react-router-dom";
-import { useSelector } from 'react-redux'
 
 import DialogUI from '../../components/MaterialUI/Dialog'
+
+import { getPlacesByUserId } from '../../services/place.service';
+import { useSelector } from 'react-redux'
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+
+import SeroSpace from '../../assets/ser0_space_fondooscuro.png'
 
 const Topbar = () => {
 
@@ -40,6 +48,9 @@ const Topbar = () => {
 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElApps, setAnchorElApps] = useState(null);
+  const user = useSelector(state => state.user)
+  const [places, setPlaces] = useState([])
+  const [selectedPlace, setSelectedPlace] = useState('');
 
 
   const [state, setState] = useState({
@@ -78,10 +89,13 @@ const Topbar = () => {
     setAnchorElApps(null);
   };
 
-
   return (
-    <Box display="flex" justifyContent="space-between" p={2} sx={{ marginBottom: '15px', backgroundColor: location.pathname === `/map/${mapa_seleccionado.place_id}` ? theme.palette.mode === "dark" ? '#1F2D40' : '#F2F0F0' : null }} >
+
+    <Box display="flex" justifyContent="space-between" p={2}
+      sx={{ marginBottom: '15px', 
+      backgroundColor: location.pathname === `/map/${mapa_seleccionado.place_id}` ? theme.palette.mode === "dark" ? '#1F2D40' : '#F2F0F0' : null, position: 'relative', zIndex:100 }} >
       {/* SEARCH BAR */}
+
 
       <DrawerNotification state={state} toggleDrawer={toggleDrawer} />
 
@@ -92,11 +106,11 @@ const Topbar = () => {
         borderRadius="3px"
         gap='10px'
       >
-       {location.pathname === `/map/${mapa_seleccionado.place_id}` && (
+        {location.pathname === `/map/${mapa_seleccionado.place_id}` && (
           <>
             <LayersIcon sx={{ fontSize: '36px' }} />
             <Typography sx={{ fontSize: '22px' }}>
-              Sistema De Información Geográfica 
+              Sistema De Información Geográfica
               <span style={{ marginLeft: '15px', color: theme.palette.mode === "dark" ? colors.greenAccent[400] : 'black', fontSize: '20px', fontWeight: 'bold' }}>
                 {`${mapa_seleccionado.name}`}
               </span>
@@ -117,7 +131,7 @@ const Topbar = () => {
           )}
         </IconButton>
 
-         {location.pathname === `/map/${mapa_seleccionado.place_id}` && (
+        {location.pathname === `/map/${mapa_seleccionado.place_id}` && (
 
           <DialogUI />
 
@@ -161,10 +175,11 @@ const Topbar = () => {
               </IconButton>
             </Box>
 
-            <Box sx={{ padding: '5px', borderRadius: '10px' }}>
-              <IconButton sx={{ backgroundColor: colors.blueAccent[700] }} onClick={() => navigation('/map-list')} >
+            <Box sx={{ padding: '5px', borderRadius: '10px', cursor: 'pointer' }}>
+              <img src={SeroSpace} alt="" onClick={() => navigation('/map-list')} />
+              {/* <IconButton sx={{ backgroundColor: colors.blueAccent[700] }} onClick={() => navigation('/map-list')} >
                 <MapIcon sx={{ fontSize: '30px' }} />
-              </IconButton>
+              </IconButton> */}
             </Box>
 
             <Box sx={{ padding: '5px', borderRadius: '50%' }}>

@@ -23,6 +23,9 @@ import MapList from './scenes/maps'
 import Map from './scenes/map'
 import Roles from './scenes/roles'
 import Maintenance from './scenes/maintenance'
+import WorkAssignment from './scenes/work-assignment'
+import DashboardCoordinator from './scenes/dashboard-coordinacion'
+import Account from './scenes/account'
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -128,10 +131,8 @@ function App() {
                     <Route path="/map-list" element={<MapList />} />
                     <Route path="/map/:place_id" element={<Map />} />
                     <Route path="/roles" element={<Roles />} />
-                    {/* <Route path="/maintenance" element={<AcountHistory /> */}{/* Aqui va Maintenance />*/} 
-                    <Route path="/maintenance" element={<AcountHistory />}/>
-                    
-
+                    <Route path="/maintenance" element={<AcountHistory />} />
+                    <Route path="/work-assignment" element={<WorkAssignment />} />
                   </Routes>
                 </main>
               </div>
