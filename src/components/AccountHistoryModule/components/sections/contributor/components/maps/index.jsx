@@ -11,9 +11,9 @@ const classNames = {
   panorama: "GoogleMapsPrincipalPanorama",
   // principal: 'GoogleMapsPrincipal'
 };
-function GoogleMaps() {
-  const lat =19.5404127
-  const lng = -99.1785603
+function GoogleMaps({latitude,longitude}) {
+  const lat =latitude?latitude: 19.6593364
+  const lng =longitude?longitude: -99.2093698
   const mapRef = React.useRef(null);
   const panoramaRef = React.useRef(null);
   const [mapLoaded, setMapLoaded] = React.useState(false);
@@ -42,6 +42,7 @@ function GoogleMaps() {
       map.setStreetView(panorama);
     }
   }, [mapLoaded, lng, lat]);
+  
   return (
     <div className={classNames.principal}>
     <LoadScript googleMapsApiKey={"AIzaSyBSbHAclLiEeiClEXfeZ2zn9OT850Mw55A"} onLoad={onMapLoad}>

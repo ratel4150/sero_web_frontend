@@ -1,12 +1,16 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import React from 'react'
 import { tokens } from '../../../../../theme';
-
-import TableContributor from './components/TableContributor';
-
 import GoogleMaps from './components/maps';
+import { useStoreZustand } from '../../../../../zustan_store/useStoreZustand';
+import InputsContributor from './components/InputsContributor';
+
 
 function ContributorSection() {
+  const {informationContributorPersonalData}=useStoreZustand()
+
+  const latitude =informationContributorPersonalData?.latitude
+  const longitude = informationContributorPersonalData?.longitude
     const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
@@ -64,7 +68,7 @@ function ContributorSection() {
         }}
     >
 
-       {/*  <DataGrid rows={recaudadoGestor} columns={columns} autoPageSize /> */}<TableContributor/>
+       {/*  <DataGrid rows={recaudadoGestor} columns={columns} autoPageSize /> */}<InputsContributor/>
     </Box>
     
 
@@ -78,7 +82,7 @@ function ContributorSection() {
             color={colors.greenAccent[400]}
             sx={{ paddingTop: '10px', paddingLeft: '30px' }}
         >
-            GOOGLE MAPS
+            GOOGLE MAPS 
         </Typography>
     </Box>
     <Box
@@ -117,7 +121,7 @@ function ContributorSection() {
         }}
     >
 
-       {/*  <DataGrid rows={recaudadoGestor} columns={columns} autoPageSize /> */}<GoogleMaps/>
+       {/*  <DataGrid rows={recaudadoGestor} columns={columns} autoPageSize /> */}<GoogleMaps latitude={latitude} longitude={longitude}/>
     </Box>
 
       </Grid>

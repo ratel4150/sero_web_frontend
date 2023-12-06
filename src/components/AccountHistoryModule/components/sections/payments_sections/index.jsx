@@ -1,79 +1,211 @@
-import React from 'react'
-import { DataGrid } from '@mui/x-data-grid';
+import React from "react";
+import {
+  DataGrid,
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
+  GridToolbarDensitySelector,
+  GridToolbarExport,
+  GridToolbarFilterButton,
+} from "@mui/x-data-grid";
+import { useStoreZustand } from "../../../../../zustan_store/useStoreZustand";
+import { Box } from "@mui/material";
+import functionsCustom from "../../../../../helpers";
 
 function PaymentsSections() {
-    const columns = [
-        { field: 'id', headerName: 'ID', width: 90 },
-        {
-          field: 'refernce',
-          headerName: 'Referencia',
-          width: 150,
-          editable: true,
-        },
-        {
-          field: 'description',
-          headerName: 'Descripcion',
-          width: 150,
-          editable: true,
-        },
-        {
-          field: 'amount_paid',
-          headerName: 'Monto a Pagar',
-          type: 'number',
-          width: 110,
-          editable: true,
-        },
-        {
-            field: 'payment_date',
-            headerName: 'Fecha de Pago',
-            type: 'number',
-            width: 110,
-            editable: true,
-          },
-          {
-            field: 'payment_period',
-            headerName: 'Periodo de Pago',
-            type: 'number',
-            width: 110,
-            editable: true,
-          },
-      /*   {
-          field: 'payment_date',
-          headerName: 'Fecha de Pago',
-          description: 'This column has a value getter and is not sortable.',
-          sortable: false,
-          width: 160,
-          valueGetter: (params) =>
-            `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-        }, */
-      ];
-      
-      const rows = [
-        { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-        { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-        { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-        { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-        { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-        { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-        { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-        { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-        { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-      ];
+  const { payments } = useStoreZustand();
+  console.log(payments);
+  const columns = [];
+  payments?.forEach((debtObject, index) => {
+    if (index === 0) {
+      for (const key in debtObject) {
+        switch (key) {
+          case "referencia":
+            columns.push({
+              field: key,
+              renderHeader: () => (
+                <strong style={{ color: "#5EBFFF" }}>
+                  {"Referencia "}
+                  {/*    <span role="img" aria-label="gestor" style={{color:"#5EBFFF"}}>
+                    🧑
+                  </span> */}
+                </strong>
+              ),
+              width: 150,
+              editable: true,
+            });
+
+            break;
+          case "descripcion":
+            columns.push({
+              field: key,
+              renderHeader: () => (
+                <strong style={{ color: "#5EBFFF" }}>
+                  {"Descripciòn"}
+                  {/*  <span role="img" aria-label="gestor" style={{color:"#5EBFFF"}}>
+                    {""}
+                  </span> */}
+                </strong>
+              ),
+              width: 300,
+              editable: true,
+              valueGetter: ({ value }) => {
+                switch (value) {
+                  case "DERECHOS DE AGUA POTABLE REZAGO":
+                    return `💦 ${value}`;
+
+                    break;
+
+                  default:
+                    return value;
+                    break;
+                }
+              },
+            });
+            break;
+          case "payment_period":
+            columns.push({
+              field: key,
+              renderHeader: () => (
+                <strong style={{ color: "#5EBFFF" }}>
+                  {"Periodo de Pago "}
+                  {/*    <span role="img" aria-label="gestor" style={{color:"#5EBFFF"}}>
+                    🧑
+                  </span> */}
+                </strong>
+              ),
+              width: 150,
+              editable: true,
+              type: "dateTime",
+              valueGetter: ({ value }) => {
+                return new Date(value);
+              },
+            });
+            break;
+          case "fechaDePago":
+            columns.push({
+              field: key,
+              renderHeader: () => (
+                <strong style={{ color: "#5EBFFF" }}>
+                  {"Fecha de Pago"}
+                  {/*  <span role="img" aria-label="gestor" style={{color:"#5EBFFF"}}>
+                    🧑
+                  </span> */}
+                </strong>
+              ),
+              width: 150,
+              editable: true,
+              type: "dateTime",
+              valueGetter: ({ value }) => {
+                return new Date(value);
+              },
+            });
+            break;
+          case "montoPagado":
+            columns.push({
+              field: key,
+              renderHeader: () => (
+                <strong style={{ color: "#5EBFFF" }}>
+                  {"Pago "}
+                  {/*    <span role="img" aria-label="gestor" style={{color:"#5EBFFF"}}>
+                    🧑
+                  </span> */}
+                </strong>
+              ),
+              width: 150,
+              editable: true,
+              type: "string",
+              valueGetter: ({ value }) => {
+                return value
+                  ? `$ ${functionsCustom.formatNumberWithCommas(value)}`
+                  : `$ 00.00`;
+              },
+            });
+            break;
+
+          default:
+            break;
+        }
+      }
+    }
+  });
+
+  const rows = [];
+payments?.forEach((debtObject, index) => {
+  // Verificar si todas las propiedades del objeto son undefined
+  const allUndefined = Object.values(debtObject).every(value => value === undefined);
+
+  if (debtObject && !allUndefined) {
+    console.log(debtObject);
+    debtObject = { ...debtObject, id: index + 1 };
+    rows.push(debtObject);
+  }
+});
+
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer>
+        <GridToolbarColumnsButton color="secondary" />
+        <GridToolbarFilterButton color="secondary" />
+        <GridToolbarDensitySelector color="secondary" />
+        <GridToolbarExport color="secondary" />
+      </GridToolbarContainer>
+    );
+  }
+
   return (
-    <DataGrid
-    rows={rows}
-    columns={columns}
-    initialState={{
-      pagination: {
-        paginationModel: {
-          pageSize: 5,
+    <Box
+      sx={{
+        height: 300,
+        width: "100%",
+        "& .cold": {
+          color: "red",
         },
-      },
-    }}
-    pageSizeOptions={[5]}
-    checkboxSelection
-    disableRowSelectionOnClick/>
-  )
+        "& .payment": {
+          color: "#17E85D",
+        },
+        "& .secondLetter": {
+          color: "#ff9900",
+        },
+        "& .thirdLetter": {
+          color: "#33cc33",
+        },
+        "& .fourthLetter": {
+          color: "#ff0000",
+        },
+      }}
+    >
+      <DataGrid
+        slots={{ toolbar: CustomToolbar }}
+        localeText={{
+          toolbarColumns: "Columnas",
+          toolbarFilters: "Filtros",
+          toolbarDensity: "Tamaño Celda",
+          toolbarExport: "Exportar",
+        }}
+        rows={rows.filter((row) => row !== undefined)}
+        columns={columns}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 5,
+            },
+          },
+        }}
+        pageSizeOptions={[5]}
+        checkboxSelection
+        disableRowSelectionOnClick
+        getCellClassName={(params) => {
+          if (
+            params.value &&
+            typeof params.value === "string" &&
+            params.value.includes("$")
+          ) {
+            return "payment";
+          }
+        }}
+      />
+    </Box>
+  );
 }
 
-export default PaymentsSections
+export default PaymentsSections;
