@@ -130,7 +130,7 @@ function SearchDialog({ handleCloseDialog }) {
     verificationInputs.townInput,
   ]);
 
-  /* console.log(responseData); */
+  
 
   const columns = [];
 
