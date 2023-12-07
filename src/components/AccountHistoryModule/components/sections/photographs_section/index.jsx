@@ -42,12 +42,20 @@ import { useSelector } from "react-redux";
 import functionsCustom from "../../../../../helpers";
 import useAccountData from "../../../../../hooks/accountDataHook";
 
-const AWS_BUCKET_NAME = "bucket-files-msg";
-const AWS_BUCKET_REGION = "us-east-2";
-const AWS_PUBLIC_KEY = "AKIAT5FEWJS6F645GO3V";
-const AWS_SECRET_KEY = "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";
-const AWS_EXPIRE_SECONDS = 3600;
-const AWS_LIST_MAX_KEYS = 100;
+
+
+const AWS_BUCKET_NAME = import.meta.env.VITE_AWS_BUCKET_NAME;
+const AWS_BUCKET_REGION = import.meta.env.AWS_BUCKET_REGION;
+const AWS_PUBLIC_KEY = import.meta.env.AWS_PUBLIC_KEY;
+const AWS_SECRET_KEY = import.meta.env.AWS_SECRET_KEY;
+const AWS_EXPIRE_SECONDS = import.meta.env.AWS_EXPIRE_SECONDS;
+const AWS_LIST_MAX_KEYS = import.meta.env.AWS_LIST_MAX_KEYS;
+
+
+
+
+// Use these variables wherever needed in your application
+
 
 AWS.config.update({
   accessKeyId: AWS_PUBLIC_KEY,
