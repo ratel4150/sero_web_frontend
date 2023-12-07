@@ -11,11 +11,12 @@ import { BsMailbox2 } from "react-icons/bs";
 import { useStoreZustand } from '../../../../../../zustan_store/useStoreZustand';
 import { IoIosHelpCircle } from "react-icons/io";
 import { tokens } from '../../../../../../theme';
+import useCombinedSlices from '../../../../../../hooks/useCombinedSlices';
 
 function InputsContributor() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-    const {informationContributorPersonalData}=useStoreZustand()
+    const {informationContributor}=useCombinedSlices()
     const[help,setHelp]=React.useState(false)
   return  (
     <Box sx={{padding:"2rem",maxHeight:"400px",overflow:"auto"}}>
@@ -50,7 +51,7 @@ function InputsContributor() {
         sx={{marginBottom:"1rem",marginRight:"1rem",width:"92%"}}
         id="input-with-icon-textfield"
         label="Direccion"
-        value={informationContributorPersonalData?.street || ""}
+        value={informationContributor?.street || ""}
         multiline
         InputProps={{
           startAdornment: (
@@ -69,7 +70,7 @@ function InputsContributor() {
         sx={{marginBottom:"1rem",marginRight:"1rem"}}
         id="input-with-icon-textfield"
         label="Num. Ext."
-        value={informationContributorPersonalData?.["outdoor_number"] || ""}
+        value={informationContributor?.["outdoor_number"] || ""}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -87,7 +88,7 @@ function InputsContributor() {
         sx={{marginBottom:"1rem",marginRight:"1rem"}}
         id="input-with-icon-textfield"
         label="Num. Int."
-        value={ informationContributorPersonalData?.["interior_number"] || "" }
+        value={ informationContributor?.["interior_number"] || "" }
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -105,7 +106,7 @@ function InputsContributor() {
         sx={{marginBottom:"1rem",marginRight:"1rem",width:"92%"}}
         id="input-with-icon-textfield"
         label="Colonia"
-        value={informationContributorPersonalData?.cologne || ""}
+        value={informationContributor?.cologne || ""}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -123,7 +124,7 @@ function InputsContributor() {
         sx={{marginBottom:"1rem",marginRight:"1rem"}}
         id="input-with-icon-textfield"
         label="Manzana"
-        value={informationContributorPersonalData?.square || ""}
+        value={informationContributor?.square || ""}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -141,7 +142,7 @@ function InputsContributor() {
         sx={{marginBottom:"1rem",marginRight:"1rem"}}
         id="input-with-icon-textfield"
         label="Lote"
-        value={informationContributorPersonalData?.allotment || ""}
+        value={informationContributor?.allotment || ""}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -160,7 +161,7 @@ function InputsContributor() {
         sx={{marginBottom:"1rem",marginRight:"1rem"}}
         id="input-with-icon-textfield"
         label="Entre Calle"
-        value={informationContributorPersonalData?.["between_street_1"] || ""}
+        value={informationContributor?.["between_street_1"] || ""}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -178,7 +179,7 @@ function InputsContributor() {
         sx={{marginBottom:"1rem",marginRight:"1rem"}}
         id="input-with-icon-textfield"
         label="Entre Calle 2"
-        value={informationContributorPersonalData?.["between_street_2"] || ""}
+        value={informationContributor?.["between_street_2"] || ""}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -196,7 +197,7 @@ function InputsContributor() {
         sx={{marginBottom:"1rem",marginRight:"1rem"}}
         id="input-with-icon-textfield"
         label="Referencia"
-        value={ informationContributorPersonalData?.reference || ""}
+        value={ informationContributor?.reference || ""}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -214,7 +215,7 @@ function InputsContributor() {
         sx={{marginBottom:"1rem",marginRight:"1rem"}}
         id="input-with-icon-textfield"
         label="Poblaciòn"
-        value={informationContributorPersonalData?.town || ""}
+        value={informationContributor?.town || ""}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -232,7 +233,7 @@ function InputsContributor() {
         sx={{marginBottom:"1rem",marginRight:"1rem"}}
         id="input-with-icon-textfield"
         label="Codigo Postal"
-        value={informationContributorPersonalData?.poastal_code || ""}
+        value={informationContributor?.poastal_code || ""}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

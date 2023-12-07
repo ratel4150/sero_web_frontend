@@ -8,8 +8,9 @@ import ReviewsIcon from '@mui/icons-material/Reviews';
 import PersonIcon from '@mui/icons-material/Person';
 import { useStoreZustand } from '../../../../zustan_store/useStoreZustand';
 import { IoIosHelpCircle } from "react-icons/io";
+import useCombinedSlices from '../../../../hooks/useCombinedSlices';
 function ContributorInfo() {
-  const {informationContributorPersonalData}=useStoreZustand()
+  const {informationContributor}=useCombinedSlices()
   const[help,setHelp]=React.useState(false)
 
 
@@ -40,7 +41,7 @@ function ContributorInfo() {
         sx={{marginBottom:"1rem"}}
         id="input-with-icon-textfield"
         label="Cuenta"
-        value={informationContributorPersonalData?.account || "" }
+        value={informationContributor?.account || "" }
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -58,7 +59,7 @@ function ContributorInfo() {
         sx={{width:"13rem"}}
         id="input-with-icon-textfield"
         label="Propietario"
-        value={informationContributorPersonalData?.["owner_name"] || ""}
+        value={informationContributor?.["owner_name"] || ""}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -84,7 +85,7 @@ function ContributorInfo() {
         sx={{marginBottom:"1rem"}}
         id="input-with-icon-textfield"
         label="Servicio"
-        value={informationContributorPersonalData?.["type_service"] || ""}
+        value={informationContributor?.["type_service"] || ""}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -102,7 +103,7 @@ function ContributorInfo() {
         sx={{width:"13rem"}}
         id="input-with-icon-textfield"
         label="Tipo de tarifa"
-        value={informationContributorPersonalData?.["rate_type"] || ""}
+        value={informationContributor?.["rate_type"] || ""}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -122,7 +123,7 @@ function ContributorInfo() {
         sx={{marginBottom:"1rem"}}
         id="input-with-icon-textfield"
         label="Turno"
-        value={informationContributorPersonalData?.turn || ""}
+        value={informationContributor?.turn || ""}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -140,7 +141,7 @@ function ContributorInfo() {
         sx={{width:"13rem"}}
         id="input-with-icon-textfield"
         label="Serie de Medidor"
-        value={informationContributorPersonalData?.["meter_series"] || ""}
+        value={informationContributor?.["meter_series"] || ""}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

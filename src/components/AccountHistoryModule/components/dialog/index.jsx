@@ -30,11 +30,12 @@ import { ImCancelCircle } from "react-icons/im";
 import useAccountData from "../../../../hooks/accountDataHook";
 import { FaRegCircleCheck } from "react-icons/fa6";
 import { TbZoomCancel } from "react-icons/tb";
+import useCombinedSlices from "../../../../hooks/useCombinedSlices";
 
 function SearchDialog({ handleCloseDialog }) {
   const { setRowAccount, plazaNumber, setAlertInfoFromRequest } =
     useStoreZustand();
-  const { setAccountData } = useAccountData();
+  const { setAccountData } = useCombinedSlices();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [formDataFromInputs, setFormDataFromInputs] = React.useState({

@@ -3,9 +3,10 @@ import React from "react";
 import { useStoreZustand } from "../../../../../zustan_store/useStoreZustand";
 import { Box } from "@mui/material";
 import functionsCustom from "../../../../../helpers";
+import useCombinedSlices from "../../../../../hooks/useCombinedSlices";
 
 function DebtsSections() {
-  const { debts } = useStoreZustand();
+  const { debts } = useCombinedSlices();
   console.log("Esto es un gran comentario");
 
   const columns = [];

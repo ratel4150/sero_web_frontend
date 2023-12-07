@@ -41,6 +41,7 @@ import { GrUploadOption } from "react-icons/gr";
 import { useSelector } from "react-redux";
 import functionsCustom from "../../../../../helpers";
 import useAccountData from "../../../../../hooks/accountDataHook";
+import useCombinedSlices from "../../../../../hooks/useCombinedSlices";
 
 
 
@@ -151,8 +152,9 @@ function PhotographsSections() {
     informationContributorPersonalData,
     /* setAccountData, */
     plazaNumber,
-    photos,
+    /* photos, */
   } = useStoreZustand();
+  const {photos}=useCombinedSlices()
 
   const { setAccountData } = useAccountData();
 

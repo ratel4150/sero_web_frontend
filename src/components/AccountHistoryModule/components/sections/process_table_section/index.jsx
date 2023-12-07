@@ -3,9 +3,10 @@ import React from "react";
 import { useStoreZustand } from "../../../../../zustan_store/useStoreZustand";
 import { Avatar, Box } from "@mui/material";
 import Viewer from "react-viewer";
+import useCombinedSlices from "../../../../../hooks/useCombinedSlices";
 
 function ProcessTableSection() {
-  const { actions } = useStoreZustand();
+  const { actions } = useCombinedSlices();
   console.log(actions);
   /* // ✅ Valid
 const CountButton = () => {
@@ -61,11 +62,11 @@ const column = {
             columns.push({
               field: key,
               renderHeader: () => (
-                <strong>
+                <strong style={{color:"#5EBFFF"}}>
                   {"Tarea Gestionada "}
-                  <span role="img" aria-label="task" style={{color:"#5EBFFF"}}>
+               {/*    <span role="img" aria-label="task" style={{color:"#5EBFFF"}}>
                   📃
-                  </span>
+                  </span> */}
                 </strong>
               ),
               width: 150,
@@ -78,11 +79,11 @@ const column = {
             columns.push({
               field: key,
               renderHeader: () => (
-                <strong>
+                <strong  style={{color:"#5EBFFF"}}>
                   {"Fecha de Captura "}
-                  <span role="img" aria-label="fecha" style={{color:"#5EBFFF"}}>
+             {/*      <span role="img" aria-label="fecha" style={{color:"#5EBFFF"}}>
                     📆
-                  </span>
+                  </span> */}
                 </strong>
               ),
               width: 150,

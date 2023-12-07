@@ -12,7 +12,7 @@ import contributorAddress from "./contributorAddressSlice";
 import debts from "./debtsSlice";
 import getImageData from "./getImageDataSlice";
 import getRowAccount from './getRowAccountSlice'
-import informationContibutorPersonal from './informationContributorPersonalDataSlice'
+import informationContributor from './informationContributorSlice'
 import payment from './paymentsSlice'
 import photo from './photosSlice'
 import plazaNumber from './plazaNumberSlice'
@@ -30,7 +30,7 @@ const rootReducer = combineReducers({
   debts: debts,
   getImageData: getImageData,
   getRowAccount:getRowAccount,
-  informationContibutorPersonal:informationContibutorPersonal,
+  informationContributor:informationContributor,
   payment:payment,
   photo:photo,
   plazaNumber:plazaNumber

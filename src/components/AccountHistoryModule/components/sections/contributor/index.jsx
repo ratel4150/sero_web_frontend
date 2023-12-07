@@ -4,13 +4,15 @@ import { tokens } from '../../../../../theme';
 import GoogleMaps from './components/maps';
 import { useStoreZustand } from '../../../../../zustan_store/useStoreZustand';
 import InputsContributor from './components/InputsContributor';
+import useCombinedSlices from '../../../../../hooks/useCombinedSlices';
 
 
 function ContributorSection() {
-  const {informationContributorPersonalData}=useStoreZustand()
+  const {informationContributor}=useCombinedSlices()
+  console.log(informationContributor);
 
-  const latitude =informationContributorPersonalData?.latitude
-  const longitude = informationContributorPersonalData?.longitude
+  const latitude =informationContributor?.latitude
+  const longitude = informationContributor?.longitude
     const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (

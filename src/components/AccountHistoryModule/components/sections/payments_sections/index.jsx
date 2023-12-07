@@ -7,12 +7,12 @@ import {
   GridToolbarExport,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { useStoreZustand } from "../../../../../zustan_store/useStoreZustand";
 import { Box, Chip } from "@mui/material";
 import functionsCustom from "../../../../../helpers";
+import useCombinedSlices from "../../../../../hooks/useCombinedSlices";
 
 function PaymentsSections() {
-  const { payments } = useStoreZustand();
+  const { payments } = useCombinedSlices();
   /* console.log(payments); */
   const Chips = ({ params }) => {
     return (

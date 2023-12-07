@@ -22,11 +22,11 @@ import ReactPDF from '@react-pdf/renderer';
 import useAccountData from '../../../../hooks/accountDataHook'
 import useCombinedSlices from "../../../../hooks/useCombinedSlices";
 function Search({ handleOpenDialog, handelOpenBackDrop, handelCloseBackDrop,ownerDetails,ownerHomeImages,ownerDebts,ownerPayments}) {
-  const {setPlazaNumber,plazaNumber,setAlertInfoFromRequest,alertInfo}=useStoreZustand();
+  const {setPlazaNumber,plazaNumber,setAlertInfoFromRequest}=useStoreZustand();
   const [searchValue, setSearchValue] = React.useState("");
   
   /* const { setAccountData} = useStoreZustand(); */
-  const{setAccountData} = useAccountData()
+  const{setAccountData,alertInfo,setAlertInfo} = useCombinedSlices()
   const [openPDF, setOpenPDF] = React.useState(false);
   console.log(ownerHomeImages);
   const handleOpenPDF = () => {
@@ -42,7 +42,7 @@ function Search({ handleOpenDialog, handelOpenBackDrop, handelCloseBackDrop,owne
   
 
   const handleAccountSearch = () => {
-    setAlertInfoFromRequest(null)
+    setAlertInfo(null)
     const startTime = Date.now(); // Guarda el tiempo de inicio
     handelOpenBackDrop();
     const apiUrl = `http://localhost:3000/api/AccountHistoryByCount/${plazaNumber}/${searchValue}/`;
@@ -61,7 +61,7 @@ function Search({ handleOpenDialog, handelOpenBackDrop, handelCloseBackDrop,owne
           statusText: response.statusText,
         };
     
-        setAlertInfoFromRequest(requestInfo);
+        setAlertInfo(requestInfo);
     
         // Hacer algo con los datos, por ejemplo, actualizar el estado del componente
         setAccountData(data);
@@ -76,7 +76,7 @@ function Search({ handleOpenDialog, handelOpenBackDrop, handelCloseBackDrop,owne
           statusText: error.response ? error.response.statusText : undefined,
         };
     
-        setAlertInfoFromRequest(requestInfo);
+        setAlertInfo(requestInfo);
       } finally {
         const endTime = Date.now(); // Guarda el tiempo de finalización
         const duration = endTime - startTime; // Calcula la duración de la solicitud
@@ -88,7 +88,7 @@ function Search({ handleOpenDialog, handelOpenBackDrop, handelCloseBackDrop,owne
         }, duration);
         setTimeout(() => {
           handelCloseBackDrop();
-          setAlertInfoFromRequest(null);
+          setAlertInfo(null);
         }, duration + 3000);
       }
     };
