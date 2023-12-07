@@ -262,7 +262,7 @@ function DebtsSections() {
           },
         },
       }}
-      pageSizeOptions={[5]}
+      pageSizeOptions={[5,10,30,50]}
       checkboxSelection
       disableRowSelectionOnClick
       getCellClassName={(params) => {

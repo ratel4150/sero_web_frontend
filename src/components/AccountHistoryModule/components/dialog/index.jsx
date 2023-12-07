@@ -14,6 +14,8 @@ import {
   FormGroup,
   FormControlLabel,
   CircularProgress,
+  Stack,
+  Typography,
 } from "@mui/material";
 import React, { useEffect } from "react";
 import Container from "../Container";
@@ -25,8 +27,14 @@ import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { useStoreZustand } from "../../../../zustan_store/useStoreZustand";
 import { ImCancelCircle } from "react-icons/im";
+import useAccountData from "../../../../hooks/accountDataHook";
+import { FaRegCircleCheck } from "react-icons/fa6";
+import { TbZoomCancel } from "react-icons/tb";
+
 function SearchDialog({ handleCloseDialog }) {
-  const { setRowAccount ,setAccountData,plazaNumber,setAlertInfoFromRequest} = useStoreZustand();
+  const { setRowAccount, plazaNumber, setAlertInfoFromRequest } =
+    useStoreZustand();
+  const { setAccountData } = useAccountData();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [formDataFromInputs, setFormDataFromInputs] = React.useState({
@@ -34,6 +42,12 @@ function SearchDialog({ handleCloseDialog }) {
     owner_name: "",
     street: "",
     cologne: "",
+  });
+  const [verificationInputs, setVerificationInputs] = React.useState({
+    accountInput: false,
+    ownerNameinput: false,
+    streetInput: false,
+    townInput: false,
   });
   const [alertInfo, setAlertInfo] = React.useState(null);
   const [responseData, setResponseData] = React.useState(null);
@@ -43,38 +57,80 @@ function SearchDialog({ handleCloseDialog }) {
 
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
+
+    setVerificationInputs((prev) => {
+      switch (name) {
+        case "account":
+          return {
+            ...prev,
+            [name]: !!value,
+            accountInput: value.length > 0 ? true : false,
+          };
+
+        case "owner_name":
+          return {
+            ...prev,
+            [name]: !!value,
+            ownerNameinput: value.length > 0 ? true : false,
+          };
+        case "street":
+          return {
+            ...prev,
+            [name]: !!value,
+            streetInput: value.length > 0 ? true : false,
+          };
+        case "cologne":
+          return {
+            ...prev,
+            [name]: !!value,
+            townInput: value.length > 0 ? true : false,
+          };
+        // Agrega más casos si es necesario para otros campos
+
+        /*  default:
+          return {
+            ...prev,
+            [name]: !!value,
+          }; */
+      }
+    });
     setFormDataFromInputs({
       ...formDataFromInputs,
       [name]: value,
     });
   };
   React.useEffect(() => {
-    const apiUrl = `http://localhost:3000/api/AccountHistoryByParameters/${plazaNumber}/${formDataFromInputs.account}/${formDataFromInputs.owner_name}/${formDataFromInputs.street}/${formDataFromInputs.cologne}`;
-    // Aquí puedes realizar la acción de búsqueda con el valor de "cuenta"
-    // Por ahora, solo mostraremos el valor en la consola
-    
-
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(apiUrl);
-        const data = response.data;
-        setResponseData(data);
-      } catch (error) {
-        // Manejar errores, por ejemplo, imprimir el mensaje de error en la consola
-        console.error("Error al hacer la solicitud:", error.message);
-      }
-    };
-
-    // Llama a la función para hacer la solicitud al montar el componente
-    fetchData();
+    // Verifica si todas las propiedades de verificationInputs son true
+    const allInputsVerified = Object.values(verificationInputs).every(Boolean);
+  
+    // Si todas las propiedades son true, procede con la lógica del useEffect
+    if (allInputsVerified) {
+      const apiUrl = `http://localhost:3000/api/AccountHistoryByParameters/${plazaNumber}/${formDataFromInputs.account}/${formDataFromInputs.owner_name}/${formDataFromInputs.street}/${formDataFromInputs.cologne}`;
+  
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(apiUrl);
+          const data = response.data;
+          setResponseData(data);
+        } catch (error) {
+          console.error("Error al hacer la solicitud:", error.message);
+        }
+      };
+  
+      fetchData();
+    }
   }, [
     formDataFromInputs.account,
     formDataFromInputs.owner_name,
     formDataFromInputs.street,
     formDataFromInputs.cologne,
+    verificationInputs.accountInput,
+    verificationInputs.ownerNameinput,
+    verificationInputs.streetInput,
+    verificationInputs.townInput,
   ]);
 
-  console.log(responseData);
+  /* console.log(responseData); */
 
   const columns = [];
 
@@ -175,7 +231,6 @@ function SearchDialog({ handleCloseDialog }) {
       <DialogTitle
         sx={{ backgroundColor: colors.primary[400] }}
         id="responsive-dialog-title"
- 
       >
         {"BUSQUEDA PERSONALIZADA"}
       </DialogTitle>
@@ -192,7 +247,7 @@ function SearchDialog({ handleCloseDialog }) {
           >
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <TextField
-              color="secondary"
+                color="secondary"
                 sx={{ marginBottom: "1rem", width: "400px" }}
                 id="input-with-icon-textfield-account"
                 label="Cuenta"
@@ -209,8 +264,24 @@ function SearchDialog({ handleCloseDialog }) {
                 }}
                 variant="standard"
               />
+              {verificationInputs.accountInput ? (
+                <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                  <FaRegCircleCheck style={{ color: "#14B814" }} />{" "}
+                  <Typography color={"secondary"} variant="caption">
+                    ¡Gracias por ingresar una cuenta!
+                  </Typography>
+                </Stack>
+                
+                /* TbZoomCancel */
+              ) : (
+                <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                  <TbZoomCancel style={{ color: "red" }} />{" "}
+                <Typography sx={{ color: "red" }} variant="caption">
+                  * ¡Por favor, ingresa una cuenta!
+                </Typography></Stack>
+              )}
               <TextField
-              color="secondary"
+                color="secondary"
                 size="small"
                 sx={{ width: "400px", marginBottom: "1rem" }}
                 id="input-with-icon-textfield-contributor"
@@ -227,8 +298,22 @@ function SearchDialog({ handleCloseDialog }) {
                 }}
                 variant="standard"
               />
+              {verificationInputs.ownerNameinput ? (
+                <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                  <FaRegCircleCheck style={{ color: "#14B814" }} />{" "}
+                  <Typography color={"secondary"} variant="caption">
+                    ¡Gracias por ingresar un propietario!
+                  </Typography>
+                </Stack>
+              ) : (
+                <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                <TbZoomCancel style={{ color: "red" }} />{" "}
+              <Typography sx={{ color: "red" }} variant="caption">
+                * ¡Por favor, ingresa un nombre de propietario!
+              </Typography></Stack>
+              )}
               <TextField
-               color="secondary"
+                color="secondary"
                 size="small"
                 sx={{ width: "400px", marginBottom: "1rem" }}
                 id="input-with-icon-textfield-street"
@@ -245,26 +330,54 @@ function SearchDialog({ handleCloseDialog }) {
                 }}
                 variant="standard"
               />
-              <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <TextField
-                  color="secondary"
-                  size="small"
-                  sx={{ width: "400px", marginBottom: "1rem" }}
-                  id="input-with-icon-textfield-cologne"
-                  label="Colonia"
-                  name="cologne"
-                  onChange={handleChangeInput}
-                  value={formDataFromInputs.cologne}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <PersonIcon color=""/>
-                      </InputAdornment>
-                    ),
-                  }}
-                  variant="standard"
-                />
-                {/*     <FormGroup sx={{display:"flex",flexDirection:"row",justifyContent:"start"}}>
+              {verificationInputs.streetInput ? (
+                <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                  <FaRegCircleCheck style={{ color: "#14B814" }} />{" "}
+                  <Typography color={"secondary"} variant="caption">
+                    ¡Gracias por ingresar una calle!
+                  </Typography>
+                </Stack>
+              ) : (
+                <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                <TbZoomCancel style={{ color: "red" }} />{" "}
+              <Typography sx={{ color: "red" }} variant="caption">
+                * ¡Por favor, ingresa una calle valida!
+              </Typography></Stack>
+              )}
+
+              <TextField
+                color="secondary"
+                size="small"
+                sx={{ width: "400px", marginBottom: "1rem" }}
+                id="input-with-icon-textfield-cologne"
+                label="Colonia"
+                name="cologne"
+                onChange={handleChangeInput}
+                value={formDataFromInputs.cologne}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PersonIcon color="" />
+                    </InputAdornment>
+                  ),
+                }}
+                variant="standard"
+              />
+              {verificationInputs.townInput ? (
+                <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                  <FaRegCircleCheck style={{ color: "#14B814" }} />{" "}
+                  <Typography color={"secondary"} variant="caption">
+                    ¡Gracias por ingresar una colonia!
+                  </Typography>
+                </Stack>
+              ) : (
+                <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                <TbZoomCancel style={{ color: "red" }} />{" "}
+              <Typography sx={{ color: "red" }} variant="caption">
+                * ¡Por favor, ingresa un nombre de colonia valido!
+              </Typography></Stack>
+              )}
+              {/*     <FormGroup sx={{display:"flex",flexDirection:"row",justifyContent:"start"}}>
               <FormControlLabel
                   
                   control={<Checkbox />}
@@ -281,26 +394,26 @@ function SearchDialog({ handleCloseDialog }) {
                   label="Igual"
                 />
               </FormGroup> */}
-              </Box>
             </Box>
           </Box>
         </Container>
-        {loading ?(<Box sx={{textAlign:"center", padding:"20px"}}>
-          <CircularProgress color="secondary" />
-
-        </Box>):responseData ?(
+        {loading ? (
+          <Box sx={{ textAlign: "center", padding: "20px" }}>
+            <CircularProgress color="secondary" />
+          </Box>
+        ) : responseData ? (
           <DataGrid
             onRowClick={(params) => {
               setLoading(true); // Activa el indicador de carga
               const plaza_id = plazaNumber;
               const account_id = params.row.account;
               const apiUrl = `http://localhost:3000/api/AccountHistoryByCount/${plaza_id}/${account_id}/`;
-          
+
               const fetchData = async () => {
                 try {
                   const response = await axios.get(apiUrl);
                   const data = response.data;
-          
+
                   // Hacer algo con los datos, por ejemplo, actualizar el estado del componente
                   setAlertInfoFromRequest({
                     status: response.status,
@@ -316,26 +429,22 @@ function SearchDialog({ handleCloseDialog }) {
                   });
                 } finally {
                   setLoading(false); // Desactiva el indicador de carga después de la solicitud
-          
+
                   // Cierra el backdrop después de completar la búsqueda, considerando la duración
                   setTimeout(() => {
                     handelCloseBackDrop();
                   }, 0);
-          
+
                   // Limpia la alerta después de cierto tiempo
                   setTimeout(() => {
-                 
-                  
                     handleCloseDialog();
                   }, 10);
                   setTimeout(() => {
-                 
                     setAlertInfoFromRequest(null);
-                   
                   }, 3000);
                 }
               };
-          
+
               // Llama a la función para hacer la solicitud al hacer clic en la fila
               fetchData();
             }}
@@ -352,10 +461,11 @@ function SearchDialog({ handleCloseDialog }) {
             checkboxSelection
             disableRowSelectionOnClick
           />
-        ):(<Box sx={{textAlign:"center", padding:"20px"}}>
-          <CircularProgress color="secondary" />
-
-        </Box>)}
+        ) : (
+          <Box sx={{ textAlign: "center", padding: "20px" }}>
+            <CircularProgress color="secondary" />
+          </Box>
+        )}
 
         {/*   <DialogContentText>
           Let Google help apps determine location. This means sending anonymous
@@ -363,10 +473,15 @@ function SearchDialog({ handleCloseDialog }) {
         </DialogContentText> */}
       </DialogContent>
       <DialogActions sx={{ backgroundColor: colors.primary[400] }}>
-        <Button autoFocus onClick={handleCloseDialog} color="secondary" startIcon={<ImCancelCircle/>}>
+        <Button
+          autoFocus
+          onClick={handleCloseDialog}
+          color="secondary"
+          startIcon={<ImCancelCircle />}
+        >
           Cerrar
         </Button>
-       {/*  <Button  autoFocus>Agree</Button> */}
+        {/*  <Button  autoFocus>Agree</Button> */}
       </DialogActions>
     </Dialog>
   );

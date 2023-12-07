@@ -8,12 +8,20 @@ import {
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
 import { useStoreZustand } from "../../../../../zustan_store/useStoreZustand";
-import { Box } from "@mui/material";
+import { Box, Chip } from "@mui/material";
 import functionsCustom from "../../../../../helpers";
 
 function PaymentsSections() {
   const { payments } = useStoreZustand();
-  console.log(payments);
+  /* console.log(payments); */
+  const Chips = ({ params }) => {
+    return (
+      <Box>
+        <Chip label={params} color="secondary" size="small" />
+      </Box>
+    );
+  };
+
   const columns = [];
   payments?.forEach((debtObject, index) => {
     if (index === 0) {
@@ -30,7 +38,7 @@ function PaymentsSections() {
                   </span> */}
                 </strong>
               ),
-              width: 150,
+              width: 100,
               editable: true,
             });
 
@@ -121,6 +129,23 @@ function PaymentsSections() {
               },
             });
             break;
+          case "paymentPeriod":
+            columns.push({
+              field: key,
+              renderHeader: () => (
+                <strong style={{ color: "#5EBFFF" }}>
+                  {"Periodo de pago "}
+                  {/*    <span role="img" aria-label="gestor" style={{color:"#5EBFFF"}}>
+                      🧑
+                    </span> */}
+                </strong>
+              ),
+              width: 150,
+              renderCell: (params) => (
+                <Chips params={params.row.paymentPeriod} />
+              ),
+            });
+            break;
 
           default:
             break;
@@ -130,16 +155,18 @@ function PaymentsSections() {
   });
 
   const rows = [];
-payments?.forEach((debtObject, index) => {
-  // Verificar si todas las propiedades del objeto son undefined
-  const allUndefined = Object.values(debtObject).every(value => value === undefined);
+  payments?.forEach((debtObject, index) => {
+    // Verificar si todas las propiedades del objeto son undefined
+    const allUndefined = Object.values(debtObject).every(
+      (value) => value === undefined
+    );
 
-  if (debtObject && !allUndefined) {
-    console.log(debtObject);
-    debtObject = { ...debtObject, id: index + 1 };
-    rows.push(debtObject);
-  }
-});
+    if (debtObject && !allUndefined) {
+      console.log(debtObject);
+      debtObject = { ...debtObject, id: index + 1 };
+      rows.push(debtObject);
+    }
+  });
 
   function CustomToolbar() {
     return (
@@ -175,7 +202,8 @@ payments?.forEach((debtObject, index) => {
       }}
     >
       <DataGrid
-        slots={{ toolbar: CustomToolbar }}
+        slots={{ toolbar: CustomToolbar}}
+       
         localeText={{
           toolbarColumns: "Columnas",
           toolbarFilters: "Filtros",
@@ -191,7 +219,7 @@ payments?.forEach((debtObject, index) => {
             },
           },
         }}
-        pageSizeOptions={[5]}
+        pageSizeOptions={[5,10,30,50]}
         checkboxSelection
         disableRowSelectionOnClick
         getCellClassName={(params) => {
