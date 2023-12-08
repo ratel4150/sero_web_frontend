@@ -1,13 +1,28 @@
 import { DataGrid, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarExport, GridToolbarFilterButton } from "@mui/x-data-grid";
 import React from "react";
-import { useStoreZustand } from "../../../../../zustan_store/useStoreZustand";
 import { Box } from "@mui/material";
 import functionsCustom from "../../../../../helpers";
 import useCombinedSlices from "../../../../../hooks/useCombinedSlices";
-
+/**
+ * Componente que muestra información sobre deudas.
+ *
+ * @component
+ * @example
+ * // Ejemplo de uso
+ * <DebtsSections />
+ *
+ * @returns {JSX.Element} - React component
+ */
 function DebtsSections() {
+  
   const { debts } = useCombinedSlices();
-  /* console.log("Esto es un gran comentario"); */
+/**
+   * Construye las columnas para el componente DataGrid.
+   *
+   * @returns {Array} - Un array de objetos que representa las columnas.
+   */
+  const buildColumns = ()=>{
+
 
   const columns = [];
   debts?.forEach((debtObject, index) => {
@@ -123,6 +138,9 @@ function DebtsSections() {
       }
     }
   });
+
+  return columns
+}
   
   /* const columns = [
         { field: 'id', headerName: 'ID', width: 90 },
@@ -193,6 +211,15 @@ function DebtsSections() {
   })
    */
 
+  
+  /**
+   * Construye las filas para el componente DataGrid.
+   *
+   * @returns {Array} - Un array de objetos que representa las filas.
+   */
+   const buildRows=()=>{
+
+  
   const rows = [];
   /* debts?.forEach((debtObject,index)=>{
     debtObject={...debtObject,id: index + 1}
@@ -210,6 +237,14 @@ function DebtsSections() {
       rows.push(debtObject);
     }
   });
+
+ return rows
+}
+/**
+   * Componente personalizado para la barra de herramientas del DataGrid.
+   *
+   * @returns {JSX.Element} - React component
+   */
 
   function CustomToolbar() {
     return (
@@ -254,8 +289,8 @@ function DebtsSections() {
       toolbarExport: "Exportar"
     }}
       color
-      rows={rows?rows:null}
-      columns={columns}
+      rows={buildRows()}
+      columns={buildColumns()}
       initialState={{
         pagination: {
           paginationModel: {
@@ -278,5 +313,11 @@ function DebtsSections() {
     /></Box>
   );
 }
+DebtsSections.propTypes = {
+  /**
+   * La lista de deudas.
+   */
+  debts: PropTypes.array.isRequired,
+};
 
 export default DebtsSections;
