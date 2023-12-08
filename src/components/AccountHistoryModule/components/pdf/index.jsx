@@ -16,6 +16,13 @@ import QRCode from 'qrcode';
 
 /* Functions */
 
+/**
+ * Generates a QR code data URL.
+ * 
+ * @param {string} url - URL to encode in the QR code.
+ * @returns {string} - Data URL of the generated QR code.
+ */
+
 
 const generateQRCodeData = (url) => {
   return QRCode.toDataURL(url, {
@@ -23,7 +30,13 @@ const generateQRCodeData = (url) => {
     scale: 4,
   });
 };
-
+/**
+ * Formats a date string.
+ * 
+ * @param {string} dateString - Input date string.
+ * @param {string} format - Desired format ('date', 'time', 'full').
+ * @returns {string} - Formatted date string.
+ */
 function formatDate(dateString, format) {
   const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
   const formattedDate = new Date(dateString).toLocaleString('es-MX', options);
@@ -47,7 +60,12 @@ const originalDate = '2023-10-26T10:28:50.000Z';
 console.log(formatDate(originalDate, 'date'));    // 10/26/2023
 console.log(formatDate(originalDate, 'time'));    // 10:28:50
 console.log(formatDate(originalDate, 'full'));    // 10/26/2023, 10:28:50 */
-
+/**
+ * Formats a currency amount.
+ * 
+ * @param {number} amount - Amount to format.
+ * @returns {string} - Formatted currency amount.
+ */
 function formatCurrency(amount) {
   // Asegura que amount sea un número
   const numericAmount = Number(amount);
@@ -74,9 +92,15 @@ const amount2 = 678;
 
 console.log(formatCurrency(amount1)); // $123.45
 console.log(formatCurrency(amount2)); // $678.00 */
-
+/**
+ * Calcula el monto total de los pagos en un array de objetos.
+ *
+ * @function
+ * @param {Array} array - El array de objetos que contiene los pagos.
+ * @returns {string} - El monto total formateado como una cadena con el símbolo de dólar y dos decimales.
+ */
 const totalPayments=(array)=>{
-  console.log(array);
+
   let totalCount = 0
   array.forEach((payments)=>{
     if (payments.montoPagado != undefined) {
@@ -226,7 +250,7 @@ const styles = StyleSheet.create({
 
 function Pdf({ ownerDetails, ownerHomeImages, ownerDebts,ownerPayments }) {
 
-  console.log(ownerHomeImages);
+ /*  console.log(ownerHomeImages); */
   
 
   const qrCodeData = generateQRCodeData('https://example.com');
@@ -240,7 +264,7 @@ function Pdf({ ownerDetails, ownerHomeImages, ownerDebts,ownerPayments }) {
   &markers=color:red%7Clabel:C%7C40.718217,-73.998284
   &key=AIzaSyBSbHAclLiEeiClEXfeZ2zn9OT850Mw55A`;
   console.log(imageUrl); */
-  console.log(ownerHomeImages[1]?.imageUrl);
+  /* console.log(ownerHomeImages[1]?.imageUrl); */
   const [image, setImage] = React.useState("");
   React.useEffect(() => {
     setImage(ownerHomeImages[1]?.imageUrl);

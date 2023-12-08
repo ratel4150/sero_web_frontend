@@ -2,14 +2,19 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import React from 'react'
 import { tokens } from '../../../../../theme';
 import GoogleMaps from './components/maps';
-import { useStoreZustand } from '../../../../../zustan_store/useStoreZustand';
+
 import InputsContributor from './components/InputsContributor';
 import useCombinedSlices from '../../../../../hooks/useCombinedSlices';
-
-
+import { withErrorBoundary } from '@sentry/react';
+/**
+ * Sección del contribuyente que muestra información sobre el contribuyente y un mapa de Google.
+ * 
+ * @component
+ * @returns {JSX.Element} - Elemento JSX que representa la sección del contribuyente.
+ */
 function ContributorSection() {
   const {informationContributor}=useCombinedSlices()
-  console.log(informationContributor);
+  
 
   const latitude =informationContributor?.latitude
   const longitude = informationContributor?.longitude
@@ -133,4 +138,4 @@ function ContributorSection() {
   )
 }
 
-export default ContributorSection
+export default withErrorBoundary(ContributorSection)

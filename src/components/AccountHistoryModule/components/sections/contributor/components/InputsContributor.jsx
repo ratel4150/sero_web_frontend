@@ -8,11 +8,16 @@ import { FaMountainCity } from "react-icons/fa6";
 import { MdAssignment } from "react-icons/md";
 import { GoCrossReference } from "react-icons/go";
 import { BsMailbox2 } from "react-icons/bs";
-import { useStoreZustand } from '../../../../../../zustan_store/useStoreZustand';
 import { IoIosHelpCircle } from "react-icons/io";
 import { tokens } from '../../../../../../theme';
 import useCombinedSlices from '../../../../../../hooks/useCombinedSlices';
-
+import { withErrorBoundary } from '@sentry/react';
+/**
+ * Componente que muestra campos de información sobre la dirección de un contribuyente.
+ *
+ * @component
+ * @returns {JSX.Element} - Elemento JSX que representa los campos de información del contribuyente.
+ */
 function InputsContributor() {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -20,17 +25,7 @@ function InputsContributor() {
     const[help,setHelp]=React.useState(false)
   return  (
     <Box sx={{padding:"2rem",maxHeight:"400px",overflow:"auto"}}>
-        {/* "street": "LUIS PASTEUR No EX.07 C, PARQUE INDUSTRIAL LA JOYA, CUAUTITLAN IZCALLI, ESTADO DE MEXICO",
-"outdoor_number": "",
-"interior_number": "",
-"cologne": "PARQUE INDUSTRIAL LA JOYA",
-"square": "",
-"allotment": "",
-"between_street_1": "",
-"between_street_2": "",
-"reference": "",
-"town": "",
-"poastal_code": "", */}
+      
 <Tooltip title="Ayuda">
   <IconButton onClick={()=>{
     if (help) {
@@ -248,4 +243,4 @@ function InputsContributor() {
   )
 }
 
-export default InputsContributor
+export default withErrorBoundary(InputsContributor);

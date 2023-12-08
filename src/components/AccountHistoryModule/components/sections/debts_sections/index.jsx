@@ -7,7 +7,7 @@ import useCombinedSlices from "../../../../../hooks/useCombinedSlices";
 
 function DebtsSections() {
   const { debts } = useCombinedSlices();
-  console.log("Esto es un gran comentario");
+  /* console.log("Esto es un gran comentario"); */
 
   const columns = [];
   debts?.forEach((debtObject, index) => {
@@ -205,7 +205,7 @@ function DebtsSections() {
     const allUndefined = Object.values(debtObject).every(value => value === undefined);
   
     if (debtObject && !allUndefined) {
-      console.log(debtObject);
+     /*  console.log(debtObject); */
       debtObject = { ...debtObject, id: index + 1 };
       rows.push(debtObject);
     }

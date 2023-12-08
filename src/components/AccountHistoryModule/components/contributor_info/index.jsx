@@ -9,6 +9,15 @@ import PersonIcon from '@mui/icons-material/Person';
 import { useStoreZustand } from '../../../../zustan_store/useStoreZustand';
 import { IoIosHelpCircle } from "react-icons/io";
 import useCombinedSlices from '../../../../hooks/useCombinedSlices';
+
+
+
+
+/**
+ * Componente para mostrar la información del contribuidor.
+ * @component
+ * @returns {JSX.Element}
+ */
 function ContributorInfo() {
   const {informationContributor}=useCombinedSlices()
   const[help,setHelp]=React.useState(false)

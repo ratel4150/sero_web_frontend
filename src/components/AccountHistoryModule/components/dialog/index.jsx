@@ -31,6 +31,15 @@ import useAccountData from "../../../../hooks/accountDataHook";
 import { FaRegCircleCheck } from "react-icons/fa6";
 import { TbZoomCancel } from "react-icons/tb";
 import useCombinedSlices from "../../../../hooks/useCombinedSlices";
+import PropTypes from "prop-types";
+/**
+ * Componente funcional que representa un cuadro de diálogo para realizar búsquedas personalizadas.
+ *
+ * @component
+ * @param {Object} props - Propiedades del componente.
+ * @param {Function} props.handleCloseDialog - Función para cerrar el cuadro de diálogo.
+ * @returns {JSX.Element} Elemento JSX que representa el cuadro de diálogo de búsqueda.
+ */
 
 function SearchDialog({ handleCloseDialog }) {
   const { setRowAccount, plazaNumber, setAlertInfoFromRequest } =
@@ -55,6 +64,15 @@ function SearchDialog({ handleCloseDialog }) {
   const [loading, setLoading] = React.useState(false);
   const colors = tokens(theme.palette.mode);
   const label = "hol";
+
+  /**
+   * Maneja el cambio en los campos de entrada y actualiza el estado correspondiente.
+   *
+   * @param {Object} e - Evento de cambio.
+   * @param {string} e.target.name - Nombre del campo de entrada.
+   * @param {string} e.target.value - Valor del campo de entrada.
+   * @returns {void}
+   */
 
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
@@ -100,14 +118,20 @@ function SearchDialog({ handleCloseDialog }) {
       [name]: value,
     });
   };
+  /**
+   * Efecto secundario que realiza la búsqueda cuando todos los campos están verificados.
+   *
+   * @function
+   * @returns {void}
+   */
   React.useEffect(() => {
     // Verifica si todas las propiedades de verificationInputs son true
     const allInputsVerified = Object.values(verificationInputs).every(Boolean);
-  
+
     // Si todas las propiedades son true, procede con la lógica del useEffect
     if (allInputsVerified) {
       const apiUrl = `http://localhost:3000/api/AccountHistoryByParameters/${plazaNumber}/${formDataFromInputs.account}/${formDataFromInputs.owner_name}/${formDataFromInputs.street}/${formDataFromInputs.cologne}`;
-  
+
       const fetchData = async () => {
         try {
           const response = await axios.get(apiUrl);
@@ -117,7 +141,7 @@ function SearchDialog({ handleCloseDialog }) {
           console.error("Error al hacer la solicitud:", error.message);
         }
       };
-  
+
       fetchData();
     }
   }, [
@@ -130,46 +154,50 @@ function SearchDialog({ handleCloseDialog }) {
     verificationInputs.streetInput,
     verificationInputs.townInput,
   ]);
+  /**
+   * Función auxiliar que construye las columnas para el componente DataGrid.
+   *
+   * @function
+   * @returns {Array} Arreglo de objetos que representan las columnas del DataGrid.
+   */
+  const buildColumns = () => {
+    const columns = [];
 
-  
+    responseData?.forEach((responseDataObject, index) => {
+      if (index === 0) {
+        for (const key in responseDataObject) {
+          switch (key) {
+            case "account":
+              columns.push({
+                field: key,
+                headerName: "Cuenta",
+                width: 150,
+              });
+              break;
+            case "owner_name":
+              columns.push({
+                field: key,
+                headerName: "Propietario",
+                width: 250,
+              });
+              break;
 
-  const columns = [];
-
-  responseData?.forEach((responseDataObject, index) => {
-    if (index === 0) {
-      for (const key in responseDataObject) {
-        switch (key) {
-          case "account":
-            columns.push({
-              field: key,
-              headerName: "Cuenta",
-              width: 150,
-            });
-            break;
-          case "owner_name":
-            columns.push({
-              field: key,
-              headerName: "Propietario",
-              width: 250,
-            });
-            break;
-
-          case "street":
-            columns.push({
-              field: key,
-              headerName: "Calle",
-              width: "auto",
-            });
-            break;
-          case "cologne":
-            columns.push({
-              field: key,
-              headerName: "Colonia",
-              width: "auto",
-              editable: true,
-            });
-            break;
-          /*      case "cutoffDate":
+            case "street":
+              columns.push({
+                field: key,
+                headerName: "Calle",
+                width: "auto",
+              });
+              break;
+            case "cologne":
+              columns.push({
+                field: key,
+                headerName: "Colonia",
+                width: "auto",
+                editable: true,
+              });
+              break;
+            /*      case "cutoffDate":
           columns.push({
             field: key,
             headerName: "Fecha Corte",
@@ -208,19 +236,32 @@ function SearchDialog({ handleCloseDialog }) {
 
           break; */
 
-          default:
-            break;
+            default:
+              break;
+          }
         }
       }
-    }
-  });
+    });
 
-  console.log(columns);
+    return columns;
+  };
 
-  const rows = [];
-  responseData?.forEach((responseDataObject, index) => {
-    rows.push({ id: index + 1 + "Arturo", ...responseDataObject });
-  });
+  /**
+   * Función auxiliar que construye las filas para el componente DataGrid.
+   *
+   * @function
+   * @returns {Array} Arreglo de objetos que representan las filas del DataGrid.
+   */
+  const buildRows = () => {
+    const rows = [];
+
+    // Itera sobre los objetos de responseData y construye las filas
+    responseData?.forEach((responseDataObject, index) => {
+      rows.push({ id: index + 1, ...responseDataObject });
+    });
+
+    return rows;
+  };
 
   return (
     <Dialog
@@ -272,14 +313,14 @@ function SearchDialog({ handleCloseDialog }) {
                     ¡Gracias por ingresar una cuenta!
                   </Typography>
                 </Stack>
-                
-                /* TbZoomCancel */
               ) : (
+                /* TbZoomCancel */
                 <Stack sx={{ marginTop: "0.5rem" }} direction="row">
                   <TbZoomCancel style={{ color: "red" }} />{" "}
-                <Typography sx={{ color: "red" }} variant="caption">
-                  * ¡Por favor, ingresa una cuenta!
-                </Typography></Stack>
+                  <Typography sx={{ color: "red" }} variant="caption">
+                    * ¡Por favor, ingresa una cuenta!
+                  </Typography>
+                </Stack>
               )}
               <TextField
                 color="secondary"
@@ -308,10 +349,11 @@ function SearchDialog({ handleCloseDialog }) {
                 </Stack>
               ) : (
                 <Stack sx={{ marginTop: "0.5rem" }} direction="row">
-                <TbZoomCancel style={{ color: "red" }} />{" "}
-              <Typography sx={{ color: "red" }} variant="caption">
-                * ¡Por favor, ingresa un nombre de propietario!
-              </Typography></Stack>
+                  <TbZoomCancel style={{ color: "red" }} />{" "}
+                  <Typography sx={{ color: "red" }} variant="caption">
+                    * ¡Por favor, ingresa un nombre de propietario!
+                  </Typography>
+                </Stack>
               )}
               <TextField
                 color="secondary"
@@ -340,10 +382,11 @@ function SearchDialog({ handleCloseDialog }) {
                 </Stack>
               ) : (
                 <Stack sx={{ marginTop: "0.5rem" }} direction="row">
-                <TbZoomCancel style={{ color: "red" }} />{" "}
-              <Typography sx={{ color: "red" }} variant="caption">
-                * ¡Por favor, ingresa una calle valida!
-              </Typography></Stack>
+                  <TbZoomCancel style={{ color: "red" }} />{" "}
+                  <Typography sx={{ color: "red" }} variant="caption">
+                    * ¡Por favor, ingresa una calle valida!
+                  </Typography>
+                </Stack>
               )}
 
               <TextField
@@ -373,10 +416,11 @@ function SearchDialog({ handleCloseDialog }) {
                 </Stack>
               ) : (
                 <Stack sx={{ marginTop: "0.5rem" }} direction="row">
-                <TbZoomCancel style={{ color: "red" }} />{" "}
-              <Typography sx={{ color: "red" }} variant="caption">
-                * ¡Por favor, ingresa un nombre de colonia valido!
-              </Typography></Stack>
+                  <TbZoomCancel style={{ color: "red" }} />{" "}
+                  <Typography sx={{ color: "red" }} variant="caption">
+                    * ¡Por favor, ingresa un nombre de colonia valido!
+                  </Typography>
+                </Stack>
               )}
               {/*     <FormGroup sx={{display:"flex",flexDirection:"row",justifyContent:"start"}}>
               <FormControlLabel
@@ -449,8 +493,8 @@ function SearchDialog({ handleCloseDialog }) {
               // Llama a la función para hacer la solicitud al hacer clic en la fila
               fetchData();
             }}
-            rows={rows}
-            columns={columns}
+            rows={buildRows()}
+            columns={buildColumns()}
             initialState={{
               pagination: {
                 paginationModel: {
@@ -487,5 +531,12 @@ function SearchDialog({ handleCloseDialog }) {
     </Dialog>
   );
 }
+/**
+ * PropTypes para SearchDialog.
+ * @property {Function} handleCloseDialog - Función para cerrar el cuadro de diálogo.
+ */
+SearchDialog.propTypes = {
+  handleCloseDialog: PropTypes.func.isRequired,
+};
 
 export default SearchDialog;
