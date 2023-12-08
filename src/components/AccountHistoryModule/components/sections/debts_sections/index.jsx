@@ -3,6 +3,7 @@ import React from "react";
 import { Box } from "@mui/material";
 import functionsCustom from "../../../../../helpers";
 import useCombinedSlices from "../../../../../hooks/useCombinedSlices";
+import PropTypes from 'prop-types';
 /**
  * Componente que muestra información sobre deudas.
  *
@@ -313,11 +314,15 @@ function DebtsSections() {
     /></Box>
   );
 }
+DebtsSections.defaultProps = {
+  debts: [], // Set your default value here
+};
+
 DebtsSections.propTypes = {
   /**
    * La lista de deudas.
    */
-  debts: PropTypes.array.isRequired,
+  debts: PropTypes.array,
 };
 
 export default DebtsSections;

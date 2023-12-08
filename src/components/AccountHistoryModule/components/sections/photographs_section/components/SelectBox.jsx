@@ -3,6 +3,32 @@ import axios from "axios";
 import e from "cors";
 import React from "react";
 import { useStoreZustand } from "../../../../../../zustan_store/useStoreZustand";
+import PropTypes from 'prop-types';
+
+/**
+ * SelectBox component for rendering a dropdown select.
+ *
+ * @component
+ * @example
+ * // Example usage of SelectBox component
+ * <SelectBox
+ *   hasFetchData={true}
+ *   title="Select Task"
+ *   setImageDataNew={handleSetImageDataNew}
+ *   imageDataNew={imageDataNewState}
+ *   setValidateInputs={handleSetValidateInputs}
+ * />
+ *
+ * @param {Object} props - The properties of the component.
+ * @param {boolean} props.hasFetchData - Flag to determine if data needs to be fetched.
+ * @param {string} props.title - The title for the dropdown select.
+ * @param {Array} props.array - The array of items for the dropdown (only used when hasFetchData is false).
+ * @param {string} props.field - The field for which to update the state.
+ * @param {function} props.setImageDataNew - Callback to update the imageDataNew state.
+ * @param {Object} props.imageDataNew - The imageDataNew state.
+ * @param {function} props.setValidateInputs - Callback to update the validateInputs state.
+ * @returns {React.Component} The rendered SelectBox component.
+ */
 
 function SelectBox({
   hasFetchData,
@@ -17,6 +43,14 @@ function SelectBox({
   const [task, setTask] = React.useState("");
   const [taskCatalog, setTaskCatalog] = React.useState([]);
 
+
+ /**
+   * Handles the change event of the select dropdown.
+   *
+   * @param {Object} event - The change event.
+   * @returns {void}
+   */
+  
   const handleChange = (event) => {
     const selectedValue = event.target.value;
 
@@ -67,6 +101,11 @@ function SelectBox({
   switch (true) {
     case hasFetchData === true:
       React.useEffect(() => {
+          /**
+     * Fetches data for the dropdown select.
+     *
+     * @returns {void}
+     */
         const fetchData = async () => {
           try {
             const response = await axios.get(
@@ -144,5 +183,20 @@ function SelectBox({
       return null;
   }
 }
+SelectBox.propTypes = {
+  hasFetchData: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
+  array: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ),
+  field: PropTypes.string.isRequired,
+  setImageDataNew: PropTypes.func.isRequired,
+  imageDataNew: PropTypes.object.isRequired,
+  setValidateInputs: PropTypes.func.isRequired,
+};
+
 
 export default SelectBox;

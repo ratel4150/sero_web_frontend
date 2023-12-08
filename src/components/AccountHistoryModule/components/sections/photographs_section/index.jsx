@@ -66,7 +66,11 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 const bucketName = AWS_BUCKET_NAME;
-
+/**
+ * Check if a file exists in the AWS S3 bucket.
+ * @param {string} fileName - The name of the file to check.
+ * @returns {Promise<string|boolean>} - Returns the file name if it exists, otherwise false.
+ */
 const checkFileExists = async (fileName) => {
   try {
     const params = {
@@ -84,7 +88,13 @@ const checkFileExists = async (fileName) => {
     throw error; // Otro error
   }
 };
-
+/**
+ * Upload a file to the AWS S3 bucket.
+ * @param {File} selectedFile - The file to upload.
+ * @param {string} remoteFileName - The name to give the file in the bucket.
+ * @param {number} maxFileSizeMB - The maximum file size allowed in megabytes.
+ * @returns {Promise<Object>} - Returns the result of the upload operation.
+ */
 const uploadFile = async (selectedFile, remoteFileName, maxFileSizeMB = 1) => {
   try {
     // Verificar el tamaño del archivo
@@ -115,7 +125,13 @@ const uploadFile = async (selectedFile, remoteFileName, maxFileSizeMB = 1) => {
     throw error; // Puedes lanzar el error nuevamente si es necesario
   }
 };
-
+/**
+ * Generate a signed URL for a file in the AWS S3 bucket.
+ * @param {string} fileName - The name of the file.
+ * @param {string} operation - The S3 operation (default: "getObject").
+ * @param {number} expirationTimeInSeconds - The expiration time for the signed URL (default: 604800 seconds).
+ * @returns {Promise<string>} - Returns the signed URL.
+ */
 const signUrl = async (
   fileName,
   operation = "getObject",
@@ -144,6 +160,13 @@ const signUrl = async (
     textAlign: 'center',
     color: theme.palette.text.secondary,
   })); */
+
+  /**
+ * React component for managing photograph sections.
+ *
+ * @component
+ * @returns {JSX.Element} - The rendered component.
+ */
 function PhotographsSections() {
   const isUploadingRef = React.useRef(false);
   const {
@@ -158,10 +181,9 @@ function PhotographsSections() {
 
   const { setAccountData } = useAccountData();
 
-  console.log(photos);
 
   const user = useSelector((state) => state.user);
-  console.log(user);
+ 
 
   const [open, setOpen] = React.useState(false);
   const [openDialogForm, setOpenDialogForm] = React.useState(false);
@@ -184,7 +206,7 @@ function PhotographsSections() {
   });
   const changeControl = (event) => {
     // Otras lógicas según sea necesario
-    console.log(event);
+    
 
     setSelectedUserId(event.target.value);
     setValidateInputs((prev) => ({
@@ -250,7 +272,7 @@ function PhotographsSections() {
 
   React.useEffect(() => {
     // This block of code will run after the state update is complete
-    console.log(imageDataNew);
+   
 
     const postImageData = async () => {
       try {
@@ -336,7 +358,7 @@ function PhotographsSections() {
 
         if (getResponse.status === 200) {
           const accountHistory = getResponse.data;
-          console.log("Account History:", accountHistory);
+        
           // Update the state with the new account data
           setAccountData(accountHistory);
 
@@ -468,7 +490,7 @@ function PhotographsSections() {
         );
 
         // Actualizar el estado con los datos obtenidos
-        console.log(response.data);
+        
         setUsers(response.data);
       } catch (error) {
         console.error("Error al obtener datos:", error);

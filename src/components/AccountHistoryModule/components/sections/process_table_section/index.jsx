@@ -4,10 +4,15 @@ import { useStoreZustand } from "../../../../../zustan_store/useStoreZustand";
 import { Avatar, Box } from "@mui/material";
 import Viewer from "react-viewer";
 import useCombinedSlices from "../../../../../hooks/useCombinedSlices";
-
+/**
+ * React component for displaying a data grid with processing information.
+ *
+ * @component
+ * @returns {JSX.Element} - The rendered component.
+ */
 function ProcessTableSection() {
   const { actions } = useCombinedSlices();
-  console.log(actions);
+ /*  console.log(actions); */
   /* // ✅ Valid
 const CountButton = () => {
   const [count, setCount] = React.useState(0);
@@ -21,8 +26,15 @@ const column = {
   // ...other properties,
   renderCell: () => <CountButton />,
 }; */
+/**
+   * Component for rendering an Avatar image with a viewer.
+   *
+   * @param {Object} props - The component props.
+   * @param {string} props.image - The URL of the image.
+   * @returns {JSX.Element|string} - The rendered component or an empty string if no image is provided.
+   */
   const AvatarImage = ({ image }) => {
-    console.log(image);
+   /*  console.log(image); */
 
     const [visibleAvatar, setVisibleAvatar] = React.useState(false);
     /*  */
@@ -53,7 +65,7 @@ const column = {
 
   const columns = [];
   actions?.forEach((actionObject, index) => {
-    console.log(actionObject);
+    /* console.log(actionObject); */
     actionObject = { ...actionObject, avatar: "avatar" };
     if (index === 0) {
       for (const key in actionObject) {
@@ -146,7 +158,11 @@ const column = {
     rows.push(debtObject);
   });
 
-
+  /**
+   * Custom toolbar for the DataGrid.
+   *
+   * @returns {JSX.Element} - The rendered toolbar.
+   */
 
   function CustomToolbar() {
     return (

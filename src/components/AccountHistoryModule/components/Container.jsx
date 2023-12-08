@@ -1,8 +1,15 @@
 import { Box,useTheme } from '@mui/material'
 import React from 'react'
 import { tokens } from '../../../theme';
-
-
+import PropTypes from 'prop-types';
+/**
+ * React component for a container with specific styling.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {React.ReactNode} props.children - The child elements to be rendered within the container.
+ * @returns {JSX.Element} - The rendered component.
+ */
 function Container({children}) {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -29,5 +36,9 @@ function Container({children}) {
 </Box>
   )
 }
+// PropTypes for the component
+Container.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default Container

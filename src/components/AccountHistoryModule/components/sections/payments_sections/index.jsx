@@ -10,10 +10,32 @@ import {
 import { Box, Chip } from "@mui/material";
 import functionsCustom from "../../../../../helpers";
 import useCombinedSlices from "../../../../../hooks/useCombinedSlices";
+import PropTypes from 'prop-types';
+import { ErrorBoundary } from '@sentry/react';
 
+/**
+ * Componente que muestra información sobre pagos.
+ *
+ * @component
+ * @example
+ * // Ejemplo de uso
+ * <PaymentsSections payments={[{...}, {...}, ...]} />
+ *
+ * @param {Object} props - Las propiedades del componente.
+ * @param {Array} props.payments - La lista de pagos.
+ * 
+ * @returns {JSX.Element} - React component
+ */
 function PaymentsSections() {
   const { payments } = useCombinedSlices();
-  /* console.log(payments); */
+   /**
+   * Renderiza las fichas (Chips) para el componente DataGrid.
+   *
+   * @param {Object} params - Parámetros de la celda.
+   * @param {string} params.row.paymentPeriod - Período de pago.
+   *
+   * @returns {JSX.Element} - React component
+   */
   const Chips = ({ params }) => {
     return (
       <Box>
@@ -21,6 +43,9 @@ function PaymentsSections() {
       </Box>
     );
   };
+
+  const buildColumns = () => {
+
 
   const columns = [];
   payments?.forEach((debtObject, index) => {
@@ -153,6 +178,8 @@ function PaymentsSections() {
       }
     }
   });
+return columns
+}
 
   const rows = [];
   payments?.forEach((debtObject, index) => {
@@ -162,12 +189,16 @@ function PaymentsSections() {
     );
 
     if (debtObject && !allUndefined) {
-      console.log(debtObject);
+    /*   console.log(debtObject); */
       debtObject = { ...debtObject, id: index + 1 };
       rows.push(debtObject);
     }
   });
-
+ /**
+   * Componente personalizado para la barra de herramientas del DataGrid.
+   *
+   * @returns {JSX.Element} - React component
+   */
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
@@ -180,6 +211,7 @@ function PaymentsSections() {
   }
 
   return (
+    <ErrorBoundary fallback={"An error has occurred."}>
     <Box
       sx={{
         height: 300,
@@ -211,7 +243,7 @@ function PaymentsSections() {
           toolbarExport: "Exportar",
         }}
         rows={rows.filter((row) => row !== undefined)}
-        columns={columns}
+        columns={buildColumns()}
         initialState={{
           pagination: {
             paginationModel: {
@@ -232,8 +264,16 @@ function PaymentsSections() {
           }
         }}
       />
-    </Box>
+    </Box></ErrorBoundary>
   );
 }
-
+PaymentsSections.defaultProps = {
+  payments: [], // Set your default value here
+};
+PaymentsSections.propTypes = {
+  /**
+   * La lista de pagos.
+   */
+  payments: PropTypes.array.isRequired,
+};
 export default PaymentsSections;

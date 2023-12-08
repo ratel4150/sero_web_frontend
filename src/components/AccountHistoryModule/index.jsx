@@ -153,7 +153,7 @@ function AccountHistoryModule() {
 
     if (accountData) {
       accountData.forEach((el, i) => {
-        console.log(el);
+        
         for (const key in el) {
           const prop = keyMapping[key];
           if (prop !== undefined) {
@@ -165,7 +165,7 @@ function AccountHistoryModule() {
 
     let data = {};
 
-    console.log(accountDataIndexes);
+  
 
     if (accountDataIndexes.userProfileContributor.index.length > 1) {
       accountDataIndexes.userProfileContributor.index.forEach(
@@ -194,7 +194,7 @@ function AccountHistoryModule() {
             [key]: accountData?.[iteration][key],
           };
         }
-        console.log(arrayInformationContributorPersonalData);
+       
 
         setInformationContributor(arrayInformationContributorPersonalData);
       }
@@ -258,7 +258,7 @@ function AccountHistoryModule() {
               [`${key}_${index + 1}`]: accountData?.[iteration][key],
             };
           }
-          console.log(iteration);
+         
           /*   for (const key in accountData?.[iteration]) {
             data = {
               ...data,
@@ -326,7 +326,7 @@ function AccountHistoryModule() {
 
       arrayActions.push(action);
     }
-    console.log(arrayActions);
+    /* console.log(arrayActions); */
     setActions(arrayActions);
 
     const arrayPhotos = [];
@@ -352,7 +352,7 @@ function AccountHistoryModule() {
       }
     }
 
-    console.log(arrayPhotos);
+   /*  console.log(arrayPhotos); */
 
     setPhotos(arrayPhotos);
   }, [accountData, alertInfo]);

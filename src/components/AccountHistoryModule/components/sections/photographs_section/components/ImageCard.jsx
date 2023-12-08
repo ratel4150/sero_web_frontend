@@ -108,7 +108,7 @@ const findTask = (nameTask) => {
 };
 
 // Puedes usar tasksArray como desees en tu aplicación
-console.log(findTask("4ta Carta Invitación"));
+/* console.log(findTask("4ta Carta Invitación")); */
 
 function ImageCard({ photoObject }) {
   const {
@@ -145,7 +145,7 @@ function ImageCard({ photoObject }) {
 
   const changeControl = (event) => {
     // Otras lógicas según sea necesario
-    console.log(event);
+    /* console.log(event); */
 
     setSelectedUserId(event.target.value);
     setValidateInputs((prev) => ({
@@ -157,7 +157,7 @@ function ImageCard({ photoObject }) {
   }
 
 
- console.log(selectedUserId);
+ /* console.log(selectedUserId); */
   // Efecto para realizar la solicitud cuando el componente se monta
   React.useEffect(() => {
     const fetchData = async () => {
@@ -229,7 +229,7 @@ function ImageCard({ photoObject }) {
 
         if (getResponse.status === 200) {
           const accountHistory = getResponse.data;
-          console.log('Account History:', accountHistory);
+         /*  console.log('Account History:', accountHistory); */
 
           setAccountData(accountHistory); 
           setValidateInputs({
@@ -308,11 +308,11 @@ function ImageCard({ photoObject }) {
       .patch("http://localhost:3000/api/UpdatePhotoState", payload)
       .then((response) => {
         // Handle the response if needed
-        console.log(response.data.message);
+        /* console.log(response.data.message); */
         if (response.data.message === "Operación exitosa") {
           setShowSuccessAlert(true);
         }
-        console.log(response.data);
+       /*  console.log(response.data); */
 
         setTimeout(() => {
           setShowSuccessAlert(false);
