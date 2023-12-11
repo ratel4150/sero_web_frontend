@@ -62,16 +62,31 @@ const buildInitialRows = async()=>{
 
 
 function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
+  const { setRows, setRowModesModel,rows } = props;
 
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
+  const handleClick = async() => {
+
+    const id = rows.length + 1;
+    let newTask = { id_tarea:id, nombre: '', activo: '',id_proceso: '',id, isNew: true };
+    setRows((oldRows) => [...oldRows, newTask]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'nombre' },
     }));
+
+    try {
+      const response = await createTask(newTask);
+      console.log(response);
+      
+    } catch (error) {
+
+      console.error('Error al crear la tarea:', error);
+
+      
+    }
   };
+
+
 
   return (
     <GridToolbarContainer>
@@ -86,6 +101,8 @@ function EditToolbar(props) {
 function DataGridCrud() {
   const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
+  console.log(rows);
+  console.log(rowModesModel);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -212,7 +229,7 @@ const CheckCell = ({data}) => {
           </span> */}
         </strong>
       ),
-      type: 'string',
+      type: 'number',
       width: 150,
       align: 'left',
       headerAlign: 'left',
@@ -317,7 +334,7 @@ const CheckCell = ({data}) => {
           toolbar: EditToolbar,
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: { setRows, setRowModesModel,rows },
         }}
         
 
