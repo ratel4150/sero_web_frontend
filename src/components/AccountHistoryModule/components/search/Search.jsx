@@ -14,15 +14,14 @@ import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import SearchIcon from "@mui/icons-material/Search";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
-import { useStoreZustand } from "../../../../zustan_store/useStoreZustand";
+
 import axios from "axios";
 import { PDFViewer } from "@react-pdf/renderer";
 import Pdf from "../pdf";
 import ReactPDF from "@react-pdf/renderer";
-import useAccountData from "../../../../hooks/accountDataHook";
 import useCombinedSlices from "../../../../hooks/useCombinedSlices";
-import PropTypes from 'prop-types';
-import { withErrorBoundary } from '@sentry/react';
+import PropTypes from "prop-types";
+import { withErrorBoundary } from "@sentry/react";
 /**
  * Componente de búsqueda que permite buscar información por cuenta y realizar búsquedas personalizadas.
  *
@@ -46,14 +45,18 @@ function Search({
   ownerDebts,
   ownerPayments,
 }) {
-  const { setPlazaNumber, plazaNumber, setAlertInfoFromRequest } =
-    useStoreZustand();
   const [searchValue, setSearchValue] = React.useState("");
 
   /* const { setAccountData} = useStoreZustand(); */
-  const { setAccountData, alertInfo, setAlertInfo } = useCombinedSlices();
+  const {
+    setAccountData,
+    alertInfo,
+    setAlertInfo,
+    plazaNumber,
+    setPlazaNumber,
+  } = useCombinedSlices();
   const [openPDF, setOpenPDF] = React.useState(false);
-  
+
   /**
    * Abre el visor de PDF.
    */
@@ -81,7 +84,6 @@ function Search({
       try {
         const response = await axios.get(apiUrl);
         const data = response.data;
-       
 
         const requestInfo = {
           url: apiUrl,
@@ -95,7 +97,7 @@ function Search({
         setAccountData(data);
       } catch (error) {
         // Manejar errores, por ejemplo, imprimir el mensaje de error en la consola
-        
+
         console.error("Error al hacer la solicitud:", error.message);
 
         const requestInfo = {

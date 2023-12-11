@@ -25,7 +25,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { CheckBox, Favorite, FavoriteBorder } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
-import { useStoreZustand } from "../../../../zustan_store/useStoreZustand";
+
 import { ImCancelCircle } from "react-icons/im";
 import useAccountData from "../../../../hooks/accountDataHook";
 import { FaRegCircleCheck } from "react-icons/fa6";
@@ -42,9 +42,9 @@ import PropTypes from "prop-types";
  */
 
 function SearchDialog({ handleCloseDialog }) {
-  const { setRowAccount, plazaNumber, setAlertInfoFromRequest } =
-    useStoreZustand();
-  const { setAccountData } = useCombinedSlices();
+ /*  const { setRowAccount, plazaNumber, setAlertInfoFromRequest } =
+    useStoreZustand(); */
+  const { setAccountData,setAlertInfo ,plazaNumber} = useCombinedSlices();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [formDataFromInputs, setFormDataFromInputs] = React.useState({
@@ -59,7 +59,7 @@ function SearchDialog({ handleCloseDialog }) {
     streetInput: false,
     townInput: false,
   });
-  const [alertInfo, setAlertInfo] = React.useState(null);
+ 
   const [responseData, setResponseData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const colors = tokens(theme.palette.mode);
@@ -460,7 +460,7 @@ function SearchDialog({ handleCloseDialog }) {
                   const data = response.data;
 
                   // Hacer algo con los datos, por ejemplo, actualizar el estado del componente
-                  setAlertInfoFromRequest({
+                  setAlertInfo({
                     status: response.status,
                     statusText: response.statusText,
                   });
@@ -468,7 +468,7 @@ function SearchDialog({ handleCloseDialog }) {
                 } catch (error) {
                   // Manejar errores, por ejemplo, imprimir el mensaje de error en la consola
                   console.error("Error al hacer la solicitud:", error.message);
-                  setAlertInfoFromRequest({
+                  setAlertInfo({
                     status: error.response?.status || 500,
                     statusText: error.message,
                   });
@@ -485,7 +485,7 @@ function SearchDialog({ handleCloseDialog }) {
                     handleCloseDialog();
                   }, 10);
                   setTimeout(() => {
-                    setAlertInfoFromRequest(null);
+                    setAlertInfo(null);
                   }, 3000);
                 }
               };

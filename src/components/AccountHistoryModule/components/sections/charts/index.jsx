@@ -1,15 +1,14 @@
 import React from "react";
-import useAccountData from "../../../../../hooks/accountDataHook";
-import { useStoreZustand } from "../../../../../zustan_store/useStoreZustand";
+
 import { create, all } from "mathjs";
 import ReactApexChart from "react-apexcharts";
 import { Grid } from "@mui/material";
+import useCombinedSlices from "../../../../../hooks/useCombinedSlices";
 const config = {};
 const math = create(all, config);
 function Charts() {
-  const { accountData } = useAccountData();
-
-  const { debts, payments } = useStoreZustand();
+ 
+  const {debts,payments,accountData}=useCombinedSlices()
 
   // Obtener montos de adeudo
   console.log(debts);

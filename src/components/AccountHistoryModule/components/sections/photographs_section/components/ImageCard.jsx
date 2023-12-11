@@ -54,7 +54,7 @@ import {
   LocalizationProvider,
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useStoreZustand } from "../../../../../../zustan_store/useStoreZustand";
+
 import dayjs from "dayjs";
 import { store } from "../../../../../../redux/store";
 import axios from "axios";
@@ -66,7 +66,8 @@ import { FaMobile } from "react-icons/fa";
 import { TiTick } from "react-icons/ti";
 
 import { IoDuplicate } from "react-icons/io5";
-import useAccountData from "../../../../../../hooks/accountDataHook";
+
+import useCombinedSlices from "../../../../../../hooks/useCombinedSlices";
 
 const tasksArray = [
   { idTask: 1, nameTask: "1ra Carta Invitación" },
@@ -112,14 +113,11 @@ const findTask = (nameTask) => {
 
 function ImageCard({ photoObject }) {
   const {
-    getImageData,
-    setImageData,
-    informationContributorPersonalData,
-   
+    setAccountData,
     plazaNumber,
-  } = useStoreZustand();
-  const{setAccountData} = useAccountData()
-  
+    informationContributor,
+    setGetImageData,
+  } = useCombinedSlices();
 
   const [checked, setChecked] = useState(photoObject.active);
   const [visible, setVisible] = useState(false);
@@ -130,17 +128,14 @@ function ImageCard({ photoObject }) {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [openDialogSwitch, setOpenDialogSwitch] = React.useState(false);
 
-  const [visibleAvatarSelectBox, setVisibleAvatarSelectbox] =
-    React.useState(false);
+  React.useState(false);
   const [users, setUsers] = useState([]);
 
   const [selectedUserId, setSelectedUserId] = useState("");
 
   const [validateInputs, setValidateInputs] = React.useState({
-  
     dateTimeInput: false,
     avatarInput: false,
-   
   });
 
   const changeControl = (event) => {
@@ -152,12 +147,9 @@ function ImageCard({ photoObject }) {
       ...prev,
       avatarInput: !!event.target.value,
     }));
-     
-  
-  }
+  };
 
-
- /* console.log(selectedUserId); */
+  /* console.log(selectedUserId); */
   // Efecto para realizar la solicitud cuando el componente se monta
   React.useEffect(() => {
     const fetchData = async () => {
@@ -168,7 +160,7 @@ function ImageCard({ photoObject }) {
         );
 
         // Actualizar el estado con los datos obtenidos
-       
+
         setUsers(response.data);
       } catch (error) {
         console.error("Error al obtener datos:", error);
@@ -194,18 +186,14 @@ function ImageCard({ photoObject }) {
   }; */
 
   const handleImageDuplication = async () => {
-    if (
-     
-      !validateInputs.avatarInput &&
-      !validateInputs.dateTimeInput 
-    ) {
+    if (!validateInputs.avatarInput && !validateInputs.dateTimeInput) {
       // Muestra un mensaje de error o realiza alguna acción si el archivo no está cargado
       console.error("¡Por favor, te faltan campos por llenar ");
       return;
     }
     const ImageData = {
       imageId: photoObject.imageId,
-      account: informationContributorPersonalData.account,
+      account: informationContributor.account,
       type: photoObject.imageType,
       user_id: selectedUserId,
       date_capture: valueDateTime.format("YYYY-MM-DD HH:mm:ss"),
@@ -218,39 +206,33 @@ function ImageCard({ photoObject }) {
         ImageData
       );
 
-      
-      const { message} = response.data;
+      const { message } = response.data;
 
       if (message === "Operación exitosa") {
-
         const getResponse = await axios.get(
-          `http://localhost:3000/api/AccountHistoryByCount/${plazaNumber}/${informationContributorPersonalData.account}/`
+          `http://localhost:3000/api/AccountHistoryByCount/${plazaNumber}/${informationContributor.account}/`
         );
 
         if (getResponse.status === 200) {
           const accountHistory = getResponse.data;
-         /*  console.log('Account History:', accountHistory); */
+          /*  console.log('Account History:', accountHistory); */
 
-          setAccountData(accountHistory); 
+          setAccountData(accountHistory);
           setValidateInputs({
-  
             dateTimeInput: false,
             avatarInput: false,
-           
-          })
+          });
           // Aquí puedes hacer lo que necesites con los datos obtenidos
-         /*  return accountHistory; */
+          /*  return accountHistory; */
         } else {
-          console.error('Error obteniendo datos de la cuenta:', getResponse.status, getResponse.data);
+          console.error(
+            "Error obteniendo datos de la cuenta:",
+            getResponse.status,
+            getResponse.data
+          );
           // Puedes lanzar una excepción, devolver un objeto de error, o manejarlo de otra manera según tus necesidades
-          throw new Error('Error obteniendo datos de la cuenta');
+          throw new Error("Error obteniendo datos de la cuenta");
         }
-
-        
-        
-         
-
-     
       } else {
         console.error("Error en la operación:", response.data.message);
       }
@@ -282,7 +264,7 @@ function ImageCard({ photoObject }) {
   /* console.log(getImageData); */
   const handleChangeDateTime = (newValue) => {
     setValueDateTime(newValue);
-    setImageData({
+    setGetImageData({
       fechaCaptura: newValue.format("YYYY-MM-DD HH:mm:ss"), // Usa selectedValue en lugar de task
     });
     setValidateInputs((prev) => ({
@@ -312,7 +294,7 @@ function ImageCard({ photoObject }) {
         if (response.data.message === "Operación exitosa") {
           setShowSuccessAlert(true);
         }
-       /*  console.log(response.data); */
+        /*  console.log(response.data); */
 
         setTimeout(() => {
           setShowSuccessAlert(false);
@@ -326,8 +308,6 @@ function ImageCard({ photoObject }) {
     // Update local state if needed
     setChecked(newCheckedState);
   };
-
- 
 
   // Utilizamos un conjunto para almacenar user_ids únicos
   const uniqueUserIds = new Set();
@@ -401,7 +381,10 @@ function ImageCard({ photoObject }) {
           </>
         }
         title={photoObject.personWhoCapture}
-        subheader={functionsCustom.formatDate(photoObject.synchronizationDate, "full")}
+        subheader={functionsCustom.formatDate(
+          photoObject.synchronizationDate,
+          "full"
+        )}
         /* subheader={functionsCustom.formatDate(photoObject.dateCapture, "full")} */
       />
       <Viewer
@@ -542,13 +525,18 @@ function ImageCard({ photoObject }) {
                   </Typography>
                 </Stack>
               </LocalizationProvider>
-              {validateInputs.dateTimeInput ? <Stack sx={{marginTop:"0.5rem"}} direction="row"><FaRegCircleCheck style={{color:"#14B814"}}/>{" "} <Typography  color={"secondary"} variant="caption">
-                          ¡Gracias por ingresar una fecha!
-                  </Typography></Stack> : (
-                  <Typography sx={{ color: "red" }} variant="caption">
-                    * ¡Por favor, ingresa una fecha!
+              {validateInputs.dateTimeInput ? (
+                <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                  <FaRegCircleCheck style={{ color: "#14B814" }} />{" "}
+                  <Typography color={"secondary"} variant="caption">
+                    ¡Gracias por ingresar una fecha!
                   </Typography>
-                )}
+                </Stack>
+              ) : (
+                <Typography sx={{ color: "red" }} variant="caption">
+                  * ¡Por favor, ingresa una fecha!
+                </Typography>
+              )}
               {/*  Tipo Imagen*/}
             </Grid>
             <Grid item xs={6}>
@@ -585,13 +573,18 @@ function ImageCard({ photoObject }) {
                   );
                 })}
               </TextField>
-              {validateInputs.avatarInput? <Stack sx={{marginTop:"0.5rem"}} direction="row"><FaRegCircleCheck style={{color:"#14B814"}}/>{" "} <Typography  color={"secondary"} variant="caption">
-                          ¡Gracias por ingresar un usuario!
-                  </Typography></Stack> : (
-                  <Typography sx={{ color: "red" }} variant="caption">
-                    * ¡Por favor, ingresa una user!
+              {validateInputs.avatarInput ? (
+                <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                  <FaRegCircleCheck style={{ color: "#14B814" }} />{" "}
+                  <Typography color={"secondary"} variant="caption">
+                    ¡Gracias por ingresar un usuario!
                   </Typography>
-                )}
+                </Stack>
+              ) : (
+                <Typography sx={{ color: "red" }} variant="caption">
+                  * ¡Por favor, ingresa una user!
+                </Typography>
+              )}
               {/* <SelectBox
               
                 hasFetchData={false}

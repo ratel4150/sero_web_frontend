@@ -2,7 +2,7 @@ import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import axios from "axios";
 import e from "cors";
 import React from "react";
-import { useStoreZustand } from "../../../../../../zustan_store/useStoreZustand";
+
 import PropTypes from 'prop-types';
 
 /**
@@ -36,10 +36,10 @@ function SelectBox({
   array,
   field,
   setImageDataNew,
-  imageDataNew,
+ 
   setValidateInputs,
 }) {
-  const { setImageData, getImageData } = useStoreZustand();
+  
   const [task, setTask] = React.useState("");
   const [taskCatalog, setTaskCatalog] = React.useState([]);
 

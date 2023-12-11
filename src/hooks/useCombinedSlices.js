@@ -23,9 +23,11 @@ const useCombinedSlices = () => {
   ;
   const contributorAddress = useSelector((state) => state.contributorAddress);
   const debts = useSelector((state) => state.debts); // Agregado
-  const getImageData = useSelector((state) => state.getImageData); // Agregado
+   // Agregado
   const getRowAccount = useSelector((state) => state.getRowAccount); // Agregado */
   const informationContributor = useSelector((state) => state.informationContributor); // Agregado
+  const plazaNumber = useSelector((state) => state.plazaNumber);
+  const getImageData = useSelector((state) => state.getImageData);
  /*   // Agregado
   const plazaNumber = useSelector((state) => state.plazaNumber); // Agregado */
   const debts = useSelector((state) => state.debts);
@@ -62,6 +64,14 @@ const useCombinedSlices = () => {
     dispatch(setAlertInfoFromRequest(data));
   };
 
+  const setPlazaNumberAction = (data) => { // Agregado
+    dispatch(setPlazaNumber(data));
+  };
+
+  const setGetImageDataAction = (data) => { // Agregado
+    dispatch(setImageData(data));
+  };
+
  /*  
 
   
@@ -72,9 +82,7 @@ const useCombinedSlices = () => {
 
   
 
-  const setGetImageDataAction = (data) => { // Agregado
-    dispatch(setImageData(data));
-  };
+  
 
   const setRowAccountAction = (data) => { // Agregado
     dispatch(setRowAccount(data));
@@ -86,9 +94,7 @@ const useCombinedSlices = () => {
 
  
 
-  const setPlazaNumberAction = (data) => { // Agregado
-    dispatch(setPlazaNumber(data));
-  }; */
+   */
 
   // Puedes agregar más acciones según tus necesidades
 
@@ -100,15 +106,17 @@ const useCombinedSlices = () => {
     actions,
     photos,
     alertInfo,
+    plazaNumber,
+    getImageData,
    /*  //
     //
     contributorAddress,//
     debts, // Agregado
-    getImageData, // Agregado
+    // Agregado
     getRowAccount, // Agregado
     informationContributor, // Agregado
      // Agregado
-    plazaNumber, // Agregado */
+    // Agregado */
     setAccountData: setAccountDataAction,
     setInformationContributor: setInformationContributorAction,
     setDebts: setDebtsAction,
@@ -116,15 +124,17 @@ const useCombinedSlices = () => {
     setActions: setActionsAction,
     setPhotos: setPhotosAction,
     setAlertInfo: setAlertInfoAction,
+    setPlazaNumber: setPlazaNumberAction,
+    setGetImageData: setGetImageDataAction,
     /* 
     
     setContributorAddress: setContributorAddressAction,
     setDebts: setDebtsAction, // Agregado
-    setGetImageData: setGetImageDataAction, // Agregado
+     // Agregado
     setRowAccount: setRowAccountAction, // Agregado
     setInformationContributor: setInformationContributorAction, // Agregado
      // Agregado
-    setPlazaNumber: setPlazaNumberAction, */ // Agregado
+     */ // Agregado
     // Agrega más funciones de acción si es necesario
   };
 };

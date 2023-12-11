@@ -24,7 +24,7 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useStoreZustand } from "../../../../../zustan_store/useStoreZustand";
+
 
 import { BiSolidImageAdd } from "react-icons/bi";
 import SelectBox from "./components/SelectBox";
@@ -38,12 +38,10 @@ import AWS from "aws-sdk";
 import { ImCancelCircle } from "react-icons/im";
 import { FaRegCircleCheck } from "react-icons/fa6";
 import { GrUploadOption } from "react-icons/gr";
-import { useSelector } from "react-redux";
+
 import functionsCustom from "../../../../../helpers";
-import useAccountData from "../../../../../hooks/accountDataHook";
+
 import useCombinedSlices from "../../../../../hooks/useCombinedSlices";
-
-
 
 const AWS_BUCKET_NAME = import.meta.env.VITE_AWS_BUCKET_NAME;
 const AWS_BUCKET_REGION = import.meta.env.AWS_BUCKET_REGION;
@@ -52,11 +50,7 @@ const AWS_SECRET_KEY = import.meta.env.AWS_SECRET_KEY;
 const AWS_EXPIRE_SECONDS = import.meta.env.AWS_EXPIRE_SECONDS;
 const AWS_LIST_MAX_KEYS = import.meta.env.AWS_LIST_MAX_KEYS;
 
-
-
-
 // Use these variables wherever needed in your application
-
 
 AWS.config.update({
   accessKeyId: AWS_PUBLIC_KEY,
@@ -161,36 +155,27 @@ const signUrl = async (
     color: theme.palette.text.secondary,
   })); */
 
-  /**
+/**
  * React component for managing photograph sections.
  *
  * @component
  * @returns {JSX.Element} - The rendered component.
  */
 function PhotographsSections() {
-  const isUploadingRef = React.useRef(false);
   const {
-    getImageData,
-    setImageData,
-    informationContributorPersonalData,
-    /* setAccountData, */
+    photos,
+    setAccountData,
+    informationContributor,
     plazaNumber,
-    /* photos, */
-  } = useStoreZustand();
-  const {photos}=useCombinedSlices()
-
-  const { setAccountData } = useAccountData();
-
-
-  const user = useSelector((state) => state.user);
- 
+    setGetImageData,
+  } = useCombinedSlices();
 
   const [open, setOpen] = React.useState(false);
   const [openDialogForm, setOpenDialogForm] = React.useState(false);
   const [valueDateTime, setValueDateTime] = React.useState(null);
 
   const [selectedFile, setSelectedFile] = React.useState(null);
-  const [signedUrl, setSignedUrl] = React.useState(null);
+
   const [imageURL, setImageURL] = React.useState(null);
   /* const [openBackdrop, setOpenBackdrop] = React.useState(false); */
   /* const [isUploading, setIsUploading] = React.useState(false); */
@@ -206,7 +191,6 @@ function PhotographsSections() {
   });
   const changeControl = (event) => {
     // Otras lógicas según sea necesario
-    
 
     setSelectedUserId(event.target.value);
     setValidateInputs((prev) => ({
@@ -233,7 +217,7 @@ function PhotographsSections() {
 
   const handleChangeDateTime = (newValue) => {
     setValueDateTime(newValue);
-    setImageData({
+    setGetImageData({
       date_capture: newValue.format("YYYY-MM-DD HH:mm:ss"), // Usa selectedValue en lugar de task
     });
     setValidateInputs((prev) => ({
@@ -272,7 +256,6 @@ function PhotographsSections() {
 
   React.useEffect(() => {
     // This block of code will run after the state update is complete
-   
 
     const postImageData = async () => {
       try {
@@ -325,7 +308,7 @@ function PhotographsSections() {
     try {
       const fechaActual = new Date();
       const fileName = `${
-        informationContributorPersonalData.account
+        informationContributor.account
       }${functionsCustom.formatDate(fechaActual, "full")}`;
       const remoteFileName = fileName;
 
@@ -339,7 +322,7 @@ function PhotographsSections() {
       // Actualizar el estado con los datos de la imagen
       setImageDataNew((prevImageData) => ({
         ...prevImageData,
-        account: informationContributorPersonalData.account,
+        account: informationContributor.account,
         user_id: selectedUserId,
         session_user_id: store.getState().user.user_id,
         namePhoto: remoteFileName,
@@ -349,16 +332,15 @@ function PhotographsSections() {
 
       setSignedUrl(null);
       setSelectedFile(null);
-     
 
       try {
         const getResponse = await axios.get(
-          `http://localhost:3000/api/AccountHistoryByCount/${plazaNumber}/${informationContributorPersonalData.account}/`
+          `http://localhost:3000/api/AccountHistoryByCount/${plazaNumber}/${informationContributor.account}/`
         );
 
         if (getResponse.status === 200) {
           const accountHistory = getResponse.data;
-        
+
           // Update the state with the new account data
           setAccountData(accountHistory);
 
@@ -369,7 +351,7 @@ function PhotographsSections() {
             taskInput: false,
             typeInput: false,
             serviceInput: false,
-          })
+          });
 
           setSignedUrl(null);
           setSelectedFile(null);
@@ -490,7 +472,7 @@ function PhotographsSections() {
         );
 
         // Actualizar el estado con los datos obtenidos
-        
+
         setUsers(response.data);
       } catch (error) {
         console.error("Error al obtener datos:", error);
@@ -611,9 +593,14 @@ function PhotographsSections() {
                     );
                   })}
                 </TextField>
-                {validateInputs.avatarInput ? <Stack sx={{marginTop:"0.5rem"}} direction="row"><FaRegCircleCheck style={{color:"#14B814"}}/>{" "} <Typography  color={"secondary"} variant="caption">
-                          ¡Gracias por ingresar un usuario!
-                  </Typography></Stack> : (
+                {validateInputs.avatarInput ? (
+                  <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                    <FaRegCircleCheck style={{ color: "#14B814" }} />{" "}
+                    <Typography color={"secondary"} variant="caption">
+                      ¡Gracias por ingresar un usuario!
+                    </Typography>
+                  </Stack>
+                ) : (
                   <Typography sx={{ color: "red" }} variant="caption">
                     * ¡Por favor, ingresa un usuario!
                   </Typography>
@@ -628,9 +615,14 @@ function PhotographsSections() {
                   imageDataNew={imageDataNew}
                   setValidateInputs={setValidateInputs}
                 />
-                {validateInputs.taskInput ? <Stack sx={{marginTop:"0.5rem"}} direction="row"><FaRegCircleCheck style={{color:"#14B814"}}/>{" "} <Typography  color={"secondary"} variant="caption">
-                          ¡Gracias por ingresar una tarea!
-                  </Typography></Stack> : (
+                {validateInputs.taskInput ? (
+                  <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                    <FaRegCircleCheck style={{ color: "#14B814" }} />{" "}
+                    <Typography color={"secondary"} variant="caption">
+                      ¡Gracias por ingresar una tarea!
+                    </Typography>
+                  </Stack>
+                ) : (
                   <Typography sx={{ color: "red" }} variant="caption">
                     * ¡Por favor, ingresa una tarea!
                   </Typography>
@@ -653,9 +645,14 @@ function PhotographsSections() {
                     </Typography>
                   </Stack>
                 </LocalizationProvider>
-                {validateInputs.dateTimeInput ?   <Stack sx={{marginTop:"0.5rem"}} direction="row"><FaRegCircleCheck style={{color:"#14B814"}}/>{" "} <Typography  color={"secondary"} variant="caption">
-                          ¡Gracias por ingresar una fecha!
-                  </Typography></Stack> : (
+                {validateInputs.dateTimeInput ? (
+                  <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                    <FaRegCircleCheck style={{ color: "#14B814" }} />{" "}
+                    <Typography color={"secondary"} variant="caption">
+                      ¡Gracias por ingresar una fecha!
+                    </Typography>
+                  </Stack>
+                ) : (
                   <Typography sx={{ color: "red" }} variant="caption">
                     * ¡Por favor, ingresa una fecha!
                   </Typography>
@@ -681,9 +678,14 @@ function PhotographsSections() {
                   imageDataNew={imageDataNew}
                   setValidateInputs={setValidateInputs}
                 />
-                {validateInputs.typeInput ? <Stack sx={{marginTop:"0.5rem"}} direction="row"><FaRegCircleCheck style={{color:"#14B814"}}/>{" "} <Typography  color={"secondary"} variant="caption">
-                          ¡Gracias por cargar un tipo de tarea!
-                  </Typography></Stack> : (
+                {validateInputs.typeInput ? (
+                  <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                    <FaRegCircleCheck style={{ color: "#14B814" }} />{" "}
+                    <Typography color={"secondary"} variant="caption">
+                      ¡Gracias por cargar un tipo de tarea!
+                    </Typography>
+                  </Stack>
+                ) : (
                   <Typography sx={{ color: "red" }} variant="caption">
                     * ¡Por favor, ingresa un tipo de tarea!
                   </Typography>
@@ -716,9 +718,14 @@ function PhotographsSections() {
                     No hay imagen disponible
                   </Typography>
                 )}
-                {validateInputs.inputFile ? <Stack sx={{marginTop:"0.5rem"}} direction="row"><FaRegCircleCheck style={{color:"#14B814"}}/>{" "} <Typography  color={"secondary"} variant="caption">
-                          ¡Gracias por cargar una imagen!
-                  </Typography></Stack> : (
+                {validateInputs.inputFile ? (
+                  <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                    <FaRegCircleCheck style={{ color: "#14B814" }} />{" "}
+                    <Typography color={"secondary"} variant="caption">
+                      ¡Gracias por cargar una imagen!
+                    </Typography>
+                  </Stack>
+                ) : (
                   <Typography sx={{ color: "red" }} variant="caption">
                     * ¡Por favor, carga una foto!
                   </Typography>
@@ -740,9 +747,14 @@ function PhotographsSections() {
                   imageDataNew={imageDataNew}
                   setValidateInputs={setValidateInputs}
                 />
-                {validateInputs.serviceInput ? <Stack sx={{marginTop:"0.5rem"}} direction="row"><FaRegCircleCheck style={{color:"#14B814"}}/>{" "} <Typography  color={"secondary"} variant="caption">
-                          ¡Gracias por ingresar un servicio!
-                  </Typography></Stack> : (
+                {validateInputs.serviceInput ? (
+                  <Stack sx={{ marginTop: "0.5rem" }} direction="row">
+                    <FaRegCircleCheck style={{ color: "#14B814" }} />{" "}
+                    <Typography color={"secondary"} variant="caption">
+                      ¡Gracias por ingresar un servicio!
+                    </Typography>
+                  </Stack>
+                ) : (
                   <Typography sx={{ color: "red" }} variant="caption">
                     * ¡Por favor, ingresa un servicio!
                   </Typography>
