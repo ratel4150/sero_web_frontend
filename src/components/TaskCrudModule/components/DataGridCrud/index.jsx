@@ -150,9 +150,11 @@ function DataGridCrud({handleOpenDialog}) {
   };
 
   const  handleSaveClick = (id) => async() => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    
       let filterRowById = rows.find((row)=>row.id_tarea===id)
     console.log(filterRowById);
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+   
     try {
       const updateTask= await updateTasks(filterRowById)
     
@@ -184,7 +186,7 @@ function DataGridCrud({handleOpenDialog}) {
   };
 
   const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow, isNew: true };
+    const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
   };
