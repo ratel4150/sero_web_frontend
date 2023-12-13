@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import Topbar from "./scenes/global/Topbar";
-import Sidebar from "./scenes/global/Sidebar";
-import SidebarMap from "./scenes/global/SidebarMap";
+
+
+
 import Dashboard from "./scenes/dashboard-direccion";
 import Team from "./scenes/team";
 import Invoices from "./scenes/invoices";
@@ -38,6 +38,9 @@ import Cookies from 'js-cookie'
 import { verifyTokenRequest } from "./api/auth";
 import AcountHistory from "./scenes/acount-history";
 import SheetGenerator from "./scenes/sheet-generator";
+import SideBar from "./scenes/globalRatel/SideBar";
+import SideBarMap from "./scenes/globalRatel/SideBarMap";
+import TopBar from "./scenes/globalRatel/TopBar";
 
 
 function App() {
@@ -111,9 +114,9 @@ function App() {
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <div className="app">
-              {location.pathname !== `/map/${mapa_seleccionado.place_id}` ? (<Sidebar isSidebar={isSidebar} />) : (<SidebarMap isSidebar={isSidebar} />)}
+              {location.pathname !== `/map/${mapa_seleccionado.place_id}` ? ( <SideBar isSidebar={isSidebar} />  ) : (<SideBarMap isSidebar={isSidebar} />)}
                 <main className="content">
-                  <Topbar setIsSidebar={setIsSidebar} />
+                  <TopBar setIsSidebar={setIsSidebar} />
                   <Routes>
                     <Route path="/home" element={<Home />} />
                     <Route path="/dashboard-direccion" element={<Dashboard setLogin={setLogin} />} />

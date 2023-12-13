@@ -128,7 +128,7 @@ const Item = ({ title, to, icon, selected, setSelected, color, isCollapsed = fal
 
 
 
-const Sidebar = () => {
+const SideBar = () => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -306,4 +306,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default SideBar;

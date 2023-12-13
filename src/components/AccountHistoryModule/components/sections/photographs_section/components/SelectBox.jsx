@@ -1,6 +1,6 @@
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import axios from "axios";
-import e from "cors";
+
 import React from "react";
 
 import PropTypes from 'prop-types';

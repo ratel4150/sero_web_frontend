@@ -60,7 +60,7 @@ const Item = ({ title, to, icon, selected, setSelected, color, isCollapsed = fal
 
 
 
-const Sidebar = () => {
+const SideBarMap = () => {
 
     const dispatch = useDispatch()
 
@@ -403,4 +403,4 @@ const Sidebar = () => {
     );
 };
 
-export default Sidebar;
+export default SideBarMap;

@@ -34,7 +34,7 @@ import InputLabel from '@mui/material/InputLabel';
 
 import SeroSpace from '../../assets/ser0_space_fondooscuro.png'
 
-const Topbar = () => {
+const TopBar = () => {
 
   const mapa_seleccionado = useSelector((state) => state.plaza_mapa)
   console.log(mapa_seleccionado)
@@ -251,4 +251,4 @@ const Topbar = () => {
   );
 };
 
-export default Topbar;
+export default TopBar;
