@@ -21,10 +21,11 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import { Button, IconButton } from '@mui/material';
 import { MdTask } from "react-icons/md";
-import { allTasksRequest } from '../../../../api/tasks';
+import { allTasksRequest, updateTasks } from '../../../../api/tasks';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import { red } from '@mui/material/colors';
+import { useEffect } from 'react';
 const roles = ['Market', 'Finance', 'Development'];
 
 const randomRole = () => {
@@ -62,59 +63,82 @@ const buildInitialRows = async()=>{
 
 
 function EditToolbar(props) {
-  const { setRows, setRowModesModel,rows } = props;
+  const { setRows, setRowModesModel,rows,rowModesModel,lastRecord } = props;
+  
 
   const handleClick = async() => {
 
-    const id = rows.length + 1;
-    let newTask = { id_tarea:id, nombre: '', activo: '',id_proceso: '',id, isNew: true };
-    setRows((oldRows) => [...oldRows, newTask]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'nombre' },
-    }));
 
-    try {
-      const response = await createTask(newTask);
-      console.log(response);
+
+      const id = randomId();
+      const newTask = { id_tarea: id, nombre: '', activo: '', id_proceso: '', id, isNew: true };
+      setRows((oldRows) => [...oldRows, newTask]);
+      // Actualizar el estado de la interfaz de usuario antes de la operación asincrónica
+  setRowModesModel((oldModel) => ({
+    ...oldModel,
+    [id]: { mode: GridRowModes.Edit, fieldToFocus: 'nombre' },
+  }));
+
+  // Agregar la nueva tarea usando la función existente
+
+
+
+  
+ 
       
-    } catch (error) {
+  
 
-      console.error('Error al crear la tarea:', error);
 
-      
-    }
+  
+  
   };
+
+  
+
+
 
 
 
   return (
     <GridToolbarContainer>
-      <Button color="secondary" startIcon={<AddIcon />} endIcon={<MdTask/>} onClick={handleClick}>
+    {/*   <Button color="secondary" startIcon={<AddIcon />} endIcon={<MdTask/>} onClick={handleClick}>
         Agregar Nueva Tarea
-      </Button>
+      </Button> */}
     </GridToolbarContainer>
   );
 }
 
 
-function DataGridCrud() {
+function DataGridCrud({handleOpenDialog}) {
   const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
-  console.log(rows);
-  console.log(rowModesModel);
+  
+
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const initialRows = await buildInitialRows();
-      setRows(initialRows);
+      try {
+        const initialRows = await buildInitialRows();
+        setRows(initialRows);
+      } catch (error) {
+        console.error('Error fetching initial data:', error);
+        // Puedes manejar el error de alguna manera si es necesario
+      }
     };
-
+  
     fetchData();
   }, []);
 
 
-  console.log(rows);
+
+
+
+   
+  
+
+
+ 
+
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -125,8 +149,22 @@ function DataGridCrud() {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
-  const handleSaveClick = (id) => () => {
+  const  handleSaveClick = (id) => async() => {
+      let filterRowById = rows.find((row)=>row.id_tarea===id)
+    console.log(filterRowById);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    try {
+      const updateTask= await updateTasks(filterRowById)
+    
+      
+      
+    } catch (error) {
+      console.error('Error durante la operación:', error.message);
+      
+    }
+
+   
+    
   };
 
   const handleDeleteClick = (id) => () => {
@@ -146,7 +184,7 @@ function DataGridCrud() {
   };
 
   const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
+    const updatedRow = { ...newRow, isNew: true };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
   };
@@ -158,7 +196,7 @@ function DataGridCrud() {
   // ✅ Valid
 const CheckCell = ({data}) => {
   
-  console.log(data);
+ 
   if (data) {
     return (
       <IconButton aria-label="check" size="small">
@@ -229,20 +267,21 @@ const CheckCell = ({data}) => {
           </span> */}
         </strong>
       ),
-      type: 'number',
+      type: 'singleSelect',
       width: 150,
       align: 'left',
       headerAlign: 'left',
       editable: true,
-      valueGetter:({row})=>{
-        const targetProcess = processes.filter(process => process.id_proceso === row.id_proceso)
-        
-        return targetProcess[0]?.nombre 
-
-        /* const targetProcess = processes.filter(process => process.id_proceso === row.id_proceso)
+      valueGetter: ({ row }) => {
+        const targetProcess = processes.find(process => process.id_proceso === row.id_proceso);
         return targetProcess ? targetProcess.nombre : '';
- */
-      }
+      },
+      valueOptions: () => processes.map((process) => process.nombre),
+      valueParser: (newValue) => {
+        const targetProcess = processes.find(process => process.nombre === newValue);
+        return targetProcess ? targetProcess.id_proceso : '';
+      },
+    
     },
     {
       field: 'actions',
@@ -307,7 +346,8 @@ const CheckCell = ({data}) => {
   return (
     <Box
       sx={{
-        height: 500,
+        height:"auto",
+        maxHeight:"500px",
         width: '100%',
         '& .actions': {
           color: 'text.secondary',
@@ -321,7 +361,11 @@ const CheckCell = ({data}) => {
 
       }}
     >
+      <Button  color="secondary" startIcon={<AddIcon />} endIcon={<MdTask/>} onClick={  handleOpenDialog}>
+        Agregar
+      </Button>
       <DataGrid
+      sx={{height:"400px"}}
       checkboxSelection
         rows={rows}
         columns={buildColumns()}
@@ -334,13 +378,13 @@ const CheckCell = ({data}) => {
           toolbar: EditToolbar,
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel,rows },
+          toolbar: { setRows, setRowModesModel,rows ,rowModesModel},
         }}
         
 
         getCellClassName={(params) => {
 
-          console.log(params.row.activo);
+          
           if (
             params.row.activo
           ) {

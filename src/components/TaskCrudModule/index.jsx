@@ -1,6 +1,7 @@
 import React from 'react'
 import Container from './components/Container'
 import DataGridCrud from './components/DataGridCrud'
+import DialogCrudForm from './components/Dialog'
 
 
 
@@ -8,9 +9,21 @@ import DataGridCrud from './components/DataGridCrud'
 
 
 function TaskCrudModule() {
+  const [openDialog, setOpenDialog] = React.useState(false);
+
+  
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
   return (
    <Container>
-      <DataGridCrud/>
+      <DataGridCrud handleOpenDialog={handleOpenDialog}/>
+      <DialogCrudForm openDialog={openDialog} handleCloseDialog={handleCloseDialog}  />
    </Container>
 
   )
