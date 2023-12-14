@@ -58,3 +58,22 @@ export const updateTasks = async (task) => {
     throw error; // Re-throw the error to propagate it to the calling code
   }
 };
+
+export const deleteTask =async(id)=>{
+
+  console.log(id);
+  
+  try {
+
+    const response = await axios.delete(`http://localhost:3000/api/tasks/${id}`);
+
+    console.log('Delete Task Response:', response.data);
+    return response.data;
+    
+  } catch (error) {
+
+    console.error('Error updating task:', error.message);
+    throw error; // Re-throw the error to propagate it to the calling code
+    
+  }
+}

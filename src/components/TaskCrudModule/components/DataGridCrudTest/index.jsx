@@ -28,8 +28,8 @@ import { GridToolbarDensitySelector } from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
 import { MdTask } from "react-icons/md";
 import { FaTasks } from "react-icons/fa";
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import { deleteTask } from "../../../../api/tasks";
 
 // ✅ Valid
 const CheckCell = ({ data }) => {
@@ -73,8 +73,75 @@ const useFakeMutation = () => {
       }),
     [],
   ); */
-  return React.useCallback(async (user) => {
+  return React.useCallback(async (user, _action) => {
+
+
+   
     try {
+      // Simulating a 200 ms pause with setTimeout
+      await new Promise((timeoutResolve) => setTimeout(timeoutResolve, 200));
+
+    
+
+      let apiUrl = "";
+
+      console.log(_action);
+
+      switch (_action) {
+
+        case "update":
+          if (
+            user.nombre?.trim() === "" ||
+            user.activo === undefined ||
+            user.id_proceso === undefined
+          ) {
+            throw new Error("Invalid user data");
+          }
+          apiUrl = `http://localhost:3000/api/tasks/${user.id_tarea}`;
+          break;
+        case "delete":
+          apiUrl = `http://localhost:3000/api/tasks/${user}`;
+          break;
+        case "create":
+          apiUrl = "http://localhost:3000/api/createUser";
+          break;
+        default:
+          throw new Error("Unsupported action");
+      }
+
+      // Utilizing Axios to make the HTTP request based on the action
+
+      
+      let method = "";
+
+      switch (_action) {
+          case "delete":
+              method = "delete";
+              break;
+              case "update":
+                method = "put";
+                break;
+          // You can add more cases if needed for other actions
+
+          // Default to "put" for other actions
+      }
+
+      
+        // Utilizing Axios to make the HTTP request based on the action
+        const response = await axios({
+          method: method,
+          url: apiUrl,
+          data: user,
+      });
+      
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      // Handle Axios errors or validation errors
+      console.error(error);
+      throw error;
+    }
+    /*  try {
       // Simulando una pausa de 200 ms con setTimeout
       await new Promise((timeoutResolve) => setTimeout(timeoutResolve, 200));
 
@@ -97,7 +164,7 @@ const useFakeMutation = () => {
       // Manejar errores de Axios o errores de validación
       console.error(error);
       throw error;
-    }
+    } */
   }, []);
 };
 
@@ -174,14 +241,12 @@ export default function DataGridCrudTest({ handleOpenDialog }) {
   };
 
   const handleYes = async () => {
-    
     const { newRow, oldRow, reject, resolve } = promiseArguments;
 
     try {
       // Make the HTTP request to save in the backend
-      const response = await mutateRow(newRow);
-      console.log(response);
-      
+      const response = await mutateRow(newRow,"update");
+
       setSnackbar({ children: "User successfully saved", severity: "success" });
       resolve(response);
       setPromiseArguments(null);
@@ -218,6 +283,9 @@ export default function DataGridCrudTest({ handleOpenDialog }) {
     const { newRow, oldRow } = promiseArguments;
     const mutation = computeMutation(newRow, oldRow);
 
+
+    
+
     return (
       <Dialog
         maxWidth="xs"
@@ -253,7 +321,6 @@ export default function DataGridCrudTest({ handleOpenDialog }) {
         <Button
           color="secondary"
           startIcon={<FaTasks />}
-          
           onClick={handleOpenDialog}
         >
           Agregar Nueva Tarea
@@ -262,49 +329,34 @@ export default function DataGridCrudTest({ handleOpenDialog }) {
     );
   }
 
-  return (
-    <div style={{ height: 400, width: "100%" }}>
-      {renderConfirmDialog()}
-      <DataGrid
-        slots={{ toolbar: CustomToolbar }}
-        slotProps={{ toolbar: { handleOpenDialog } }}
-        checkboxSelection
-        localeText={{
-          toolbarColumns: "Columnas",
-          toolbarFilters: "Filtros",
-          toolbarDensity: "Tamaño Celda",
-          toolbarExport: "Exportar",
-        }}
-        rows={rows}
-        columns={columns}
-        processRowUpdate={processRowUpdate}
-      />
-      {!!snackbar && (
-        <Snackbar open onClose={handleCloseSnackbar} autoHideDuration={6000}>
-          <Alert {...snackbar} onClose={handleCloseSnackbar} />
-        </Snackbar>
-      )}
-    </div>
-  );
-}
+  const handleDeleteClick=async (id)=>{
 
-/* const columns = [
-  { field: 'name', headerName: 'Name', width: 180, editable: true },
-  { field: 'age', headerName: 'Age', type: 'number', editable: true },
-  {
-    field: 'dateCreated',
-    headerName: 'Date Created',
-    type: 'date',
-    width: 180,
-  },
-  {
-    field: 'lastLogin',
-    headerName: 'Last Login',
-    type: 'dateTime',
-    width: 220,
-  },
-]; */
 
+    console.log(id);
+
+   try {
+      // Make the HTTP request to save in the backend
+      const response = await deleteTask(id)
+
+     /*  setSnackbar({ children: "User successfully deleted", severity: "success" });
+      resolve(response); */
+      /* setPromiseArguments(null); */
+    } catch (error) {
+      /* setSnackbar({ children: "Name can't be empty", severity: "error" });
+     /*  reject(oldRow); 
+      setPromiseArguments(null); */
+    
+
+
+  
+
+
+
+   
+   
+   }}
+
+   
 const processes = [
   { id_proceso: 1, nombre: "Carta Invitacion" },
   { id_proceso: 2, nombre: "Notificacion" },
@@ -368,8 +420,8 @@ const columns = [
     },
   },
   {
-    field: 'actions',
-    type: 'actions',
+    field: "actions",
+    type: "actions",
     renderHeader: () => (
       <strong style={{ color: "#5EBFFF" }}>
         {"Proceso"}
@@ -379,24 +431,84 @@ const columns = [
       </strong>
     ),
     width: 100,
-    cellClassName: 'actions',
+    cellClassName: "actions",
     getActions: ({ id }) => {
-      
-
       return [
-        
         <GridActionsCellItem
           icon={<DeleteIcon />}
           label="Delete"
-         /*  onClick={handleDeleteClick(id)} */
+           onClick={()=>handleDeleteClick(id)} 
           color="inherit"
         />,
       ];
     },
   },
-
-  
 ];
+
+
+  return (
+    <div style={{ height: 400, width: "100%" }}>
+      {renderConfirmDialog()}
+      <DataGrid
+        slots={{ toolbar: CustomToolbar }}
+        slotProps={{ toolbar: { handleOpenDialog } }}
+        checkboxSelection
+        localeText={{
+          toolbarColumns: "Columnas",
+          toolbarFilters: "Filtros",
+          toolbarDensity: "Tamaño Celda",
+          toolbarExport: "Exportar",
+        }}
+        rows={rows}
+        columns={columns}
+        processRowUpdate={processRowUpdate}
+      />
+      {!!snackbar && (
+        <Snackbar open onClose={handleCloseSnackbar} autoHideDuration={6000}>
+          <Alert {...snackbar} onClose={handleCloseSnackbar} />
+        </Snackbar>
+      )}
+    </div>
+  );
+}
+
+/* const columns = [
+  { field: 'name', headerName: 'Name', width: 180, editable: true },
+  { field: 'age', headerName: 'Age', type: 'number', editable: true },
+  {
+    field: 'dateCreated',
+    headerName: 'Date Created',
+    type: 'date',
+    width: 180,
+  },
+  {
+    field: 'lastLogin',
+    headerName: 'Last Login',
+    type: 'dateTime',
+    width: 220,
+  },
+]; */
+
+
+/* const handleYes = async () => {
+  const { newRow, oldRow, reject, resolve } = promiseArguments;
+
+  try {
+    // Make the HTTP request to save in the backend
+    const response = await mutateRow(newRow,"update");
+
+    setSnackbar({ children: "User successfully saved", severity: "success" });
+    resolve(response);
+    setPromiseArguments(null);
+  } catch (error) {
+    setSnackbar({ children: "Name can't be empty", severity: "error" });
+    reject(oldRow);
+    setPromiseArguments(null);
+  }
+
+}; */
+
+
 
 /* const rows = [
   {
