@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.474.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
@@ -46,10 +47,11 @@
     "@sentry/react": "^7.86.0",
     "@sentry/tracing": "^7.86.0",
     "@turf/turf": "^6.5.0",
+    "amazon-cognito-identity-js": "^6.3.7",
     "animate.css": "^4.1.1",
     "antd": "^5.11.1",
     "apexcharts": "^3.44.0",
-    "aws-sdk": "^2.1493.0",
+    "aws-sdk": "^2.1519.0",
     "axios": "^1.5.0",
     "chart.js": "^4.4.0",
     "cors": "^2.8.5",
