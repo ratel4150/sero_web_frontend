@@ -48,125 +48,7 @@ const CheckCell = ({ data }) => {
   }
 };
 
-const useFakeMutation = () => {
-  /*  return React.useCallback(
-    (user) =>
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (user.nombre?.trim() === '') {
-            reject();
-          } else if(user?.activo=== undefined){
-            reject()
 
-          } else if(user?.id_proceso=== undefined){
-            reject()
-
-          
-
-          }else {
-            console.log(user);
-            resolve(user);
-
-           
-          }
-        }, 200);
-      }),
-    [],
-  ); */
-  return React.useCallback(async (user, _action) => {
-
-
-   
-    try {
-      // Simulating a 200 ms pause with setTimeout
-      await new Promise((timeoutResolve) => setTimeout(timeoutResolve, 200));
-
-    
-
-      let apiUrl = "";
-
-      console.log(_action);
-
-      switch (_action) {
-
-        case "update":
-          if (
-            user.nombre?.trim() === "" ||
-            user.activo === undefined ||
-            user.id_proceso === undefined
-          ) {
-            throw new Error("Invalid user data");
-          }
-          apiUrl = `http://localhost:3000/api/tasks/${user.id_tarea}`;
-          break;
-        case "delete":
-          apiUrl = `http://localhost:3000/api/tasks/${user}`;
-          break;
-        case "create":
-          apiUrl = "http://localhost:3000/api/createUser";
-          break;
-        default:
-          throw new Error("Unsupported action");
-      }
-
-      // Utilizing Axios to make the HTTP request based on the action
-
-      
-      let method = "";
-
-      switch (_action) {
-          case "delete":
-              method = "delete";
-              break;
-              case "update":
-                method = "put";
-                break;
-          // You can add more cases if needed for other actions
-
-          // Default to "put" for other actions
-      }
-
-      
-        // Utilizing Axios to make the HTTP request based on the action
-        const response = await axios({
-          method: method,
-          url: apiUrl,
-          data: user,
-      });
-      
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      // Handle Axios errors or validation errors
-      console.error(error);
-      throw error;
-    }
-    /*  try {
-      // Simulando una pausa de 200 ms con setTimeout
-      await new Promise((timeoutResolve) => setTimeout(timeoutResolve, 200));
-
-      if (
-        user.nombre?.trim() === "" ||
-        user.activo === undefined ||
-        user.id_proceso === undefined
-      ) {
-        throw new Error("Invalid user data");
-      }
-
-      // Utilizando Axios para realizar la solicitud HTTP con método PUT
-      const response = await axios.put(
-        `http://localhost:3000/api/tasks/${user.id_tarea}`,
-        user
-      );
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      // Manejar errores de Axios o errores de validación
-      console.error(error);
-      throw error;
-    } */
-  }, []);
-};
 
 function computeMutation(newRow, oldRow) {
   if (newRow.nombre !== oldRow.nombre) {
@@ -195,6 +77,128 @@ export default function DataGridCrudTest({ handleOpenDialog }) {
   const [snackbar, setSnackbar] = React.useState(null);
 
   const handleCloseSnackbar = () => setSnackbar(null);
+
+
+
+  const useFakeMutation = () => {
+    /*  return React.useCallback(
+      (user) =>
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            if (user.nombre?.trim() === '') {
+              reject();
+            } else if(user?.activo=== undefined){
+              reject()
+  
+            } else if(user?.id_proceso=== undefined){
+              reject()
+  
+            
+  
+            }else {
+              console.log(user);
+              resolve(user);
+  
+             
+            }
+          }, 200);
+        }),
+      [],
+    ); */
+    return React.useCallback(async (user, _action) => {
+  
+  
+     
+      try {
+        // Simulating a 200 ms pause with setTimeout
+        await new Promise((timeoutResolve) => setTimeout(timeoutResolve, 200));
+  
+      
+  
+        let apiUrl = "";
+  
+        console.log(_action);
+  
+        switch (_action) {
+  
+          case "update":
+            if (
+              user.nombre?.trim() === "" ||
+              user.activo === undefined ||
+              user.id_proceso === undefined
+            ) {
+              throw new Error("Invalid user data");
+            }
+            apiUrl = `http://localhost:3000/api/tasks/${user.id_tarea}`;
+            break;
+          case "delete":
+            apiUrl = `http://localhost:3000/api/tasks/${user}`;
+            break;
+          case "create":
+            apiUrl = "http://localhost:3000/api/createUser";
+            break;
+          default:
+            throw new Error("Unsupported action");
+        }
+  
+        // Utilizing Axios to make the HTTP request based on the action
+  
+        
+        let method = "";
+  
+        switch (_action) {
+            case "delete":
+                method = "delete";
+                break;
+                case "update":
+                  method = "put";
+                  break;
+            // You can add more cases if needed for other actions
+  
+            // Default to "put" for other actions
+        }
+  
+        
+          // Utilizing Axios to make the HTTP request based on the action
+          const response = await axios({
+            method: method,
+            url: apiUrl,
+            data: user,
+        });
+        
+        console.log(response.data);
+        return response.data;
+      } catch (error) {
+        // Handle Axios errors or validation errors
+        console.error(error);
+        throw error;
+      }
+      /*  try {
+        // Simulando una pausa de 200 ms con setTimeout
+        await new Promise((timeoutResolve) => setTimeout(timeoutResolve, 200));
+  
+        if (
+          user.nombre?.trim() === "" ||
+          user.activo === undefined ||
+          user.id_proceso === undefined
+        ) {
+          throw new Error("Invalid user data");
+        }
+  
+        // Utilizando Axios para realizar la solicitud HTTP con método PUT
+        const response = await axios.put(
+          `http://localhost:3000/api/tasks/${user.id_tarea}`,
+          user
+        );
+        console.log(response.data);
+        return response.data;
+      } catch (error) {
+        // Manejar errores de Axios o errores de validación
+        console.error(error);
+        throw error;
+      } */
+    }, []);
+  };
 
   React.useEffect(() => {
     const fetchData = async () => {

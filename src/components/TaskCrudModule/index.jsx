@@ -1,5 +1,5 @@
 import React from 'react'
-import Container from './components/Container'
+import Container from './Container'
 import DataGridCrud from './components/DataGridCrud'
 import DialogCrudForm from './components/Dialog'
 import DataGridCrudTest from './components/DataGridCrudTest';

@@ -1,6 +1,6 @@
 import { Box,useTheme } from '@mui/material'
 import React from 'react'
-import { tokens } from '../../../theme';
+import { tokens } from '../../theme';
 
 function Container({children}) {
   const theme = useTheme();
