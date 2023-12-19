@@ -40,6 +40,7 @@ import AcountHistory from "./scenes/acount-history";
 import SheetGenerator from "./scenes/sheet-generator";
 import Task from "./scenes/task";
 import Service from "./scenes/service";
+import Process from "./scenes/process";
 
 
 function App() {
@@ -133,7 +134,7 @@ function App() {
                     <Route path="/map-list" element={<MapList />} />
                     <Route path="/map/:place_id" element={<Map />} />
                     <Route path="/roles" element={<Roles />} />
-                    <Route path="/maintenance" element={<Service />} />
+                    <Route path="/maintenance" element={<Process />} />
                     <Route path="/work-assignment" element={<WorkAssignment />} />
                   </Routes>
                 </main>

@@ -13,72 +13,25 @@ import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import { Grid, Input, InputLabel } from "@mui/material";
 import { Image } from "@mui/icons-material";
+import { uploadToS3 } from "../../../../services/s3.service";
+import axios from "axios";
 
 
 
-export const uploadFile = async (selectedFile, remoteFileName, maxFileSizeMB = 1) => {
-    try {
-      // Verificar el tamaño del archivo
-      const fileSizeBytes = selectedFile.size;
-      const maxFileSizeBytes = maxFileSizeMB * 1024 * 1024; // Convertir MB a bytes
-  
-      if (fileSizeBytes > maxFileSizeBytes) {
-        throw new Error(
-          `El archivo excede el tamaño máximo permitido de ${maxFileSizeMB} MB.`
-        );
-      }
-  
-      // Generar una URL prefirmada para la carga del archivo
-      const presignedUrl = await generatePresignedUrl(remoteFileName);
-  
-      // Leer el contenido del archivo como un ArrayBuffer
-      const fileContent = await selectedFile.arrayBuffer();
-  
-      // Realizar la carga del archivo utilizando la URL prefirmada
-      const result = await fetch(presignedUrl, {
-        method: 'PUT',
-        body: fileContent,
-        headers: {
-          'Content-Type': selectedFile.type,
-        },
-      });
-  
-      // Verificar el éxito de la carga
-      if (!result.ok) {
-        throw new Error(`Error al cargar el archivo a AWS S3. Código: ${result.status}`);
-      }
-  
-      return result;
-    } catch (error) {
-      console.error("Error al cargar el archivo a AWS S3:", error);
-      throw error; // Puedes lanzar el error nuevamente si es necesario
-    }
-  };
-  
-  const generatePresignedUrl = async (key) => {
-    // Configurar los parámetros para generar la URL prefirmada
-    const params = {
-      Bucket: bucketName,
-      Key: key,
-      ContentType: 'image/jpeg', // Ajustar según el tipo de contenido del archivo
-      Expires: 60, // Duración de la URL prefirmada en segundos
-    };
-  
-    // Generar la URL prefirmada utilizando el SDK de AWS S3
-    const presignedUrl = await s3.getSignedUrlPromise('putObject', params);
-    return presignedUrl;
-  };
+
+
   
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function ServiceDialog({ dialogState, handleClickClose,getUrl }) {
+function ServiceDialog({ dialogState, handleClickClose,getUrl,getRowData }) {
 
     const [selectedFile, setSelectedFile] = React.useState(null);
+    const [singnedUrl,setSignedUrl] = React.useState(null)
 
-    const handleFileChange = (event) => {
+    const handleFileChange = async(event) => {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
@@ -87,26 +40,85 @@ function ServiceDialog({ dialogState, handleClickClose,getUrl }) {
         };
         reader.readAsDataURL(file);
       }
-    };
 
+      try {
+        const fileUrl = await uploadToS3(file);
+        console.log("URL del archivo subido:", fileUrl);
+        setSignedUrl(fileUrl)
+  
+      
+      } catch (error) {
+        console.error("Error al subir archivo:", error.message);
+        // Handle the error according to your requirements
+      }
+    };
+/*   const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setSelectedImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    try {
+      const fileUrl = await uploadToS3(file);
+      console.log("URL del archivo subido:", fileUrl);
+
+      setServiceData((prevData) => {
+        // Update the 'imagen' property in the state with the new fileUrl
+        return { ...prevData, imagen: fileUrl };
+      });
+    } catch (error) {
+      console.error("Error al subir archivo:", error.message);
+      // Handle the error according to your requirements
+    }
+  }; */
     
 const handleSave = async () => {
-  if (selectedFile) {
+
+  if (getRowData ) {
+    
     try {
-      // Generar un nombre único para el archivo (puedes ajustar esto según tus necesidades)
-      const remoteFileName = `nombre-unico-del-archivo-${Date.now()}`;
+      // Assuming getRowData is an object you want to update and getUrl is the API endpoint
+     
+     
+          console.log(getRowData);
+      // Modify the getRowData object with the new getUrl value
 
-      // Llamada a la función de carga de archivos en AWS S3
-      const result = await uploadFile(selectedFile, remoteFileName);
+      let updatedRowData
+      switch (getRowData.field) {
+        case "imagen":
+           updatedRowData= { ...getRowData, imagen: singnedUrl };
+          
+          break;
 
-      // Maneja la respuesta según sea necesario
-      console.log("Imagen cargada exitosamente:", result);
+          case "icono_app_movil":
+            updatedRowData= { ...getRowData, icono_app_movil: singnedUrl };
+           
+           break;
+      
+           default:
+            // Si field no coincide con ninguna condición, usa un valor predeterminado o maneja según tu lógica
+            updatedRowData = { ...getRowData };
+            break;
+      }
+      
 
-      // Cierra el diálogo después de la carga exitosa
+      // Make a PUT request using the updatedRowData
+   /*    console.log(updatedRowData);
+       */
+      const response = await axios.put(`http://localhost:3000/api/services/${getRowData.id}`, updatedRowData);
+      // You can handle the response as needed
+      console.log('Save successful:', response.data);
+      // If you want to close something after successful save, uncomment the following line
       handleClickClose();
     } catch (error) {
       console.error("Error al cargar la imagen:", error);
     }
+  
   }
 };
   return (

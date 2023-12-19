@@ -7,8 +7,9 @@ import ServiceDialog from './components/Dialog'
 function ServiceCrudModule() {
 
   const [openDialog, setOpenDialog] = React.useState(false)
+  const [getRowData,setGetRowData] = React.useState()
   const[getUrl,setUrl]= React.useState(null)
-
+ 
   const handleClickOpen = () => {
     setOpenDialog(true);
   };
@@ -18,8 +19,8 @@ function ServiceCrudModule() {
   };
   return (
    <Container>
-    <ServiceGridCrud handleClickOpen={handleClickOpen} setUrl={setUrl}/>
-    {openDialog && <ServiceDialog dialogState={openDialog} handleClickClose={handleClickClose} getUrl={getUrl}/>}
+    <ServiceGridCrud handleClickOpen={handleClickOpen} setUrl={setUrl} setGetRowData={setGetRowData}/>
+    {openDialog && <ServiceDialog dialogState={openDialog} handleClickClose={handleClickClose} getUrl={getUrl} getRowData={getRowData} />}
    </Container>
  
   )
