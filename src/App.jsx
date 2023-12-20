@@ -134,7 +134,7 @@ function App() {
                     <Route path="/map-list" element={<MapList />} />
                     <Route path="/map/:place_id" element={<Map />} />
                     <Route path="/roles" element={<Roles />} />
-                    <Route path="/maintenance" element={<Process />} />
+                    <Route path="/maintenance" element={<Service />} />
                     <Route path="/work-assignment" element={<WorkAssignment />} />
                   </Routes>
                 </main>

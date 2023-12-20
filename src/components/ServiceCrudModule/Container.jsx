@@ -1,9 +1,26 @@
 import { Box,useTheme } from '@mui/material'
 import React from 'react'
 import { tokens } from '../../theme';
-
+/**
+ * Functional component representing a container with custom styling.
+ *
+ * @component
+ * @param {Object} props - The component properties.
+ * @param {React.ReactNode} props.children - The child components to be rendered within the container.
+ * @returns {React.Component} The rendered Container component.
+ */
 function Container({children}) {
+    /**
+   * Accesses the current theme from the Material-UI theme provider.
+   *
+   * @type {function}
+   */
   const theme = useTheme();
+   /**
+   * Retrieves color tokens based on the theme's palette mode.
+   *
+   * @type {Object}
+   */
   const colors = tokens(theme.palette.mode);
   
   return (

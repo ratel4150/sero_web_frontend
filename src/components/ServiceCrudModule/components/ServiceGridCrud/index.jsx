@@ -46,34 +46,44 @@ import axios from "axios";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import MiscellaneousServicesIcon from "@mui/icons-material/MiscellaneousServices";
 import { listObjects, uploadToS3 } from "../../../../services/s3.service";
+import { ImCancelCircle } from "react-icons/im";
+import { FaRegCircleCheck } from "react-icons/fa6";
 
+
+
+
+/**
+ * Simulates asynchronous mutations for CRUD operations on user data.
+ *
+ * @typedef {Object} User
+ * @property {string} [nombre] - The user's name.
+ * @property {boolean} [activo] - The user's active status.
+ * @property {string} [id_servicio] - The ID of the service.
+ *
+ * @callback MutationCallback
+ * @param {User} user - The user data.
+ * @param {string} action - The CRUD action ('update', 'delete', 'create').
+ * @returns {Promise<Object>} - A promise that resolves to the mutation result.
+ * @throws {Error} - Throws an error if the user data is invalid.
+ *
+ * @function
+ * @name useFakeMutation
+ * @returns {MutationCallback} - The mutation callback function.
+ *
+ * @example
+ * // Usage example
+ * const mutateRow = useFakeMutation();
+ * try {
+ *   const result = await mutateRow({ nombre: 'John', id_servicio: '123' }, 'update');
+ *   console.log('Mutation successful:', result);
+ * } catch (error) {
+ *   console.error('Mutation failed:', error.message);
+ * }
+ */
 const useFakeMutation = () => {
-  /*  return React.useCallback(
-    (user) =>
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (user.nombre?.trim() === '') {
-            reject();
-          } else if(user?.activo=== undefined){
-            reject()
-
-          } else if(user?.id_proceso=== undefined){
-            reject()
-
-          
-
-          }else {
-            console.log(user);
-            resolve(user);
-
-           
-          }
-        }, 200);
-      }),
-    [],
-  ); */
+ 
   return React.useCallback(async (user, _action) => {
-   /*  console.log(user); */
+   
 
     try {
       // Simulating a 200 ms pause with setTimeout
@@ -127,39 +137,43 @@ const useFakeMutation = () => {
         data: user,
       });
 
-      console.log(response.data);
+    
       return response.data;
     } catch (error) {
       // Handle Axios errors or validation errors
       console.error(error);
       throw error;
     }
-    /*  try {
-      // Simulando una pausa de 200 ms con setTimeout
-      await new Promise((timeoutResolve) => setTimeout(timeoutResolve, 200));
-
-      if (
-        user.nombre?.trim() === "" ||
-        user.activo === undefined ||
-        user.id_proceso === undefined
-      ) {
-        throw new Error("Invalid user data");
-      }
-
-      // Utilizando Axios para realizar la solicitud HTTP con método PUT
-      const response = await axios.put(
-        `http://localhost:3000/api/tasks/${user.id_tarea}`,
-        user
-      );
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      // Manejar errores de Axios o errores de validación
-      console.error(error);
-      throw error;
-    } */
+    
   }, []);
 };
+
+
+/**
+ * Avatar image component with conditional rendering based on data presence.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {string|null} props.data - The image source URL or null if no image.
+ * @param {Function} props.handleClickOpen - Function to handle click and open.
+ * @param {Function} props.setUrl - Function to set the URL.
+ * @param {Function} props.setGetRowData - Function to set the row data.
+ * @param {Object} props.getDataRow - The data of the row.
+ * @param {string} props.field - The field identifier.
+ * @returns {JSX.Element} - The rendered AvatarImage component.
+ *
+ * @example
+ * // Usage example
+ * <AvatarImage
+ *   data="/path/to/image.jpg"
+ *   handleClickOpen={handleClick}
+ *   setUrl={setImageUrl}
+ *   setGetRowData={setRowData}
+ *   getDataRow={rowData}
+ *   field="imagen"
+ * />
+ */
+
 const AvatarImage = ({
   data,
   handleClickOpen,
@@ -170,30 +184,30 @@ const AvatarImage = ({
 }) => {
   if (!data) {
     return (
-      <IconButton onClick={()=>{
-        handleClickOpen();
-        switch (field) {
-          case "imagen":
-           
-            setGetRowData({ ...getDataRow, field: field });
-            
-            break;
+      <IconButton
+        onClick={() => {
+          handleClickOpen();
+          switch (field) {
+            case "imagen":
+              setGetRowData({ ...getDataRow, field: field });
+
+              break;
 
             case "icono_app_movil":
-           
-            setGetRowData({ ...getDataRow, field: field });
-            
-            break;
-        
-          default:
-            break;
-        }
-      }} aria-label="delete">
+              setGetRowData({ ...getDataRow, field: field });
+
+              break;
+
+            default:
+              break;
+          }
+        }}
+        aria-label="delete"
+      >
         <BiSolidImageAdd />
       </IconButton>
     );
   } else {
-
     return (
       <Avatar
         onClick={(e) => {
@@ -201,32 +215,38 @@ const AvatarImage = ({
           setUrl(e.target.src);
           switch (field) {
             case "imagen":
-             
               setGetRowData({ ...getDataRow, field: field });
-              
+
               break;
 
-              case "icono_app_movil":
-             
+            case "icono_app_movil":
               setGetRowData({ ...getDataRow, field: field });
-              
+
               break;
-          
+
             default:
               break;
           }
-          
-          
         }}
         alt="Remy Sharp"
-        src={
-          data 
-        }
+        src={data}
       />
     );
   }
 };
 
+/**
+ * CheckCell component for rendering an IconButton with check or clear icon based on data.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {boolean} props.data - Boolean data to determine the icon.
+ * @returns {JSX.Element} - The rendered CheckCell component.
+ *
+ * @example
+ * // Usage example
+ * <CheckCell data={true} />
+ */
 const CheckCell = ({ data }) => {
   if (data) {
     return (
@@ -242,7 +262,24 @@ const CheckCell = ({ data }) => {
     );
   }
 };
-
+/**
+ * ServiceGridCrud component for managing services using a DataGrid.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Function} props.handleClickOpen - Function to handle opening a dialog.
+ * @param {Function} props.setUrl - Function to set the URL.
+ * @param {Function} props.setGetRowData - Function to set row data.
+ * @returns {JSX.Element} - The rendered ServiceGridCrud component.
+ *
+ * @example
+ * // Usage example
+ * <ServiceGridCrud
+ *   handleClickOpen={handleClickOpen}
+ *   setUrl={setUrl}
+ *   setGetRowData={setGetRowData}
+ * />
+ */
 function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
   const [open, setOpen] = React.useState(false);
   const noButtonRef = React.useRef(null);
@@ -262,6 +299,29 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
     icono_app_movil: "",
   });
 
+  const [validateInputs, setValidateInputs] = React.useState({
+    nombre: false,
+    orden: false,
+  });
+
+  /**
+ * Handles the change event for input fields, updating the state and performing validation.
+ *
+ * @function
+ * @param {Object} event - The input change event.
+ * @param {string} event.name - The name of the input field.
+ * @param {string|boolean} event.value - The value of the input field.
+ * @param {string} event.type - The type of the input field.
+ * @param {boolean} event.checked - The checked status (for checkboxes).
+ *
+ * @returns {void}
+ *
+ * @example
+ * // Usage example
+ * const handleInputOnChange = (event) => {
+ *   // ... (function body)
+ * };
+ */
   const handleInputOnChange = (event) => {
     const { name, value, type, checked } = event.target;
     // Actualiza el estado serviceData con el nuevo valor del campo Servicio
@@ -270,7 +330,48 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
       ...prevState,
       [name]: newValue,
     }));
+
+    switch (name) {
+      case "nombre":
+        setValidateInputs((prevValidateInputs) => ({
+          ...prevValidateInputs,
+          [name]: value.length > 0,
+        }));
+
+        break;
+
+      case "orden":
+        setValidateInputs((prevValidateInputs) => ({
+          ...prevValidateInputs,
+          [name]: value > 0,
+        }));
+
+        break;
+
+      default:
+        break;
+    }
   };
+
+
+  /**
+ * Handles the change event for file input, updates the selected image preview,
+ * uploads the file to Amazon S3, and updates the state with the file URL.
+ *
+ * @async
+ * @function
+ * @param {Object} event - The file change event.
+ * @param {Object} event.target - The file input element.
+ * @param {File} event.target.files[0] - The selected file.
+ *
+ * @returns {Promise<void>} A promise that resolves when the file is uploaded and state is updated.
+ *
+ * @example
+ * // Usage example
+ * const handleFileChange = async (event) => {
+ *   // ... (function body)
+ * };
+ */
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -297,6 +398,25 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
     }
   };
 
+  /**
+ * Handles the change event for file input, updates the selected image preview,
+ * uploads the file to Amazon S3, and updates the state with the file URL.
+ *
+ * @async
+ * @function
+ * @param {Object} event - The file change event.
+ * @param {Object} event.target - The file input element.
+ * @param {File} event.target.files[0] - The selected file.
+ *
+ * @returns {Promise<void>} A promise that resolves when the file is uploaded and state is updated.
+ *
+ * @example
+ * // Usage example
+ * const handleFileChange = async (event) => {
+ *   // ... (function body)
+ * };
+ */
+
   const handleFileChange2 = async (event) => {
     const file = event.target.files[0];
 
@@ -321,16 +441,74 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
       // Handle the error according to your requirements
     }
   };
+  /**
+ * Closes the dialog form by updating the state.
+ *
+ * @function
+ * @returns {void}
+ *
+ * @example
+ * // Usage example
+ * const handleCloseDialogForm = () => {
+ *   // ... (function body)
+ * };
+ */
 
   const handleCloseDialogForm = () => {
     setOpen(false);
   };
-
+/**
+ * Closes the dialog form by updating the state.
+ *
+ * @function
+ * @returns {void}
+ *
+ * @example
+ * // Usage example
+ * const handleCloseDialogForm = () => {
+ *   // ... (function body)
+ * };
+ */
   const handleOpenDialogForm = () => {
     setOpen(true);
   };
 
   const handleCloseSnackbar = () => setSnackbar(null);
+
+  /**
+ * Fetches data asynchronously and updates the component state with the retrieved data.
+ *
+ * @function
+ * @returns {void}
+ *
+ * @example
+ * // Usage example
+ * React.useEffect(() => {
+ *   const fetchData = async () => {
+ *     try {
+ *       // Make a network request to get data
+ *       const response = await getAllServices();
+ *
+ *       // Extract the relevant data from the response
+ *       const data = response.data.services;
+ *
+ *       // Add the 'id_tarea' field to each row using the index as a unique value
+ *       const rowsWithId = data.map((row, index) => ({
+ *         ...row,
+ *         id: row.id_servicio || index.toString(),
+ *       }));
+ *
+ *       // Update the component state with the new data
+ *       setRows(rowsWithId);
+ *     } catch (error) {
+ *       console.error("Error fetching data:", error);
+ *     }
+ *   };
+ *
+ *   // Trigger the data fetching when the component mounts (empty dependency array)
+ *   fetchData();
+ * }, []);
+ */
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -356,6 +534,23 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
     fetchData();
   }, []);
 
+  /**
+ * Computes a mutation description based on the changes between the new and old row data.
+ *
+ * @function
+ * @param {Object} newRow - The new row data.
+ * @param {Object} oldRow - The old row data.
+ * @returns {string|null} - A string describing the mutation or null if no changes detected.
+ *
+ * @example
+ * // Usage example
+ * const mutationDescription = computeMutation(newRow, oldRow);
+ * if (mutationDescription) {
+ *   console.log("Mutation:", mutationDescription);
+ * } else {
+ *   console.log("No changes detected.");
+ * }
+ */
 
   function computeMutation(newRow, oldRow) {
     if (newRow.nombre !== oldRow.nombre) {
@@ -387,7 +582,24 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
     return null;
   }
 
-  
+
+  /**
+ * Handles the user's confirmation to update a row.
+ *
+ * @function
+ * @async
+ * @throws {Error} Throws an error if the update request fails.
+ * @returns {Promise<void>} A Promise that resolves when the update is successful.
+ *
+ * @example
+ * // Usage example
+ * try {
+ *   await handleYes();
+ *   console.log("Update successful");
+ * } catch (error) {
+ *   console.error("Update failed:", error.message);
+ * }
+ */
 
   const handleYes = async () => {
     const { newRow, oldRow, reject, resolve } = promiseArguments;
@@ -396,7 +608,6 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
       // Make the HTTP request to save in the backend
       const response = await mutateRow(newRow, "update");
 
-    
       setSnackbar({ children: "User successfully saved", severity: "success" });
       resolve(response);
       setPromiseArguments(null);
@@ -405,19 +616,32 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
       reject(oldRow);
       setPromiseArguments(null);
     }
-    /*  try {
-      // Casting the spell of HTTP POST using Axios
-      const response = await axios.post('your_api_endpoint', newRow);
-      setSnackbar({ children: 'User successfully saved', severity: 'success' });
-      resolve(response.data); // Gaze upon the mystical data property!
-      setPromiseArguments(null);
-    } catch (error) {
-      setSnackbar({ children: "Name can't be empty", severity: 'error' });
-      reject(oldRow);
-      setPromiseArguments(null);
-    }
-   */
+  
   };
+
+
+  /**
+ * Process row update by computing the mutation and returning a Promise.
+ *
+ * @function
+ * @param {Object} newRow - The updated row data.
+ * @param {Object} oldRow - The original row data.
+ * @returns {Promise<Object>} A Promise that resolves with the updated row data or rejects with the original row data if nothing was changed.
+ *
+ * @example
+ * // Usage example
+ * const updatedRow = await processRowUpdate(newData, oldData);
+ * console.log("Row updated:", updatedRow);
+ *
+ * @example
+ * // Usage example with error handling
+ * try {
+ *   const updatedRow = await processRowUpdate(newData, oldData);
+ *   console.log("Row updated:", updatedRow);
+ * } catch (error) {
+ *   console.error("Update failed:", error.message);
+ * }
+ */
 
   const processRowUpdate = React.useCallback(
     (newRow, oldRow) =>
@@ -433,7 +657,29 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
     []
   );
 
+
+  /**
+ * Handle the process of saving data.
+ *
+ * @function
+ * @async
+ * @returns {Promise<void>} A Promise that resolves once the data is successfully saved or rejects if an error occurs.
+ *
+ * @example
+ * // Usage example
+ * try {
+ *   await handleGuardar();
+ *   console.log("Data saved successfully!");
+ * } catch (error) {
+ *   console.error("Error saving data:", error.message);
+ * }
+ */
+
   const handleGuardar = async () => {
+     // Verificar si todos los campos están validados
+  const isFormValid = Object.values(validateInputs).every((isValid) => isValid);
+
+  if (isFormValid) {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/services",
@@ -448,19 +694,44 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
       console.error("Error al guardar datos:", error);
       // Aquí puedes manejar el error según tus necesidades
     }
+  } else {
+    console.log("Formulario no válido. Por favor, completa todos los campos correctamente.");
+    // Puedes mostrar un mensaje al usuario indicando que debe completar todos los campos correctamente.
+  }
   };
 
+
+
+/**
+ * Handle the process of deleting a service by making an HTTP DELETE request to the backend.
+ *
+ * @function
+ * @async
+ * @param {string} id - The identifier of the service to be deleted.
+ * @throws {Error} Throws an error if the delete operation fails.
+ *
+ * @example
+ * // Usage example
+ * try {
+ *   const serviceId = "example-service-id";
+ *   await handleDeleteClick(serviceId);
+ *   console.log("Service deleted successfully!");
+ * } catch (error) {
+ *   console.error("Error deleting service:", error.message);
+ * }
+ */
   const handleDeleteClick = async (id) => {
-   /*  console.log(id); */
+    /*  console.log(id); */
 
     try {
       // Make the HTTP request to save in the backend
-      const response = await axios.delete(`http://localhost:3000/api/services/${id}`);
+      const response = await axios.delete(
+        `http://localhost:3000/api/services/${id}`
+      );
       setSnackbar({ children: "Delete successful", severity: "success" });
-    
+
       // Handle the response as needed
-     /*  console.log('Delete successful:', response.data); */
-    
+      /*  console.log('Delete successful:', response.data); */
 
       /*  setSnackbar({ children: "User successfully deleted", severity: "success" });
       resolve(response); */
@@ -472,11 +743,27 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
       setPromiseArguments(null); */
     }
   };
-
-  function CustomToolbar(props) {
-    const { handleOpenDialog } = props;
-
-  /*   console.log(handleOpenDialog); */
+/**
+ * Custom toolbar component for the service grid. It includes various actions like column selection,
+ * filtering, density selector, and export. Additionally, it provides a button to open a dialog
+ * for adding a new service.
+ *
+ * @component
+ * @param {Object} props - The properties passed to the component.
+ * @param {Function} props.handleOpenDialog - The function to handle opening the dialog for adding a new service.
+ * @returns {React.ReactElement} The rendered component.
+ *
+ * @example
+ * // Usage example
+ * const handleOpenDialogFunc = () => {
+ *   // Implement the logic to open the dialog for adding a new service
+ * };
+ *
+ * // Render the CustomToolbar component with the handleOpenDialog function
+ * <CustomToolbar handleOpenDialog={handleOpenDialogFunc} />
+ */
+  function CustomToolbar() {
+    
     return (
       <GridToolbarContainer>
         <GridToolbarColumnsButton color="secondary" />
@@ -484,7 +771,7 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
         <GridToolbarDensitySelector color="secondary" />
 
         <GridToolbarExport color="secondary" />
-        {/*  <Button
+        {/*    <Button
           color="secondary"
           startIcon={<FaTasks />}
           onClick={handleOpenDialog}
@@ -502,6 +789,23 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
     );
   }
 
+
+  /**
+ * Renders a confirmation dialog based on the changes between the new and old rows.
+ * The dialog content is determined by computing the mutation between the rows.
+ *
+ * @function
+ * @returns {?string} The confirmation dialog content or null if no confirmation is needed.
+ *
+ * @example
+ * // Usage example
+ * const confirmationDialog = renderConfirmDialog();
+ * if (confirmationDialog) {
+ *   // Render and display the confirmation dialog
+ *   showDialog(confirmationDialog);
+ * }
+ */
+
   const renderConfirmDialog = () => {
     if (!promiseArguments) {
       return null;
@@ -512,7 +816,7 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
 
     function computeMutation(newRow, oldRow) {
       if (newRow.nombre !== oldRow.nombre) {
-        return `Name from '${oldRow.nombre}' to '${newRow.nombre}'`;
+        return `Nombre de '${oldRow.nombre}' a '${newRow.nombre}'`;
       }
       if (newRow.activo !== oldRow.activo) {
         return `¿Realmente deseas cambiar el estado de 'Activo' de '${
@@ -520,13 +824,25 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
         }' a '${newRow.activo ? "✅" : "❎" || ""}'?`;
       }
 
-      if (newRow.id_proceso !== oldRow.id_proceso) {
-        return `Proceso from '${oldRow.id_proceso || ""}' to '${
-          newRow.id_proceso || ""
+      if (newRow.orden !== oldRow.orden) {
+        return `Proceso de '${oldRow.orden || ""}' a '${
+          newRow.orden || ""
         }'`;
       }
       return null;
     }
+
+
+
+    /**
+ * Handles the 'No' button click in the confirmation dialog.
+ * Resolves the promise with the old row to avoid updating the internal state.
+ *
+ * @function
+ * @example
+ * // Usage example
+ * handleNo();
+ */
     const handleNo = () => {
       const { oldRow, resolve } = promiseArguments;
       resolve(oldRow); // Resolve with the old row to not update the internal state
@@ -543,7 +859,7 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
           {`Presiona 'Ok' , si  ${mutation}.`}
         </DialogContent>
         <DialogActions>
-          <Button color="secondary" ref={noButtonRef}  onClick={handleNo} >
+          <Button color="secondary" ref={noButtonRef} onClick={handleNo}>
             No
           </Button>
           <Button color="secondary" onClick={handleYes}>
@@ -554,9 +870,33 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
     );
   };
 
-/*   console.log(serviceData); */
-
+  
+/**
+ * Builds an array of columns for a data grid.
+ *
+ * @function
+ * @returns {Array} An array of column configurations for the data grid.
+ *
+ * @example
+ * // Usage example
+ * const columns = buildColumns();
+ * // Resulting columns array can be used in a data grid component
+ * <DataGrid columns={columns} rows={rows} />
+ */
   const buildColumns = () => {
+      /**
+   * The configuration for a column in the data grid.
+   *
+   * @typedef {Object} ColumnConfig
+   * @property {string} field - The field identifier for the column.
+   * @property {Function} [renderHeader] - The function to render the header content.
+   * @property {number} [width] - The width of the column.
+   * @property {boolean} [editable] - Indicates whether the column is editable.
+   * @property {Function} [renderCell] - The function to render the cell content.
+   * @property {string} [type] - The type of the column (e.g., 'boolean', 'dateTime').
+   * @property {string} [cellClassName] - The class name for the cell.
+   * @property {Function} [getActions] - The function to get actions for the cell.
+   */
     const columns = [
       {
         field: "nombre",
@@ -747,7 +1087,7 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
 
                 {
                   <img
-                    className="rounded-full w-96 h-96"
+                    className="rounded-full w-36 h-36"
                     src={
                       selectedImage ||
                       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiFYZkovo6Uq69lsMtG9ZPzszPBTa55NlR85uUqbmjNRy6Zvdh7WSBwLFpivd_70aNtmU&usqp=CAU"
@@ -785,7 +1125,15 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
                 {/* Mostrar la imagen seleccionada */}
               </Box>
             </Grid>
-            <Grid item xs={3}>
+            <Grid
+              item
+              xs={4}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+              }}
+            >
               <Box sx={{ padding: "1rem" }}>
                 {/*       <Typography variant="h6">Imagen</Typography> */}
                 <TextField
@@ -806,6 +1154,18 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
                   }}
                   variant="standard"
                 />
+                {validateInputs.nombre ? (
+                  <Stack sx={{ marginTop: "0.2rem" }} direction="row">
+                    <FaRegCircleCheck style={{ color: "#14B814" }} />{" "}
+                    <Typography color={"secondary"} variant="caption">
+                      ¡Gracias por ingresar un proceso!
+                    </Typography>
+                  </Stack>
+                ) : (
+                  <Typography sx={{ color: "red" }} variant="caption">
+                    * ¡Por favor, ingresa el nombre de un proceso!
+                  </Typography>
+                )}
                 <Stack direction={"row"} spacing={2}>
                   <FormGroup>
                     <FormControlLabel
@@ -819,7 +1179,7 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
                     color="secondary"
                     sx={{ width: "100%", marginBottom: "2rem" }}
                     id="input-with-icon-textfield-servicio"
-                    label="Servicio"
+                    label="Orden"
                     type="number"
                     name="orden"
                     value={serviceData.orden || ""}
@@ -835,6 +1195,18 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
                     }}
                     variant="standard"
                   />
+                  {validateInputs.orden ? (
+                    <Stack sx={{ marginTop: "0.2rem" }} direction="row">
+                      <FaRegCircleCheck style={{ color: "#14B814" }} />{" "}
+                      <Typography color={"secondary"} variant="caption">
+                        ¡Gracias por ingresar un orden valido!
+                      </Typography>
+                    </Stack>
+                  ) : (
+                    <Typography sx={{ color: "red" }} variant="caption">
+                      * ¡Por favor, ingresa un orden valido !
+                    </Typography>
+                  )}
                 </Stack>
               </Box>
             </Grid>
@@ -843,7 +1215,7 @@ function ServiceGridCrud({ handleClickOpen, setUrl, setGetRowData }) {
                 <Typography variant="h6">icono de app movil</Typography>
                 {
                   <img
-                    className="rounded-full w-96 h-96"
+                    className="rounded-full w-36 h-36"
                     src={
                       selectedImage2 ||
                       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiFYZkovo6Uq69lsMtG9ZPzszPBTa55NlR85uUqbmjNRy6Zvdh7WSBwLFpivd_70aNtmU&usqp=CAU"
